@@ -5,3 +5,5 @@ __pycache__
 # common editor "temporary" files
 *~
 
+# checkpoints from the Jupyter notebook
+.ipynb_checkpoints
