@@ -121,13 +121,16 @@ def save_lowe(out_pn, kps, descs, metadata):
             # Then the location of each keypoint in the image is specified by 4
             # floating point numbers giving subpixel row and column location,
             # scale, and orientation (in radians from -PI to PI).
+            #
+            # N.B. the use of "row" then "column" means we need to swap the
+            # order of the co-ordinates in k.pt.
             f.write('{} {} {} {}\n'.format(
-                kp.pt[0], kp.pt[1], kp.size, np.deg2rad(kp.angle - 180)
+                kp.pt[1], kp.pt[0], kp.size, np.deg2rad(kp.angle - 180)
             ))
 
             # Finally, the invariant descriptor vector for the keypoint is given
             # as a list of 128 integers in range [0,255].
-            f.write(' '.join(str(v) for v in desc))
+            f.write(' '.join(str(int(v)) for v in desc))
             f.write('\n')
 
 def main():
