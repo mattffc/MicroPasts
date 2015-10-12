@@ -1,0 +1,7 @@
+# ignore temporary Python bytecode file
+*.pyc
+__pycache__
+
+# common editor "temporary" files
+*~
+
