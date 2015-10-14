@@ -18,6 +18,10 @@ Notes:
     natively support masks. This is essentially a hack to work around
     less featureful tools.
 
+    Any EXIF metadata in the input image are copied into the output image. This
+    is important as such metadata often includes important properties like focal
+    length and camera model which may be used to estimate camera intrinsics.
+
     The background colour can be specified either as a single integer which will
     be used for all colour channels or as a comma-separated list of three
     integers which will be used for the corresponding colour channels.
@@ -56,7 +60,9 @@ def main():
     bg_color = parse_colour(opts['--background'])
 
     # Load input images
-    im = np.asarray(Image.open(opts['<image>']).convert('RGB'))
+    im = Image.open(opts['<image>']).convert('RGB')
+    im_exif = im.info.get('exif', None) # get any EXIF metadata
+    im = np.asarray(im)
     mask = np.asarray(Image.open(opts['<mask>']).convert('L'))
 
     # Mask each channel
@@ -65,7 +71,7 @@ def main():
         output[..., c_idx] = np.where(mask > 128, im[..., c_idx], c)
 
     # Write image to output
-    Image.fromarray(output).save(opts['<output>'])
+    Image.fromarray(output).save(opts['<output>'], exif=im_exif)
 
 if __name__ == '__main__':
     main()
