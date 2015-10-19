@@ -12,7 +12,7 @@ Options:
 # coding: utf-8
 from urllib.request import urlopen
 import xml.etree.ElementTree as ET
-from urllib.parse import urljoin
+from urllib.parse import urljoin, quote
 import os
 import shutil
 
@@ -63,7 +63,7 @@ def main():
     # ``urllib.parse`` has a handy ``urljoin`` function which does the hard work
     # for us. (In Python 2 this is in the ``urlparse`` module I *think*.)
 
-    urls = [urljoin(BUCKET_URL, key) for key in keys]
+    urls = [urljoin(BUCKET_URL, quote(key)) for key in keys]
 
 
     # OK, getting there. We now need to download all of the files. If the URL
