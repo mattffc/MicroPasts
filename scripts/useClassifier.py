@@ -2,69 +2,113 @@
 Loads classifier and uses it to predict masks and produce and error estimate.
 
 Usage:
-    useClassifier.py <folderPath> <classifierType>
+    useClassifier.py <filePath> <classifierType>
     
 Options:
-    <folderPath>    The path of the folder containing the classifier.
+    <filePath>    The path of the file containing the classifier.
     <classifierType>	The type of classifier to be trained
 """
 import glob
 import docopt
 
 opts = docopt.docopt(__doc__)
-FOLDER_PATH = opts['<folderPath>']
+FILE_PATH = opts['<filePath>']
 CLASSIFIER_TYPE = opts['<classifierType>']
+
 import sklearn
 import matplotlib
 import os
 import numpy as np
 import pickle
+from scipy import ndimage
 from PIL import Image
-
+DIR_PATH = os.path.dirname(FILE_PATH)
 def main():
-	path = FOLDER_PATH
+	path = FILE_PATH
+	
+	training = np.load(path)
+	shuffled = training['shuffled']
+	trainRatio = training['R']
+	print('Sampling rate = '+str(training['S'])+', trainingRatio = '+str(trainRatio))
 	if CLASSIFIER_TYPE == 'LinearSVC':
 		try:
-			pickleFile = open(os.path.join(path,'linear-svm.pickle'), 'rb')
+			pickleFile = open(os.path.join(DIR_PATH,'linear-svm.pickle'), 'rb')
 		except IOError:
-			print('Classifier is valid but has not been trained yet')
-			
+			print('Classifier not trained '+'\n'+'##'+'\n'+'##'+'\n'+'##'+'\n'+'##')
+			print('##>>>>>>>>'+'\n'+'##>>>>>>>>'+'\n'+'##>>>>>>>>'+'\n'+'##>>>>>>>>')
+		classifier = pickle.load(pickleFile)
+	elif CLASSIFIER_TYPE == 'Tree':
+		try:
+			pickleFile = open(os.path.join(DIR_PATH,'Tree.pickle'), 'rb')
+		except IOError:
+			print('Classifier not trained '+'\n'+'##'+'\n'+'##'+'\n'+'##'+'\n'+'##')
+			print('##>>>>>>>>'+'\n'+'##>>>>>>>>'+'\n'+'##>>>>>>>>'+'\n'+'##>>>>>>>>')
 		classifier = pickle.load(pickleFile)
 	else:
 		print('Classifier requested has not been recognised')
-		
+	
 	totalError = 0
-	imageSetSize = 0
+	imageSetSize = shuffled.shape[0]
 	numberPredicted = 0
 	imageIndex = 0
-
-	for filepath in glob.glob(os.path.join(path, '*.jpg')):
+	'''
+	for filepath in glob.glob(os.path.join(DIR_PATH, '*.jpg')):
 		imageSetSize += 1
 		trainSetSize = int(imageSetSize/2)
 	print('Image set size = '+str(imageSetSize))
 	print('Training set size = '+str(trainSetSize))
-
-	for filepath in glob.glob(os.path.join(path, '*.jpg')):
-		if imageIndex == trainSetSize: 
+	'''
+	for filepath in shuffled: #glob.glob(os.path.join(DIR_PATH, '*.jpg')):
+		if imageIndex == int(shuffled.shape[0]/trainRatio): 
 			averageErrorTraining = totalError/numberPredicted
-			print('Average error for training set of '+str(trainSetSize)+' images is '+ str(averageErrorTraining))
+			print('Average error for training set of '+str(int(shuffled.shape[0]/trainRatio))+' images is '+ str(averageErrorTraining))
 			totalError = 0
 			realTrainSetSize = numberPredicted
 
 		imageIndex += 1
 		fileNameStringWithExtension = os.path.basename(filepath)
 		fileNameString = os.path.splitext(fileNameStringWithExtension)[0]
-		maskPath = os.path.join(path, 'masks/'+fileNameString+'_mask')
+		maskPath = os.path.join(DIR_PATH, 'masks/'+fileNameString+'_mask')
 		try:
 			maskRaw = Image.open(maskPath+'.jpg')
 		except IOError:
 			print('Image '+fileNameString+' has no corresponding mask, it has been skipped')
 			continue
-		imRaw = Image.open(filepath)
-		imArray = np.asarray(imRaw)
+		
+		im = Image.open(filepath)
+		im = np.asarray(im)
+		#im = ndimage.gaussian_filter(im, 3)
+		
+		sx0 = ndimage.sobel(im[...,...,0], axis=0, mode='constant')
+		sy0 = ndimage.sobel(im[...,...,0], axis=1, mode='constant')
+		#sob0 = np.hypot(sx0, sy0)
+		sx1 = ndimage.sobel(im[...,...,1], axis=0, mode='constant')
+		sy1 = ndimage.sobel(im[...,...,1], axis=1, mode='constant')
+		#sob1 = np.hypot(sx1, sy1)
+		sx2 = ndimage.sobel(im[...,...,2], axis=0, mode='constant')
+		sy2 = ndimage.sobel(im[...,...,2], axis=1, mode='constant')
+		#sob2 = np.hypot(sx2, sy2)
+
+		sobx = np.dstack([sx0,sx1,sx2])
+		soby = np.dstack([sy0,sy1,sy2])
+
+		sobx_blurred0 = ndimage.gaussian_filter(sobx, 8)
+		soby_blurred0 = ndimage.gaussian_filter(soby, 8)
+		#sob_blurred1 = ndimage.gaussian_filter(sob1_3D, 8)
+		#sob_blurred2 = ndimage.gaussian_filter(sob2_3D, 8)
+		#sob_blurred = sob_blurred0+sob_blurred1+sob_blurred2
+		#sob_blurred2 = ndimage.gaussian_filter(sob_blurred, 8)
+		#sob_blurred3 = ndimage.gaussian_filter(sob_blurred2, 8)
+		imWithSobBlurred0 = np.dstack([im,sobx,soby,sobx_blurred0,soby_blurred0])
+		
+		
+		imArray = np.asarray(imWithSobBlurred0)
+		#imArray = im
+	
+		
 		maskArray = np.asarray(maskRaw)
 		flatMaskArray = maskArray.reshape(maskArray.shape[0]*maskArray.shape[1],1)
-		flatImArray = imArray.reshape(imArray.shape[0]*imArray.shape[1],3)
+		flatImArray = imArray.reshape(imArray.shape[0]*imArray.shape[1],imArray.shape[2])
 		predictedMask = classifier.predict(flatImArray)
 		numberPredicted += 1
 		pixelCount = flatImArray.shape[0]
@@ -80,8 +124,13 @@ def main():
 		absError = (np.absolute(y-yPrime)).sum()
 		print('Error from image '+fileNameString+ ' is '+str(absError))
 		totalError = totalError+absError
+	if imageIndex == int(shuffled.shape[0]/trainRatio): 
+			averageErrorTraining = totalError/numberPredicted
+			print('Average error for training set of '+str(int(shuffled.shape[0]/trainRatio))+' images is '+ str(averageErrorTraining))
+			totalError = 0
+			realTrainSetSize = numberPredicted - 1
 	averageErrorTest = totalError/(numberPredicted-realTrainSetSize)
-	print('Average error for testing set of '+str(imageSetSize-trainSetSize)+' images is '+ str(averageErrorTest))
+	print('Average error for testing set of '+str(imageSetSize-shuffled.shape[0]/trainRatio)+' images is '+ str(averageErrorTest))
 
 if __name__ == '__main__':
     main()

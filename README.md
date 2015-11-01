@@ -22,16 +22,16 @@ $ pip install -r requirements.txt
 
 In order to train and test a classifier:
 
-First call "%run stackImages <path to image folder>"
+First call "%run stackImages _path to image folder_"
 to concatenate the image and mask set for classification. E.g:
 "%run stackImages C:\Python34\palstaves2\2013T482_Lower_Hardres_Canterbury\Axe1"
 
-Next call "%run createClassifier <path to image folder> <classifier type>"
+Next call "%run createClassifier _path to image folder_ _classifier type_"
 to train the classifier on the ".npz" file created by "stackImages.py". The same
 path should be used as for "stackImages" as this is where the ".npz" file is saved.
 The type of classifier must also be specified, currently only LinearSVC is available.
 
-Finally call "%run useClassifier <path to image folder> <classifier type>"
+Finally call "%run useClassifier _path to image folder_ _classifier type_"
 to test the classifier on the test set and produce an average pixel error. Currently
 the error metric is simply absolute difference summed over all pixel classifications.
 Path should again be the same as "stackImages" as this is where the classifier will

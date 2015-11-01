@@ -2,17 +2,17 @@
 Loads training data and uses it to create a classifier.
 
 Usage:
-    createClassifier.py <folderPath> <classifierType>
+    createClassifier.py <filePath> <classifierType>
     
 Options:
-    <folderPath>    The path of the folder containing the training data.
+    <filePath>    The path of the file containing the training data.
     <classifierType>	The type of classifier to be trained
 
 """
 import docopt
 
 opts = docopt.docopt(__doc__)
-FOLDER_PATH = opts['<folderPath>']
+FILE_PATH = opts['<filePath>']
 CLASSIFIER_TYPE = opts['<classifierType>']
 import sklearn
 import matplotlib
@@ -23,22 +23,31 @@ from PIL import Image
 
 get_ipython().magic('pylab')
 
-path = FOLDER_PATH
-training = np.load(os.path.join(path,'trainingData0001.npz'))
+path = FILE_PATH
+
+training = np.load(path)
+dirPath = os.path.dirname(path)
+sampleNumber = training['S']
+trainRatio = training['R']
 
 X = training['X']
 y = training['y']
-print('training on approximately '+str(int(X.shape[0]/1800))+' images, assuming 18MegaPixel images and 10000:1 sampling')
+print('Sampling rate = '+str(sampleNumber)+', TrainingRatio = '+str(trainRatio))
+print('training on approximately '+str(int(X.shape[0]/(sampleNumber*2)))+' images, assuming 18MegaPixel images and ' +str(sampleNumber)+':1 sampling')
 
 if CLASSIFIER_TYPE == 'LinearSVC':
 	from sklearn.svm import LinearSVC
 	classifier = LinearSVC()
 	print('Training '+CLASSIFIER_TYPE+' classifier ...')
 	classifier.fit(X,y)
-	
-	
+	pickle.dump( classifier, open( os.path.join(dirPath,"linear-svm.pickle"), "wb" ) )
+elif CLASSIFIER_TYPE == 'Tree':
+	from sklearn import tree
+	classifier = tree.DecisionTreeClassifier()
+	classifier.fit(X,y)
+	pickle.dump( classifier, open( os.path.join(dirPath,"Tree.pickle"), "wb" ) )
 else:
 	print('Classifier: '+CLASSIFIER_TYPE+' has not been recognised')
 
-pickle.dump( classifier, open( os.path.join(path,"linear-svm6.pickle"), "wb" ) )
+
 
