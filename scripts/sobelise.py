@@ -2,7 +2,8 @@ import numpy as np
 from skimage.filters import gaussian_filter, sobel_h, sobel_v
 from skimage.transform import rescale, resize
 from PIL import Image
-
+import os
+print('Running Sobelise')
 def downsample(I):
     """Downsample I by 2 after blurring with Gaussian of sigma=2.
 
@@ -23,14 +24,18 @@ def sobel_rgb(I):
         [sobel_v(I[..., c]) for c in range(I.shape[-1])]
     )
 
-def process_image(image_fn, levels=5):
+def process_image(image_fn, levels=1):
+    path = os.path.splitext(image_fn)[0]
+    counter = 0
+    print('Working on image layer '+str(counter))
+    counter = 1+counter
     im = Image.open(image_fn)
     im = np.asarray(im.convert('RGB')) * (1.0/255.0)
     orig_shape = im.shape[:2]
     for level in range(levels):
         s = resize(sobel_rgb(im), orig_shape)
         s = (255 * (0.5 + s)).astype(np.uint8)
-        Image.fromarray(s[..., :3]).save('{}_h.png'.format(level))
-        Image.fromarray(s[..., 3:]).save('{}_v.png'.format(level))
-        im = downsample(im)
-
+        Image.fromarray(s[..., :3]).save(os.path.join(path+'_'+'{}_h.png'.format(level)))
+        Image.fromarray(s[..., 3:]).save(os.path.join(path+'_'+'{}_v.png'.format(level)))
+        im = downsample(im) 
+    print('Finished all processing')
