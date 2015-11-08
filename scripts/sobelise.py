@@ -1,4 +1,6 @@
 import numpy as np
+import docopt
+from testing_sobel import concatSob
 from skimage.filters import gaussian_filter, sobel_h, sobel_v
 from skimage.transform import rescale, resize
 from PIL import Image

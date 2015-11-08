@@ -19,17 +19,21 @@ FOLDER_PATH = opts['<folderPath>']
 SAMPLE_NUMBER = opts['<sampleNumber>']
 trainRatio = int(opts['<trainRatio>'])
 
+import sobelise
+import testing_sobel
 import numpy as np
 from PIL import Image
 import glob
 import os
 import random
 from scipy import ndimage
+from skimage.transform import rescale, resize
 
 #path = './palstaves2/2013T482_Lower_Hardres_Canterbury/Axe1/'
+levels = 1
 path = FOLDER_PATH
 outputFilename = os.path.join(path,'trainingData'+str(SAMPLE_NUMBER)+'.npz')
-wholeXArray = np.zeros([0,15])
+wholeXArray = np.zeros([0,levels*6])
 wholeyArray = np.zeros([0])
 numberStacked = 0
 numberSuccessStacked = 0
@@ -53,9 +57,16 @@ for filepath in shuffled:
 		break
 	numberStacked += 1
 	numberSuccessStacked += 1
+	
+	
+	
 	fileNameStringWithExtension = os.path.basename(filepath)
 	fileNameString = os.path.splitext(fileNameStringWithExtension)[0]
 	maskPath = os.path.join(path, 'masks/'+fileNameString+'_mask')
+	
+	sobelise.process_image(filepath,levels)
+	totalSob = testing_sobel.concatSob(filepath,levels) # loading 1/4 sized images
+	#all levels concatenated together
 	
 	try:
 		maskRaw = Image.open(maskPath+'.jpg')
@@ -66,7 +77,7 @@ for filepath in shuffled:
 	im = Image.open(filepath)
 	im = np.asarray(im)
 	#im = ndimage.gaussian_filter(im, 3)
-	
+	'''
 	sx0 = ndimage.sobel(im[...,...,0], axis=0, mode='constant')
 	sy0 = ndimage.sobel(im[...,...,0], axis=1, mode='constant')
 	#sob0 = np.hypot(sx0, sy0)
@@ -88,12 +99,15 @@ for filepath in shuffled:
 	#sob_blurred2 = ndimage.gaussian_filter(sob_blurred, 8)
 	#sob_blurred3 = ndimage.gaussian_filter(sob_blurred2, 8)
 	imWithSobBlurred0 = np.dstack([im,sobx,soby,sobx_blurred0,soby_blurred0])
+	'''
 	
-	
-	imArray = np.asarray(imWithSobBlurred0)
+	imArray = np.asarray(totalSob)
 	#imArray = im
 	
 	maskArray = np.asarray(maskRaw) #not all 255 or 0 because of compression, may need to threshold
+	print([totalSob.shape[0],totalSob.shape[1]])
+	maskArray = resize(maskArray,[totalSob.shape[0],totalSob.shape[1]])
+	maskArray *= 255
 	flatMaskArray = maskArray.reshape(maskArray.shape[0]*maskArray.shape[1])
 	flatImArray = imArray.reshape(imArray.shape[0]*imArray.shape[1],imArray.shape[2])
 	
