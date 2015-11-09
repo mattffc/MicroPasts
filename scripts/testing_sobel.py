@@ -10,20 +10,22 @@ import docopt
 import os
 get_ipython().magic('pylab')
 
-def concatSob(filePath,levels):
-	print('blaah')
+def concatSob(filePath,levels=1):
+	print('Concatinating saved sobel images...')
 	filePath = os.path.splitext(filePath)[0]
 	totalSob = np.zeros([0,15])
 	print(filePath)
 	for i in range(levels):
+		print('Concatinating level '+str(i))
 		horzSob = np.asarray(Image.open(os.path.join(filePath+'_'+str(i)+'_h.png')))
 		vertSob = np.asarray(Image.open(os.path.join(filePath+'_'+str(i)+'_v.png')))
-		horzSobSub = rescale(horzSob, 0.25)
-		vertSobSub = rescale(vertSob, 0.25)
+		#horzSobSub = rescale(horzSob, 0.25)
+		#vertSobSub = rescale(vertSob, 0.25)
 		if totalSob.shape[0]==0:
-			totalSob = np.zeros([horzSobSub.shape[0],horzSobSub.shape[1]])
-		totalSob = np.dstack([totalSob,horzSobSub,vertSobSub])
+			totalSob = np.zeros([horzSob.shape[0],horzSob.shape[1]])
+		totalSob = np.dstack([totalSob,horzSob,vertSob])
 	totalSob = totalSob[...,1:]	
+	print('Finished concatinating')
 	return totalSob
 
 

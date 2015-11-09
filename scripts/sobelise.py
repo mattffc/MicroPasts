@@ -29,12 +29,14 @@ def sobel_rgb(I):
 def process_image(image_fn, levels=1):
     path = os.path.splitext(image_fn)[0]
     counter = 0
-    print('Working on image layer '+str(counter))
-    counter = 1+counter
+    
     im = Image.open(image_fn)
     im = np.asarray(im.convert('RGB')) * (1.0/255.0)
+    im = rescale(im,0.25)#reduce the size of the image for speed
     orig_shape = im.shape[:2]
     for level in range(levels):
+        print('Saving image layer '+str(counter)+' out of '+str(levels-1))
+        counter = 1+counter
         s = resize(sobel_rgb(im), orig_shape)
         s = (255 * (0.5 + s)).astype(np.uint8)
         Image.fromarray(s[..., :3]).save(os.path.join(path+'_'+'{}_h.png'.format(level)))

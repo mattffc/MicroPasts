@@ -30,7 +30,7 @@ from scipy import ndimage
 from skimage.transform import rescale, resize
 
 #path = './palstaves2/2013T482_Lower_Hardres_Canterbury/Axe1/'
-levels = 1
+levels = 9
 path = FOLDER_PATH
 outputFilename = os.path.join(path,'trainingData'+str(SAMPLE_NUMBER)+'.npz')
 wholeXArray = np.zeros([0,levels*6])
@@ -39,7 +39,8 @@ numberStacked = 0
 numberSuccessStacked = 0
 imageSetSize = 0
 
-
+get_ipython().magic('run testing_sobel')
+get_ipython().magic('run sobelise')
 #a=np.load('./palAxe1arrays/JAIMG_3517.npz')
 #a=np.asarray(a)
 #print(a.shape)
@@ -105,7 +106,7 @@ for filepath in shuffled:
 	#imArray = im
 	
 	maskArray = np.asarray(maskRaw) #not all 255 or 0 because of compression, may need to threshold
-	print([totalSob.shape[0],totalSob.shape[1]])
+	
 	maskArray = resize(maskArray,[totalSob.shape[0],totalSob.shape[1]])
 	maskArray *= 255
 	flatMaskArray = maskArray.reshape(maskArray.shape[0]*maskArray.shape[1])
