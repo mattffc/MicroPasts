@@ -29,7 +29,7 @@ from skimage.transform import rescale, resize
 DIR_PATH = os.path.dirname(FILE_PATH)
 def main():
         path = FILE_PATH
-        levels = 9
+        levels = 7
         training = np.load(path)
         shuffled = training['shuffled']
         trainRatio = training['R']
@@ -105,8 +105,9 @@ def main():
             #sob_blurred3 = ndimage.gaussian_filter(sob_blurred2, 8)
             imWithSobBlurred0 = np.dstack([im,sobx,soby,sobx_blurred0,soby_blurred0])
             '''
-            
+            im = rescale(im,0.25)
             imArray = np.asarray(totalSob)
+            imArray = np.dstack([imArray,im])
             #imArray = im
         
             
