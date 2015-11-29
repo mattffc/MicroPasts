@@ -1,0 +1,5 @@
+29.11.15
+Notes on micro project:
+finished super pixel forming. Now need to pass the set of 
+pixels of each superpixel to the normally trained classifier, decided if >50 of the superpixel
+is foreground and then classify the whole superpixel as foreground.

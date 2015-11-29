@@ -29,7 +29,7 @@ from skimage.transform import rescale, resize
 DIR_PATH = os.path.dirname(FILE_PATH)
 def main():
         path = FILE_PATH
-        levels = 7
+        levels = 8
         training = np.load(path)
         shuffled = training['shuffled']
         trainRatio = training['R']

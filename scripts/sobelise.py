@@ -7,13 +7,14 @@ from PIL import Image
 import os
 print('Running Sobelise')
 def downsample(I):
+    sigma = 2
     """Downsample I by 2 after blurring with Gaussian of sigma=2.
 
     Blurs across dimensions 0 and 1. Leaves dimension 2 untouched.
 
     """
     I = np.atleast_3d(I)
-    return rescale(gaussian_filter(I, 2, multichannel=True), 0.5)
+    return rescale(gaussian_filter(I, sigma, multichannel=True), 0.5)
 
 def sobel_rgb(I):
     """Like skimage.sobel_{h,v} but works on RGB images. Returns a

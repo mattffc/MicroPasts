@@ -15,18 +15,18 @@ get_ipython().magic('run sobelise')
 #get_ipython().magic('run stackImages C:\\Python34\\palstaves2\\2013T482_Lower_Hardres_Canterbury\\Axe1 100 32')
 #get_ipython().magic('run createClassifier C:\\Python34\\palstaves2\\2013T482_Lower_Hardres_Canterbury\\Axe1\\trainingData100.npz Tree')
 
-sobelise.process_image('C:\Python34\palstaves2\\2013T482_Lower_Hardres_Canterbury\Axe1\IMG_3566.JPG',5)
+sobelise.process_image('C:\Python34\palstaves2\\2013T482_Lower_Hardres_Canterbury\Axe1\IMG_3530.JPG',5)
 
 
 
 
-totalSob = testing_sobel.concatSob('C:\Python34\palstaves2\\2013T482_Lower_Hardres_Canterbury\Axe1\IMG_3566.JPG',5)
-im = Image.open('C:\Python34\palstaves2\\2013T482_Lower_Hardres_Canterbury\Axe1\IMG_3566.JPG')
+totalSob = testing_sobel.concatSob('C:\Python34\palstaves2\\2013T482_Lower_Hardres_Canterbury\Axe1\IMG_3530.JPG',5)
+im = Image.open('C:\Python34\palstaves2\\2013T482_Lower_Hardres_Canterbury\Axe1\IMG_3530.JPG')
 im = np.asarray(im)
 im = rescale(im,0.25)
 imArray = np.dstack([totalSob,im])
 
-flatTotalSob = totalSob.reshape(imArray.shape[0]*imArray.shape[1],imArray.shape[2])
+flatTotalSob = imArray.reshape(imArray.shape[0]*imArray.shape[1],imArray.shape[2])
 predictedTotalSob = classifier.predict(flatTotalSob)
 
 reshapePredicted = predictedTotalSob.reshape(864,1296,1)

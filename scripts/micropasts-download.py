@@ -64,11 +64,13 @@ def main():
     # for us. (In Python 2 this is in the ``urlparse`` module I *think*.)
 
     urls = [urljoin(BUCKET_URL, quote(key)) for key in keys]
-
+    count = 0
 
     # OK, getting there. We now need to download all of the files. If the URL
     # ends in a ``/``, it's a directory. If it doesn't we'll assume it's a file.
     for key in keys:
+        count += 1
+        print(count)
         # Get the URL for this key
         url = urljoin(BUCKET_URL, key)
 

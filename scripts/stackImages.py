@@ -30,7 +30,7 @@ from scipy import ndimage
 from skimage.transform import rescale, resize
 
 #path = './palstaves2/2013T482_Lower_Hardres_Canterbury/Axe1/'
-levels = 7
+levels = 8
 path = FOLDER_PATH
 outputFilename = os.path.join(path,'trainingData'+str(SAMPLE_NUMBER)+'.npz')
 wholeXArray = np.zeros([0,levels*6+3])#+3 is for RGB non sobelised 
