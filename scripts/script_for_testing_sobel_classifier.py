@@ -15,13 +15,14 @@ get_ipython().magic('run sobelise')
 #get_ipython().magic('run stackImages C:\\Python34\\palstaves2\\2013T482_Lower_Hardres_Canterbury\\Axe1 100 32')
 #get_ipython().magic('run createClassifier C:\\Python34\\palstaves2\\2013T482_Lower_Hardres_Canterbury\\Axe1\\trainingData100.npz Tree')
 
-sobelise.process_image('C:\Python34\palstaves2\\2013T482_Lower_Hardres_Canterbury\Axe1\IMG_3530.JPG',5)
+sobelise.process_image('C:\Python34\palstaves2\\2013T482_Lower_Hardres_Canterbury\Axe1\IMG_3517.JPG',5)
+pickleFile = open('C:\Python34\palstaves2\\2013T482_Lower_Hardres_Canterbury\Axe1\Tree.pickle','rb')
+classifier = pickle.load(pickleFile)
 
 
 
-
-totalSob = testing_sobel.concatSob('C:\Python34\palstaves2\\2013T482_Lower_Hardres_Canterbury\Axe1\IMG_3530.JPG',5)
-im = Image.open('C:\Python34\palstaves2\\2013T482_Lower_Hardres_Canterbury\Axe1\IMG_3530.JPG')
+totalSob = testing_sobel.concatSob('C:\Python34\palstaves2\\2013T482_Lower_Hardres_Canterbury\Axe1\IMG_3517.JPG',5)
+im = Image.open('C:\Python34\palstaves2\\2013T482_Lower_Hardres_Canterbury\Axe1\IMG_3517.JPG')
 im = np.asarray(im)
 im = rescale(im,0.25)
 imArray = np.dstack([totalSob,im])

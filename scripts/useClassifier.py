@@ -5,7 +5,7 @@ Usage:
     useClassifier.py <filePath> <classifierType>
     
 Options:
-    <filePath>    The path of the file containing the classifier.
+    <filePath>    The path of the file containing the classifier. [Actually seems to be training data path]
     <classifierType>	The type of classifier to be trained
 """
 import glob
@@ -25,14 +25,25 @@ import pickle
 from scipy import ndimage
 from PIL import Image
 from skimage.transform import rescale, resize
+import water_test
+
+
+
+
 
 DIR_PATH = os.path.dirname(FILE_PATH)
 def main():
         path = FILE_PATH
-        levels = 8
+        levels = 5
+        #trainingPath = os.path.join(path,)
         training = np.load(path)
         shuffled = training['shuffled']
         trainRatio = training['R']
+        
+        newpath = os.path.join(DIR_PATH,'predictedMasks2')
+        if not os.path.exists(newpath):
+            os.makedirs(newpath)
+            
         print('Sampling rate = '+str(training['S'])+', trainingRatio = '+str(trainRatio))
         if CLASSIFIER_TYPE == 'LinearSVC':
             try:
@@ -62,7 +73,10 @@ def main():
                 print('Average error for training set of '+str(int(shuffled.shape[0]/trainRatio))+' images is '+ str(averageErrorTraining))
                 totalError = 0
                 realTrainSetSize = numberPredicted
-
+            print('imageIndex')
+            print(imageIndex)
+            print('out of')
+            print(shuffled.shape[0])
             imageIndex += 1
             fileNameStringWithExtension = os.path.basename(filepath)
             fileNameString = os.path.splitext(fileNameStringWithExtension)[0]
@@ -108,6 +122,11 @@ def main():
             im = rescale(im,0.25)
             imArray = np.asarray(totalSob)
             imArray = np.dstack([imArray,im])
+            #new 
+            featureMap = imArray
+            a=water_test.watershedFunc2(filepath)
+            b=water_test.superPix(im,a,featureMap,classifier,100)
+            #new end
             #imArray = im
         
             
@@ -124,8 +143,22 @@ def main():
             X = flatImArray#flatImArray[indices,...]
             y = flatMaskArray#flatMaskArray[indices,...]
             yPrime = predictedMask.astype(np.int)#predictedMask[indices,...].astype(np.int)
+            print(np.max(yPrime))
+            print(yPrime.shape)
             yPrime = np.asarray(yPrime)
-            yPrime = np.reshape(yPrime, (-1, 1))
+            yPrime = np.reshape(yPrime, (-1, 1)) # -1 means make it whatever it needs to be
+            print(yPrime.shape)
+            print(np.max(yPrime))
+            yPrimeForMaskSave = np.reshape(yPrime,(totalSob.shape[0],totalSob.shape[1]))
+            print(np.max(yPrimeForMaskSave))
+            yPrimeForMaskSave = rescale(yPrimeForMaskSave,4,preserve_range=True)
+            print(np.max(yPrimeForMaskSave))
+            print(np.max(yPrimeForMaskSave))
+            yPrimeForMaskSave *= 255
+            yPrimeForMaskSave = yPrimeForMaskSave.astype(np.uint8)
+            print(os.path.join(newpath,fileNameString+'_mask'))
+            Image.fromarray(yPrimeForMaskSave).save(os.path.join(newpath,fileNameString+'_mask.jpg'))
+            
             #yPrime = (yPrime>64).astype(np.int)
             y = (y>64).astype(np.int)
             absError = (np.absolute(y-yPrime)).sum()
