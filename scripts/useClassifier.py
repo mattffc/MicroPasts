@@ -40,7 +40,7 @@ def main():
         shuffled = training['shuffled']
         trainRatio = training['R']
         
-        newpath = os.path.join(DIR_PATH,'predictedMasks2')
+        newpath = os.path.join(DIR_PATH,'predictedMasks3')
         if not os.path.exists(newpath):
             os.makedirs(newpath)
             
@@ -135,16 +135,16 @@ def main():
             maskArray *= 255
             flatMaskArray = maskArray.reshape(maskArray.shape[0]*maskArray.shape[1],1)
             flatImArray = imArray.reshape(imArray.shape[0]*imArray.shape[1],imArray.shape[2])
-            predictedMask = classifier.predict(flatImArray)
+            #predictedMask = classifier.predict(flatImArray)#for superpix
             numberPredicted += 1
             pixelCount = flatImArray.shape[0]
             outputSampleCount = int(1*pixelCount)
             #indices = np.random.choice(pixelCount,replace=False,size=outputSampleCount)
             X = flatImArray#flatImArray[indices,...]
             y = flatMaskArray#flatMaskArray[indices,...]
-            yPrime = predictedMask.astype(np.int)#predictedMask[indices,...].astype(np.int)
-            print(np.max(yPrime))
-            print(yPrime.shape)
+            #yPrime = predictedMask.astype(np.int)#for superpix
+            
+            yPrime = b #new line for superpix
             yPrime = np.asarray(yPrime)
             yPrime = np.reshape(yPrime, (-1, 1)) # -1 means make it whatever it needs to be
             print(yPrime.shape)

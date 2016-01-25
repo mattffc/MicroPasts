@@ -6,6 +6,7 @@ from skimage import data
 from skimage.filters import rank
 from skimage.util import img_as_ubyte
 import numpy as np
+import random
 from PIL import Image
 from skimage import color
 from skimage.transform import rescale, resize
@@ -14,11 +15,11 @@ import time
 from skimage.transform import rescale, resize
 
 start = time.time()
-image = np.asarray(Image.open('C:\Python34\\2013T805_Woolaston_Gloucestershire\SetC\IMG_3751.JPG'))
+image = np.asarray(Image.open('C:\Python34\palstaves2\\2013T482_Lower_Hardres_Canterbury\Axe1\IMG_3550.JPG'))
 #image = np.asarray(Image.open(imagePath))
 #image = color.rgb2gray(image)
 image = rescale(image,0.25)
-denoised = gaussian_filter(image, 0)
+denoised = gaussian_filter(image, 2)
 denoisedR = denoised[...,0]
 denoisedG = denoised[...,1]
 denoisedB = np.asarray(denoised[...,2])
@@ -44,15 +45,25 @@ print(np.max((rank.gradient(denoisedB, disk(2)))))
 
 # local gradient (disk(2) is used to keep edges thin)
 denoised = color.rgb2gray(denoised)
-markers = (rank.gradient(denoised, disk(2)) < 10)
+markers = (rank.gradient(denoised, disk(9)) < 12) # disk 4 works well with thresh 8 and guass 2
 markers = ndi.label(markers)[0]
+#markers = markers*np.random.rand(markers.shape[0],markers.shape[1])
+print('npmax markers')
+print(np.max(markers))
+#markers = random.shuffle(markers)
 gradient = rank.gradient(denoised, disk(2))
 #gradient = np.maximum(np.maximum(np.maximum((rank.gradient(denoisedR, disk(2))),(rank.gradient(denoisedG, disk(2)))),
 #(rank.gradient(denoisedB, disk(2)))),rank.gradient(denoised, disk(2)))
 
 # process the watershed
 labels = watershed(gradient, markers)
+print(np.sum(labels))
+for i in range(np.max(labels)+1):
+    indicies = np.where(labels==i)
+    #print((np.random.rand()))
+    labels[indicies] *= np.random.rand()
 print(np.max(labels))
+print(np.sum(labels))
 end = time.time()
 print( end - start)
 fig, axes = plt.subplots(nrows=2, ncols=2, figsize=(8, 8), sharex=True, sharey=True, subplot_kw={'adjustable':'box-forced'})
@@ -66,6 +77,8 @@ ax1.set_title("Local Gradient")
 ax2.imshow(markers, cmap=plt.cm.spectral, interpolation='nearest')
 ax2.set_title("Markers")
 ax3.imshow(denoised, cmap=plt.cm.gray, interpolation='nearest')
+#labels = labels*np.random.rand(labels.shape[0],labels.shape[1])
+#labels = random.shuffle(labels)
 ax3.imshow(labels, cmap=plt.cm.spectral, interpolation='nearest', alpha=.7)
 ax3.set_title("Segmented")
 
