@@ -12,6 +12,7 @@ from skimage.transform import rescale, resize
 from skimage.filters import gaussian_filter
 import time
 from skimage.transform import rescale, resize
+from skimage.segmentation import slic
 
 def watershedFunc2(imagePath):
     start = time.time()
@@ -21,6 +22,7 @@ def watershedFunc2(imagePath):
     image = rescale(image,0.25)
     #plt.imshow(image)
     #plt.show()
+    
     denoised = gaussian_filter(image, 2)# was 2 before
     # denoise image
     #denoised = rank.median(image, disk(2))
@@ -40,11 +42,14 @@ def watershedFunc2(imagePath):
     #plt.imshow(gradient)
     #plt.show()
     # process the watershed
+    
     labels = watershed(gradient, markers)
+    
+    ###labels = slic(image)
     #plt.imshow(labels)
     #plt.show()
     end = time.time()
-    print(np.max(markers))
+    #print(np.max(markers))
     print( end - start)
     return labels
 # display results

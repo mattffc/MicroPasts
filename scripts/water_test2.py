@@ -13,12 +13,14 @@ from skimage.transform import rescale, resize
 from skimage.filters import gaussian_filter
 import time
 from skimage.transform import rescale, resize
+from skimage.segmentation import slic
 
 start = time.time()
 image = np.asarray(Image.open('C:\Python34\palstaves2\\2013T482_Lower_Hardres_Canterbury\Axe1\IMG_3550.JPG'))
 #image = np.asarray(Image.open(imagePath))
 #image = color.rgb2gray(image)
 image = rescale(image,0.25)
+image = (image*255).astype(int)
 denoised = gaussian_filter(image, 2)
 denoisedR = denoised[...,0]
 denoisedG = denoised[...,1]
@@ -56,13 +58,15 @@ gradient = rank.gradient(denoised, disk(2))
 #(rank.gradient(denoisedB, disk(2)))),rank.gradient(denoised, disk(2)))
 
 # process the watershed
-labels = watershed(gradient, markers)
+##labels = watershed(gradient, markers)
+labels = slic(image,max_iter=2,sigma=5)
 print(np.sum(labels))
 for i in range(np.max(labels)+1):
     indicies = np.where(labels==i)
     #print((np.random.rand()))
     labels[indicies] *= np.random.rand()
 print(np.max(labels))
+print(np.min(labels))
 print(np.sum(labels))
 end = time.time()
 print( end - start)

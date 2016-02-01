@@ -6,7 +6,7 @@ Usage:
     
 Options:
     <filePath>    The path of the file containing the classifier. [Actually seems to be training data path]
-    <classifierType>	The type of classifier to be trained
+    <classifierType>	The type of classifier to be used
 """
 import glob
 import docopt
@@ -39,12 +39,19 @@ def main():
         training = np.load(path)
         shuffled = training['shuffled']
         trainRatio = training['R']
-        
+        #trainingImages = training['header'](images)
         newpath = os.path.join(DIR_PATH,'predictedMasks3')
         if not os.path.exists(newpath):
             os.makedirs(newpath)
             
         print('Sampling rate = '+str(training['S'])+', trainingRatio = '+str(trainRatio))
+        #print(training.item())
+        header = training['header'][()]['images']
+        #print(type(a))
+        #print((a[()])['images'])
+        #print(header)
+        print('Images used as training: '+ str(header))
+       
         if CLASSIFIER_TYPE == 'LinearSVC':
             try:
                 pickleFile = open(os.path.join(DIR_PATH,'linear-svm.pickle'), 'rb')
@@ -63,21 +70,28 @@ def main():
             print('Classifier requested has not been recognised')
 	
         totalError = 0
+        totTestingError = 0
+        totTrainingError = 0
         imageSetSize = shuffled.shape[0]
         numberPredicted = 0
         imageIndex = 0
+        missingTest = 0
+        missingTrain = 0
 	
         for filepath in shuffled: #glob.glob(os.path.join(DIR_PATH, '*.jpg')):
-            if imageIndex == int(shuffled.shape[0]/trainRatio): 
+            '''
+            if imageIndex == int(shuffled.shape[0]/trainRatio+1): 
                 averageErrorTraining = totalError/numberPredicted
-                print('Average error for training set of '+str(int(shuffled.shape[0]/trainRatio))+' images is '+ str(averageErrorTraining))
+                print('Average error for training set of '+str(int(shuffled.shape[0]/trainRatio+1))+' images is '+ str(averageErrorTraining))
                 totalError = 0
                 realTrainSetSize = numberPredicted
+            '''
             print('imageIndex')
             print(imageIndex)
             print('out of')
             print(shuffled.shape[0])
-            imageIndex += 1
+            
+            
             fileNameStringWithExtension = os.path.basename(filepath)
             fileNameString = os.path.splitext(fileNameStringWithExtension)[0]
             maskPath = os.path.join(DIR_PATH, 'masks/'+fileNameString+'_mask')
@@ -87,8 +101,14 @@ def main():
             
             try:
                 maskRaw = Image.open(maskPath+'.jpg')
+                
             except IOError:
                 print('Image '+fileNameString+' has no corresponding mask, it has been skipped')
+                if imageIndex % trainRatio == 0:
+                    missingTrain +=1
+                else:
+                    missingTest +=1
+                imageIndex += 1
                 continue
             
             im = Image.open(filepath)
@@ -163,7 +183,14 @@ def main():
             y = (y>64).astype(np.int)
             absError = (np.absolute(y-yPrime)).sum()
             print('Error from image '+fileNameString+ ' is '+str(absError))
-            totalError = totalError+absError
+            if imageIndex % trainRatio == 0:
+                print('Training Image')
+                totTrainingError = totTrainingError+absError
+            else:
+                totTestingError = totTestingError+absError
+            #totalError = totalError+absError
+            imageIndex += 1
+        '''    
         if imageIndex == int(shuffled.shape[0]/trainRatio): 
             averageErrorTraining = totalError/numberPredicted
             print('Average error for training set of '+str(int(shuffled.shape[0]/trainRatio))+' images is '+ str(averageErrorTraining))
@@ -171,7 +198,12 @@ def main():
             realTrainSetSize = numberPredicted - 1
             averageErrorTest = totalError/(numberPredicted-realTrainSetSize)
             print('Average error for testing set of '+str(imageSetSize-shuffled.shape[0]/trainRatio)+' images is '+ str(averageErrorTest))
-
+        '''
+        print('Number Predicted = ' + str(numberPredicted) +' out of '+str(shuffled.shape[0]))
+        averageErrorTraining = totTrainingError/(len(header)-missingTrain)
+        print('Average error for training set (predicted only) of '+str(int((shuffled.shape[0]/trainRatio+1)-missingTrain))+' images is '+ str(averageErrorTraining))
+        averageErrorTest = totTestingError/(shuffled.shape[0]-len(header)-missingTest)
+        print('Average error for testing set (predicted only) of '+str((shuffled.shape[0]-len(header)-missingTest)+' images is '+ str(averageErrorTest)))
 if __name__ == '__main__':
     main()
 
