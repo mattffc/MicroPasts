@@ -16,12 +16,13 @@ from skimage.transform import rescale, resize
 from skimage.segmentation import slic
 
 start = time.time()
-image = np.asarray(Image.open('C:\Python34\palstaves2\\2013T482_Lower_Hardres_Canterbury\Axe1\IMG_3550.JPG'))
+image = np.asarray(Image.open('C:\Python34\\2013T805_Woolaston_Gloucestershire\SetA\images\IMG_3661.JPG'))
 #image = np.asarray(Image.open(imagePath))
+
 #image = color.rgb2gray(image)
 image = rescale(image,0.25)
-image = (image*255).astype(int)
-denoised = gaussian_filter(image, 2)
+#image = (image*255).astype(int)
+denoised = gaussian_filter(image, 1)
 denoisedR = denoised[...,0]
 denoisedG = denoised[...,1]
 denoisedB = np.asarray(denoised[...,2])
@@ -47,7 +48,7 @@ print(np.max((rank.gradient(denoisedB, disk(2)))))
 
 # local gradient (disk(2) is used to keep edges thin)
 denoised = color.rgb2gray(denoised)
-markers = (rank.gradient(denoised, disk(9)) < 12) # disk 4 works well with thresh 8 and guass 2
+markers = (rank.gradient(denoised, disk(2)) < 18) # disk 4 works well with thresh 8 and guass 2
 markers = ndi.label(markers)[0]
 #markers = markers*np.random.rand(markers.shape[0],markers.shape[1])
 print('npmax markers')
@@ -58,13 +59,16 @@ gradient = rank.gradient(denoised, disk(2))
 #(rank.gradient(denoisedB, disk(2)))),rank.gradient(denoised, disk(2)))
 
 # process the watershed
-##labels = watershed(gradient, markers)
-labels = slic(image,max_iter=2,sigma=5)
+labels = 2*watershed(gradient, markers)+1
+
+labels += 2*slic(image,max_iter=3,compactness=10,enforce_connectivity=True,min_size_factor=0.01,n_segments=200)
 print(np.sum(labels))
+
 for i in range(np.max(labels)+1):
     indicies = np.where(labels==i)
     #print((np.random.rand()))
     labels[indicies] *= np.random.rand()
+
 print(np.max(labels))
 print(np.min(labels))
 print(np.sum(labels))
@@ -74,16 +78,16 @@ fig, axes = plt.subplots(nrows=2, ncols=2, figsize=(8, 8), sharex=True, sharey=T
 axes = axes.ravel()
 ax0, ax1, ax2, ax3 = axes
 
-ax0.imshow(denoised, cmap=plt.cm.gray, interpolation='nearest')
+ax0.imshow(image, cmap=plt.cm.gray, interpolation='nearest')
 ax0.set_title("Original")
-ax1.imshow(gradient, cmap=plt.cm.spectral, interpolation='nearest')
+ax1.imshow(gradient, cmap = plt.cm.Greys_r, interpolation='nearest')
 ax1.set_title("Local Gradient")
-ax2.imshow(markers, cmap=plt.cm.spectral, interpolation='nearest')
+ax2.imshow(markers, cmap=plt.cm.prism, interpolation='nearest')
 ax2.set_title("Markers")
-ax3.imshow(denoised, cmap=plt.cm.gray, interpolation='nearest')
+ax3.imshow(image, cmap=plt.cm.gray, interpolation='nearest')
 #labels = labels*np.random.rand(labels.shape[0],labels.shape[1])
 #labels = random.shuffle(labels)
-ax3.imshow(labels, cmap=plt.cm.spectral, interpolation='nearest', alpha=.7)
+ax3.imshow(labels, cmap=plt.cm.prism, interpolation='nearest', alpha=.99)
 ax3.set_title("Segmented")
 
 for ax in axes:

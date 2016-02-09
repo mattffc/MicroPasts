@@ -4,7 +4,7 @@
 Stacks images from a folder into a sampled array and saves as an npz.
 
 Usage:
-    stackImages.py <folderPath> <sampleNumber> <trainRatio>
+    stackImages.py <folderPath> <sampleNumber> 
     
 Options:
     <folderPath>    The path of the folder containing the images.
@@ -68,14 +68,14 @@ for filepath in imageNames:
         
         fileNameStringWithExtension = os.path.basename(filepath)
         fileNameString = os.path.splitext(fileNameStringWithExtension)[0]
-        maskPath = os.path.join(path, 'masks/'+fileNameString+'_mask')
+        maskPath = os.path.join(path, 'masks/'+fileNameString+'_mask')##normally 'masks/'
         
         sobelise.process_image(filepath,levels)
         totalSob = testing_sobel.concatSob(filepath,levels) # loading 1/4 sized images
         #all levels concatenated together
         
         try:
-            maskRaw = Image.open(maskPath+'.jpg')
+            maskRaw = Image.open(maskPath+'.jpg').convert(mode='L')#convert is new
             imageNameHolder.append(fileNameString)
         except IOError:
             print('Image '+fileNameString+' has no corresponding mask, it has been skipped')
@@ -116,11 +116,16 @@ for filepath in imageNames:
         
         maskArray = resize(maskArray,[totalSob.shape[0],totalSob.shape[1]])
         maskArray *= 255
+        print(maskArray.shape)
         flatMaskArray = maskArray.reshape(maskArray.shape[0]*maskArray.shape[1])
         flatImArray = imArray.reshape(imArray.shape[0]*imArray.shape[1],imArray.shape[2])
-        
+        '''
         foreGround = (flatMaskArray>=64)
         backGround = (flatMaskArray<64)
+        '''
+        foreGround = (flatMaskArray>=150)#values depend on the gray used
+        backGround = (flatMaskArray<20)
+        
         foreGroundSamples = flatImArray[foreGround,...]
         backGroundSamples = flatImArray[backGround,...]
 

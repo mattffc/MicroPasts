@@ -13,17 +13,20 @@ from skimage.filters import gaussian_filter
 import time
 from skimage.transform import rescale, resize
 from skimage.segmentation import slic
+from skimage.measure import label
 
 def watershedFunc2(imagePath):
     start = time.time()
     #image = np.asarray(Image.open('C:\Python34\palstaves2\\2013T482_Lower_Hardres_Canterbury\Axe1\IMG_3517.JPG'))
     image = np.asarray(Image.open(imagePath))
-    image = color.rgb2gray(image)
+    
+    #image = color.rgb2gray(image) --needed for watershed but not slic
     image = rescale(image,0.25)
     #plt.imshow(image)
     #plt.show()
     
-    denoised = gaussian_filter(image, 2)# was 2 before
+    denoised = gaussian_filter(image, 1)# was 2 before
+    denoised = color.rgb2gray(denoised)
     # denoise image
     #denoised = rank.median(image, disk(2))
     #plt.imshow(denoised)
@@ -31,7 +34,7 @@ def watershedFunc2(imagePath):
     # find continuous region (low gradient -
     # where less than 10 for this image) --> markers
     # disk(5) is used here to get a more smooth image
-    markers = rank.gradient(denoised, disk(9)) < 8 # disk was 2 before, thresh was 10
+    markers = rank.gradient(denoised, disk(2)) < 18 # disk was 2 before, thresh was 10
     markers = ndi.label(markers)[0]
     #print(np.max(markers))
     #plt.imshow(gaussian_filter(markers, 4))
@@ -43,8 +46,17 @@ def watershedFunc2(imagePath):
     #plt.show()
     # process the watershed
     
-    labels = watershed(gradient, markers)
+    labels = 2*watershed(gradient, markers)+1
+    #print(labels.shape)
+    print(np.max(labels))
+    #print(np.min(labels))
+    labels += 2*slic(image,max_iter=3,compactness=10,enforce_connectivity=True,min_size_factor=0.01,n_segments=200)
+    #print(labels.shape)
+    print(np.max(labels))
+    labels = (label(labels, connectivity=1))
+    print(np.max(labels))
     
+    #print(np.min(labels))
     ###labels = slic(image)
     #plt.imshow(labels)
     #plt.show()
@@ -61,59 +73,72 @@ def superPix(image,labels,featureMap,classifier,sampleCount=100):
     flatLabels = labels.reshape(labels.shape[0]*labels.shape[1])
     i = 1
     totMask = np.zeros([featureMap.shape[0]*featureMap.shape[1]])
+    totMask2=np.zeros([featureMap.shape[0]*featureMap.shape[1]])
     totClassified = classifier.predict(flatFM)
     while i < (np.max(flatLabels)+1):
-        sampleCount = 1000
+        sampleCount = 100
         print(i)
         indices = (flatLabels==i)
+        #print(sum(1==indices))
+        ###if sum(1==indices) > 0:
         #indices = np.dstack([indices,indices,indices])
         #superPixel = indices*flatImage
         #superPixel = superPixel.reshape(image.shape[0],image.shape[1],image.shape[2])
         superPixel = flatFM[indices,...]
-        
-        #print(superPixel.shape[0])
-        #print(sampleCount)
-        sampleCount = min(superPixel.shape[0],sampleCount)
-        
-        superPixelInd = np.random.choice(superPixel.shape[0],replace=False,size=sampleCount)
-        sampSuperPixel = superPixel[superPixelInd,...]
-        #totClassified = classifier.predict(flatFM)
-        superMask = totClassified[indices,...]#classifier.predict(sampSuperPixel)
-        flatZeros = np.zeros(featureMap.shape[0]*featureMap.shape[1])
-        #print('indices')
-        #print(np.max(indices))
-        #print(indices.shape[0])
-        
-        #print(np.sum(superMask)/superMask.shape[0])
-        #print(np.sum(superMask))
-        #print(superMask.shape)
-        #print(sampSuperPixel.shape)
-        #print(superPixelInd)
-        #print(superPixel.shape[0])
-        #print(sampleCount)
-        if np.sum(superMask)/superMask.shape[0]>0.6:
-            k = 0
-            j = -1
-            '''
-            for x in indices:
-                if x == 1:
-                    j += 1
-                    flatZeros[k,...]=superMask[j]
-                #flatZeros[k,...]=1#superMask[j]
-                k += 1
-            '''
-            #print(np.sum(flatZeros))
-            zeros2d = flatZeros.reshape([featureMap.shape[0],featureMap.shape[1]])    
-            #print('in if')
+        if superPixel.shape[0]>0:
+            #print(superPixel.shape[0])
+            #print(sampleCount)
+            sampleCount = min(superPixel.shape[0],sampleCount)
             #print(superPixel.shape)
-            #print(featureMap.shape)
-            #superPixelMask = (superPixel>0).reshape(featureMap[0],featureMap[1])
-            totMask[indices] = 1
+            superPixelInd = np.random.choice(superPixel.shape[0],replace=False,size=sampleCount)
+            sampSuperPixel = superPixel[superPixelInd,...]
+            #totClassified = classifier.predict(flatFM)
+            superMask = totClassified[indices,...]#classifier.predict(sampSuperPixel)
+            flatZeros = np.zeros(featureMap.shape[0]*featureMap.shape[1])
+            #print('indices')
+            #print(np.max(indices))
+            #print(indices.shape[0])
+            
+            #print(np.sum(superMask)/superMask.shape[0])
+            #print(np.sum(superMask))
+            #print(superMask.shape)
+            #print(sampSuperPixel.shape)
+            #print(superPixelInd)
+            #print(superPixel.shape[0])
+            #print(sampleCount)
+            if np.sum(superMask)/superMask.shape[0]>0.8:
+                k = 0
+                j = -1
+                '''
+                for x in indices:
+                    if x == 1:
+                        j += 1
+                        flatZeros[k,...]=superMask[j]
+                    #flatZeros[k,...]=1#superMask[j]
+                    k += 1
+                '''
+                #print(np.sum(flatZeros))
+                zeros2d = flatZeros.reshape([featureMap.shape[0],featureMap.shape[1]])    
+                #print('in if')
+                #print(superPixel.shape)
+                #print(featureMap.shape)
+                #superPixelMask = (superPixel>0).reshape(featureMap[0],featureMap[1])
+                totMask[indices] = 1
+                totMask2[indices] = ((1*np.sum(superMask)/superMask.shape[0])-0.7)*(1/(1-0.7))
         i += 1
     end = time.time()
     print( end - start)
     totMask = totMask.reshape([featureMap.shape[0],featureMap.shape[1]])
-    return totMask#totClassified.reshape(featureMap.shape[0],featureMap.shape[1])
+    
+    labelledRegions = (label(totMask, connectivity=1))
+    labelledRegions = np.reshape(labelledRegions,[featureMap.shape[0]*featureMap.shape[1]])
+    counts = np.bincount(labelledRegions)
+    counts[0]=0
+    print(np.argmax(counts))
+    largestRegion = (labelledRegions==np.argmax(counts))
+    
+    totClassified = totClassified.reshape([featureMap.shape[0],featureMap.shape[1]])
+    return largestRegion,totClassified,totMask2#totClassified.reshape(featureMap.shape[0],featureMap.shape[1])
       
 '''
 fig, axes = plt.subplots(nrows=2, ncols=2, figsize=(8, 8), sharex=True, sharey=True, subplot_kw={'adjustable':'box-forced'})

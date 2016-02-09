@@ -145,7 +145,7 @@ def main():
             #new 
             featureMap = imArray
             a=water_test.watershedFunc2(filepath)
-            b=water_test.superPix(im,a,featureMap,classifier,100)
+            b,totClassified,totMask2=water_test.superPix(im,a,featureMap,classifier,100)
             #new end
             #imArray = im
         
@@ -166,6 +166,11 @@ def main():
             
             yPrime = b #new line for superpix
             yPrime = np.asarray(yPrime)
+            totMask2 = np.asarray(totMask2)
+            totMask2 = np.reshape(totMask2,(totalSob.shape[0],totalSob.shape[1]))
+            totMask2 = rescale(totMask2,4,preserve_range=True)
+            totMask2 *= 255
+            totMask2 = totMask2.astype(np.uint8)
             yPrime = np.reshape(yPrime, (-1, 1)) # -1 means make it whatever it needs to be
             print(yPrime.shape)
             print(np.max(yPrime))
@@ -177,8 +182,9 @@ def main():
             yPrimeForMaskSave *= 255
             yPrimeForMaskSave = yPrimeForMaskSave.astype(np.uint8)
             print(os.path.join(newpath,fileNameString+'_mask'))
+            Image.fromarray(totMask2).save(os.path.join(newpath,fileNameString+'_ratio_mask.jpg'))
             Image.fromarray(yPrimeForMaskSave).save(os.path.join(newpath,fileNameString+'_mask.jpg'))
-            
+            Image.fromarray((totClassified*255).astype(np.uint8)).save(os.path.join(newpath,fileNameString+'_basic_mask.jpg'))
             #yPrime = (yPrime>64).astype(np.int)
             y = (y>64).astype(np.int)
             absError = (np.absolute(y-yPrime)).sum()
@@ -203,7 +209,7 @@ def main():
         averageErrorTraining = totTrainingError/(len(header)-missingTrain)
         print('Average error for training set (predicted only) of '+str(int((shuffled.shape[0]/trainRatio+1)-missingTrain))+' images is '+ str(averageErrorTraining))
         averageErrorTest = totTestingError/(shuffled.shape[0]-len(header)-missingTest)
-        print('Average error for testing set (predicted only) of '+str((shuffled.shape[0]-len(header)-missingTest)+' images is '+ str(averageErrorTest)))
+        print('Average error for testing set (predicted only) of '+str((shuffled.shape[0]-len(header)-missingTest))+' images is '+ str(averageErrorTest))
 if __name__ == '__main__':
     main()
 
