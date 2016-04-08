@@ -32,7 +32,7 @@ import water_test
 
 
 DIR_PATH = os.path.dirname(FILE_PATH)
-def main():
+def useClassifier():
         path = FILE_PATH
         levels = 5
         #trainingPath = os.path.join(path,)
@@ -211,7 +211,7 @@ def main():
         averageErrorTest = totTestingError/(shuffled.shape[0]-len(header)-missingTest)
         print('Average error for testing set (predicted only) of '+str((shuffled.shape[0]-len(header)-missingTest))+' images is '+ str(averageErrorTest))
 if __name__ == '__main__':
-    main()
+    useClassifier()
 
 
 

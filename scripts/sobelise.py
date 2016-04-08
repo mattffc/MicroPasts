@@ -1,12 +1,12 @@
 import numpy as np
-import docopt
+#import docopt
 from testing_sobel import concatSob
 from skimage.filters import gaussian_filter, sobel_h, sobel_v,sobel
 from skimage.transform import rescale, resize
 from PIL import Image
 #from skimage.filters import gaussian_filter
 import os
-print('Running Sobelise')
+#print('Running Sobelise')
 def downsample(I):
     sigma = 2
     """Downsample I by 2 after blurring with Gaussian of sigma=2.
@@ -31,22 +31,39 @@ def sobel_rgb(I):
     )
 
 def process_image(image_fn, levels=1):
-    path = os.path.splitext(image_fn)[0]
-    counter = 0
     
+    path = os.path.dirname(os.path.dirname(image_fn))
+    #print(path)
+    if not os.path.exists(os.path.join(path,'sobels')):
+        os.makedirs(os.path.join(path,'sobels'))
+    counter = 0
+    path = os.path.join(path,'sobels')
     im = Image.open(image_fn)
     im = np.asarray(im.convert('RGB')) * (1.0/255.0)
     im = rescale(im,0.25)#reduce the size of the image for speed
     orig_shape = im.shape[:2]
-   
+    elseTest = False
+    alreadyDone = True
     for level in range(levels):
-        print('Saving image layer '+str(counter)+' out of '+str(levels-1))
-        counter = 1+counter
-      
-        s = resize(sobel_rgb(im), orig_shape)
-     
-        s = (255 * (0.5 + s)).astype(np.uint8)
-        Image.fromarray(s[..., :3]).save(os.path.join(path+'_'+'{}_hv.png'.format(level)))
-        #Image.fromarray(s[..., 3:]).save(os.path.join(path+'_'+'{}_v.png'.format(level)))
-        im = downsample(im) 
-    print('Finished all processing')
+        saveLocation = os.path.join(path,os.path.splitext((os.path.basename(image_fn)))[0]+'_'+'{}_hv.png'.format(level))
+        if not os.path.exists(saveLocation):
+            alreadyDone = False
+            #print('Saving image layer '+str(counter+1)+' out of '+str(levels))
+            counter = 1+counter
+          
+            s = resize(sobel_rgb(im), orig_shape)
+         
+            s = (255 * (0.5 + s)).astype(np.uint8)
+            #print('here')
+            #print((os.path.basename(image_fn)))
+            #print(os.path.splitext((os.path.basename(image_fn)))[0])
+            #print(os.path.join(path,'_'+'{}_hv.png'.format(level)))
+            Image.fromarray(s[..., :3]).save(saveLocation)
+            #Image.fromarray(s[..., 3:]).save(os.path.join(path+'_'+'{}_v.png'.format(level)))
+            im = downsample(im) 
+        else:
+            if elseTest == False:
+                #print('sobels already exist for ' + str(image_fn))
+                elseTest = True
+    #print('Finished all processing')
+    return alreadyDone
