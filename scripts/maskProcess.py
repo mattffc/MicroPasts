@@ -40,4 +40,4 @@ superPixMethod='combined',brushMasks=False):
     
 if __name__ == '__main__':
     maskProcess(r'C:\Python34\bell\images',
-    sobelLevels=4,brushMasks=True,superPixMethod='SLIC')
+    sobelLevels=5,brushMasks=True,superPixMethod='SLIC')

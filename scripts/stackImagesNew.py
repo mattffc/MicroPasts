@@ -117,6 +117,7 @@ def stack(folderPath,sampleNumber,sobelLevels,brushMasks,superPixMethod='combine
             classifier = 1
             b,totClassified,totMask2,segmentOutlines,totMask=water_test.superPix(im,a,featureMap,classifier,100,alreadyClassified=True,thresh=0.2)
             #print(b.shape)
+           
             maskArray=totMask.reshape([(totClassified.shape[0]),(totClassified.shape[1])])
             ###maskArray = ((maskArray+featureMap)/2)
             #plt.imshow(b, interpolation='nearest')
@@ -128,7 +129,8 @@ def stack(folderPath,sampleNumber,sobelLevels,brushMasks,superPixMethod='combine
             if not os.path.exists(newpath):
                 
                     os.makedirs(newpath)
-                    
+            greyRegion=(maskArray == 0.2).astype(int) 
+            print(np.max(greyRegion))
             maskImage = Image.fromarray((((maskArray*255).astype(np.uint8))))
             maskImage = maskImage.convert('RGB')
             print(np.array(maskImage).shape)
@@ -138,15 +140,36 @@ def stack(folderPath,sampleNumber,sobelLevels,brushMasks,superPixMethod='combine
             print(np.max(maskImage[...,0]))
             print(np.max(maskImage[...,1]))
             print(np.max(maskImage[...,2]))
-            ##maskImage[(maskImage == 0.2*255)]
-            maskImage[:,:,2:3] = 0
-            
+            #greyRegion=(maskArray == 0.2*255).astype(int)*1.0
+            print(np.max(greyRegion))
+            #l=sf
+            greyRegionImage = Image.fromarray((((greyRegion*255).astype(np.uint8))))
+            greyRegionImage = greyRegionImage.convert('RGB')
+            print( np.sum(greyRegion))
+            greyRegionImage = np.array(greyRegionImage)
+            greyRegionImage[:,:,2:3]=0
+            maskImage[:,:,1:3] = 0
+            print('hereBrB')
+            print( np.sum(greyRegion))
+            print( np.max(maskImage))
+            print( np.max(greyRegion))
+            print(greyRegion.shape)
+            print(type(greyRegion))
+            #grey255 = greyRegion*255.0
+            maskImage2 = (greyRegionImage)+maskImage
+            #52 shows red, 51 doesnt
             #superMask2 = (superMask < (a)).astype('int')
             print(np.max(maskImage))
             maskImage = Image.fromarray((((maskImage).astype(np.uint8))))
+            maskImage2 = Image.fromarray((((maskImage2).astype(np.uint8))))
+            
             #maskImage = maskImage.convert('RGB')
             origImage = Image.fromarray((im*255).astype(np.uint8))
-            blend = Image.blend(maskImage,origImage,0.5)
+            #blend2 = Image.blend(maskImage2,origImage,0.5)
+            #maskImage2.save(os.path.join(newpath,fileNameString+'_mask2_training.jpg'))
+            greyImage = Image.fromarray((greyRegion*255).astype(np.uint8))
+            #greyImage.save(os.path.join(newpath,fileNameString+'_grey_training.jpg'))
+            blend = Image.blend(maskImage2,origImage,0.5)
             blend.save(os.path.join(newpath,fileNameString+'_mask_training.jpg'))
             
             #Image.fromarray((maskArray*255).astype(np.uint8)).save(os.path.join(newpath,fileNameString+'_mask_training.jpg'))
