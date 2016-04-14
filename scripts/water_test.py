@@ -23,7 +23,7 @@ def watershedFunc2(imagePath,superPixMethod,trainingSeg=False):
     image = np.asarray(Image.open(imagePath))
     
     #image = color.rgb2gray(image) --needed for watershed but not slic
-    image = rescale(image,0.25)
+    image = rescale(image,0.125)
     #plt.imshow(image)
     #plt.show()
     
@@ -41,7 +41,7 @@ def watershedFunc2(imagePath,superPixMethod,trainingSeg=False):
     denoised -= 0.0000001 # as 1.0 max on denoised was giving errors in the markers
     print(np.max(denoised))
     print(np.min(denoised))
-    
+    slicSegments = 300
     if trainingSeg == False:
         markers = rank.gradient(denoised, disk(6)) < 5 # disk was 2 before, thresh was 10
         
@@ -60,7 +60,7 @@ def watershedFunc2(imagePath,superPixMethod,trainingSeg=False):
             #print('water start')
             labels = 100000*watershed(gradient, markers)+1
             
-            labels += slic(image,max_iter=3,compactness=10,enforce_connectivity=True,min_size_factor=0.01,n_segments=100)
+            labels += slic(image,max_iter=3,compactness=10,enforce_connectivity=True,min_size_factor=0.01,n_segments=slicSegments)
             
             #print('SLIC fin')
         elif superPixMethod == 'watershed':
@@ -74,7 +74,7 @@ def watershedFunc2(imagePath,superPixMethod,trainingSeg=False):
             
             #labels = 100000*watershed(gradient, markers)
             print('test before errorBBB')
-            labels = slic(image,max_iter=5,compactness=10,enforce_connectivity=True,min_size_factor=0.01,n_segments=100)#segements 200 was causing crash,compact was 10
+            labels = slic(image,max_iter=5,compactness=10,enforce_connectivity=True,min_size_factor=0.01,n_segments=slicSegments)#segements 200 was causing crash,compact was 10
             print('after error')
             #plt.imshow(markers, interpolation='nearest')
             #plt.imshow(labels, interpolation='nearest',cmap="prism")
@@ -99,7 +99,7 @@ def watershedFunc2(imagePath,superPixMethod,trainingSeg=False):
             #print('water start')
             labels = 100000*watershed(gradient, markers)+1
             
-            labels += slic(image,max_iter=3,compactness=10,enforce_connectivity=True,min_size_factor=0.01,n_segments=100)
+            labels += slic(image,max_iter=3,compactness=10,enforce_connectivity=True,min_size_factor=0.01,n_segments=slicSegments)
             
             #print('SLIC fin')
         elif superPixMethod == 'watershed':
@@ -112,7 +112,7 @@ def watershedFunc2(imagePath,superPixMethod,trainingSeg=False):
             #labels = rescale(labels,2)
             
             #labels = 100000+watershed(gradient, markers)
-            labels = slic(image,max_iter=5,compactness=10,enforce_connectivity=True,min_size_factor=0.01,n_segments=100)#segements 200 was causing crash
+            labels = slic(image,max_iter=5,compactness=10,enforce_connectivity=True,min_size_factor=0.01,n_segments=slicSegments)#segements 200 was causing crash
             print('here')
             #plt.imshow(markers, interpolation='nearest')
             #plt.imshow(labels, interpolation='nearest',cmap="prism")
@@ -141,10 +141,12 @@ def superPix(image,labels,featureMap,classifier,sampleCount=100,alreadyClassifie
     #print(labels.shape)
     flatLabels = labels.reshape(labels.shape[0]*labels.shape[1])
     i = 1
-    totMask = np.zeros([featureMap.shape[0]*featureMap.shape[1]])
-    totMask2=np.zeros([featureMap.shape[0]*featureMap.shape[1]])
+    totMask = np.zeros([labels.shape[0]*labels.shape[1]])
+    totMask2=np.zeros([labels.shape[0]*labels.shape[1]])
     if alreadyClassified == None:
-        flatFM = featureMap.reshape(featureMap.shape[0]*featureMap.shape[1],featureMap.shape[2])
+        print featureMap.shape
+        flatFM = featureMap
+        #flatFM = featureMap.reshape(featureMap.shape[0]*featureMap.shape[1],featureMap.shape[2])
         totClassified = classifier.predict(flatFM)
     else:
         totClassified = featureMap.reshape([featureMap.shape[0]*featureMap.shape[1]])
@@ -168,7 +170,7 @@ def superPix(image,labels,featureMap,classifier,sampleCount=100,alreadyClassifie
             ###sampSuperPixel = superPixel[superPixelInd,...]
             #totClassified = classifier.predict(flatFM)
             superMask = totClassified[indices,...]#classifier.predict(sampSuperPixel)
-            flatZeros = np.zeros(featureMap.shape[0]*featureMap.shape[1])
+            flatZeros = np.zeros(labels.shape[0]*labels.shape[1])
             #print('indices')
             #print(np.max(indices))
             #print(indices.shape[0])
@@ -203,7 +205,7 @@ def superPix(image,labels,featureMap,classifier,sampleCount=100,alreadyClassifie
                     k += 1
                 '''
                 #print(np.sum(flatZeros))
-                zeros2d = flatZeros.reshape([featureMap.shape[0],featureMap.shape[1]])    
+                zeros2d = flatZeros.reshape([labels.shape[0],labels.shape[1]])    
                 #print('in if')
                 #print(superPixel.shape)
                 #print(featureMap.shape)
@@ -223,7 +225,7 @@ def superPix(image,labels,featureMap,classifier,sampleCount=100,alreadyClassifie
                     j = -1
                     #print('actually BLARGH')
                     #print(np.sum(flatZeros))
-                    zeros2d = flatZeros.reshape([featureMap.shape[0],featureMap.shape[1]])    
+                    zeros2d = flatZeros.reshape([labels.shape[0],labels.shape[1]])    
                     #print('in if')
                     #print(superPixel.shape)
                     #print(featureMap.shape)
@@ -242,10 +244,10 @@ def superPix(image,labels,featureMap,classifier,sampleCount=100,alreadyClassifie
         i += 1
     end = time.time()
     print('Time taken on the super pixels = '+ str(end - start))
-    totMask = totMask.reshape([featureMap.shape[0],featureMap.shape[1]])
+    totMask = totMask.reshape([labels.shape[0],labels.shape[1]])
     
     totMask2 = np.asarray(totMask2)
-    totMask2 = np.reshape(totMask2,(featureMap.shape[0],featureMap.shape[1]))
+    totMask2 = np.reshape(totMask2,(labels.shape[0],labels.shape[1]))
     segmentOutlines=skimage.segmentation.find_boundaries(labels)#was totmask2
     
     totMask2 = rescale(totMask2,4,preserve_range=True,order=0)#default is 1 order
@@ -264,13 +266,15 @@ def superPix(image,labels,featureMap,classifier,sampleCount=100,alreadyClassifie
     #plt.imshow(segmentOutlines, interpolation='nearest')
     #plt.show()
     labelledRegions = (label(totMask, connectivity=1))
-    labelledRegions = np.reshape(labelledRegions,[featureMap.shape[0]*featureMap.shape[1]])
+    print featureMap.shape
+    #l=lp
+    labelledRegions = np.reshape(labelledRegions,[labels.shape[0]*labels.shape[1]])
     counts = np.bincount(labelledRegions)
     counts[0]=0
     #print(np.argmax(counts))
     largestRegion = (labelledRegions==np.argmax(counts))
     
-    totClassified = totClassified.reshape([featureMap.shape[0],featureMap.shape[1]])
+    totClassified = totClassified.reshape([labels.shape[0],labels.shape[1]])
     return largestRegion,totClassified,totMask2,segmentOutlines,totMask#totClassified.reshape(featureMap.shape[0],featureMap.shape[1])
       
 '''

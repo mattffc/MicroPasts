@@ -39,5 +39,5 @@ superPixMethod='combined',brushMasks=False):
     useClassifier(os.path.dirname(folderPath),sobelLevels,classifier,trainSample,superPixMethod,brushMasks)
     
 if __name__ == '__main__':
-    maskProcess(r'C:\Python34\bell\images',
+    maskProcess(r'C:\Python34\palstaves2\2013T482_Lower_Hardres_Canterbury\Axe4\images',
     sobelLevels=5,brushMasks=True,superPixMethod='SLIC')

@@ -29,6 +29,7 @@ import os
 import random
 from scipy import ndimage
 from skimage.transform import rescale, resize
+from dwtSliding import dwtSlide  
 
 #path = './palstaves2/2013T482_Lower_Hardres_Canterbury/Axe1/'
 levels = 5
@@ -107,9 +108,16 @@ for filepath in imageNames:
         #sob_blurred3 = ndimage.gaussian_filter(sob_blurred2, 8)
         imWithSobBlurred0 = np.dstack([im,sobx,soby,sobx_blurred0,soby_blurred0])
         '''
-        im = rescale(im,0.25)
-        imArray = np.asarray(totalSob)
-        imArray = np.dstack([imArray,im])
+        ##im = rescale(im,0.25)
+        im = rescale(im,0.125)
+        ##imArray = np.asarray(totalSob)
+        dwtFeature = dwtSlide(filepath,4)
+        flatIm = im.reshape(im.shape[0]*im.shape[1],-1)
+        
+        print np.max(flatIm)
+        print np.max(dwtFeature)
+        
+        #imArray = np.dstack([imArray,im])
         #imArray = im
         
         maskArray = np.asarray(maskRaw) #not all 255 or 0 because of compression, may need to threshold
@@ -118,7 +126,8 @@ for filepath in imageNames:
         maskArray *= 255
         print(maskArray.shape)
         flatMaskArray = maskArray.reshape(maskArray.shape[0]*maskArray.shape[1])
-        flatImArray = imArray.reshape(imArray.shape[0]*imArray.shape[1],imArray.shape[2])
+        #flatImArray = imArray.reshape(imArray.shape[0]*imArray.shape[1],imArray.shape[2])
+        flatImArray = np.hstack(flatIm,dwtFeature)
         '''
         foreGround = (flatMaskArray>=64)
         backGround = (flatMaskArray<64)

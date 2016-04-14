@@ -7,6 +7,7 @@ import os
 import random
 from scipy import ndimage
 from skimage.transform import rescale, resize
+from dwtSliding import dwtSlide 
 import matplotlib.pyplot as plt
 import water_test
 
@@ -19,7 +20,7 @@ def stack(folderPath,sampleNumber,sobelLevels,brushMasks,superPixMethod='combine
     levels = sobelLevels
     path = FOLDER_PATH
     outputFilename = os.path.join(os.path.dirname(path),'trainingData_'+str(sobelLevels)+'_'+str(sampleNumber)+'.npz')
-    wholeXArray = np.zeros([0,levels*3+3])#+3 is for RGB non sobelised 
+    wholeXArray = np.zeros([0,103])#np.zeros([0,levels*3+3])#+3 is for RGB non sobelised 
     wholeyArray = np.zeros([0])
     numberStacked = 0
     numberSuccessStacked = 0
@@ -98,9 +99,18 @@ def stack(folderPath,sampleNumber,sobelLevels,brushMasks,superPixMethod='combine
             #sob_blurred3 = ndimage.gaussian_filter(sob_blurred2, 8)
             imWithSobBlurred0 = np.dstack([im,sobx,soby,sobx_blurred0,soby_blurred0])
             '''
-            im = rescale(im,0.25)
-            imArray = np.asarray(totalSob)
-            imArray = np.dstack([imArray,im])
+            #im = rescale(im,0.25)
+            im = rescale(im,0.125)
+            #imArray = np.asarray(totalSob)
+            #imArray = np.dstack([imArray,im*255])
+            dwtFeature = dwtSlide(filepath,4)
+            flatIm = im.reshape(im.shape[0]*im.shape[1],-1)
+            print(np.max(dwtFeature))
+            print(np.max(im))
+            print(np.mean(dwtFeature))
+            print(np.mean(im))
+            #l=lp
+            #l=lp
             #imArray = im
             
             maskArray = np.asarray(maskRaw) #not all 255 or 0 because of compression, may need to threshold
@@ -108,7 +118,8 @@ def stack(folderPath,sampleNumber,sobelLevels,brushMasks,superPixMethod='combine
             
             
             
-            maskArray = resize(maskArray,[totalSob.shape[0],totalSob.shape[1]])
+            ###maskArray = resize(maskArray,[totalSob.shape[0],totalSob.shape[1]])
+            maskArray = resize(maskArray,[im.shape[0],im.shape[1]])
             ##maskArray *= 255
             
             a=water_test.watershedFunc2(filepath,superPixMethod,trainingSeg=True)
@@ -161,6 +172,7 @@ def stack(folderPath,sampleNumber,sobelLevels,brushMasks,superPixMethod='combine
             #superMask2 = (superMask < (a)).astype('int')
             print(np.max(maskImage))
             maskImage = Image.fromarray((((maskImage).astype(np.uint8))))
+            print maskImage2.shape
             maskImage2 = Image.fromarray((((maskImage2).astype(np.uint8))))
             
             #maskImage = maskImage.convert('RGB')
@@ -168,6 +180,7 @@ def stack(folderPath,sampleNumber,sobelLevels,brushMasks,superPixMethod='combine
             #blend2 = Image.blend(maskImage2,origImage,0.5)
             #maskImage2.save(os.path.join(newpath,fileNameString+'_mask2_training.jpg'))
             greyImage = Image.fromarray((greyRegion*255).astype(np.uint8))
+            print im.shape
             #greyImage.save(os.path.join(newpath,fileNameString+'_grey_training.jpg'))
             blend = Image.blend(maskImage2,origImage,0.5)
             blend.save(os.path.join(newpath,fileNameString+'_mask_training.jpg'))
@@ -175,7 +188,8 @@ def stack(folderPath,sampleNumber,sobelLevels,brushMasks,superPixMethod='combine
             #Image.fromarray((maskArray*255).astype(np.uint8)).save(os.path.join(newpath,fileNameString+'_mask_training.jpg'))
             maskArray = maskArray*255
             flatMaskArray = maskArray.reshape(maskArray.shape[0]*maskArray.shape[1])
-            flatImArray = imArray.reshape(imArray.shape[0]*imArray.shape[1],imArray.shape[2])
+            #flatImArray = imArray.reshape(imArray.shape[0]*imArray.shape[1],imArray.shape[2])
+            flatImArray = np.hstack([flatIm,dwtFeature])
             '''
             foreGround = (flatMaskArray>=64)
             backGround = (flatMaskArray<64)

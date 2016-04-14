@@ -12,6 +12,7 @@ import pickle
 from scipy import ndimage
 from PIL import Image
 from skimage.transform import rescale, resize
+from dwtSliding import dwtSlide 
 import water_test
 import json
 import matplotlib.cm as cm
@@ -193,11 +194,19 @@ def useClassifier(FILE_PATH,levels,CLASSIFIER_TYPE,trainSample,superPixMethod,br
                 #sob_blurred3 = ndimage.gaussian_filter(sob_blurred2, 8)
                 imWithSobBlurred0 = np.dstack([im,sobx,soby,sobx_blurred0,soby_blurred0])
                 '''
-                im = rescale(im,0.25)
-                imArray = np.asarray(totalSob)
-                imArray = np.dstack([imArray,im])
+                #im = rescale(im,0.25)
+                im = rescale(im,0.125)
+                #im = im*255 # normalising
+                ##imArray = np.asarray(totalSob)
+                print(np.mean(totalSob))
+                print(np.mean(im))
+                #l=lp
+                ##imArray = np.dstack([imArray,im*255])
                 #new 
-                featureMap = imArray
+                dwtFeature = dwtSlide(filepath,4)
+                flatIm = im.reshape(im.shape[0]*im.shape[1],-1)
+                flatImArray = np.hstack([flatIm,dwtFeature])
+                featureMap = flatImArray
                 #print('here b4')
                 a=water_test.watershedFunc2(filepath,superPixMethod)
                 #print('between')
@@ -213,7 +222,7 @@ def useClassifier(FILE_PATH,levels,CLASSIFIER_TYPE,trainSample,superPixMethod,br
                 #maskArray = resize(maskArray,[totalSob.shape[0],totalSob.shape[1]])
                 #maskArray *= 255
                 #flatMaskArray = maskArray.reshape(maskArray.shape[0]*maskArray.shape[1],1)
-                flatImArray = imArray.reshape(imArray.shape[0]*imArray.shape[1],imArray.shape[2])
+                ###flatImArray = imArray.reshape(imArray.shape[0]*imArray.shape[1],imArray.shape[2])
                 #predictedMask = classifier.predict(flatImArray)#for superpix
                 numberPredicted += 1
                 pixelCount = flatImArray.shape[0]
@@ -232,16 +241,23 @@ def useClassifier(FILE_PATH,levels,CLASSIFIER_TYPE,trainSample,superPixMethod,br
                 totMask2 *= 255
                 totMask2 = totMask2.astype(np.uint8)
                 '''
+                print yPrime.shape
                 yPrime = np.reshape(yPrime, (-1, 1)) # -1 means make it whatever it needs to be
                 #print(yPrime.shape)
                 #print(np.max(yPrime))
-                yPrimeForMaskSave = np.reshape(yPrime,(totalSob.shape[0],totalSob.shape[1]))
+                print yPrime.shape
+                print im.shape
+                yPrimeForMaskSave = np.reshape(yPrime,(im.shape[0],im.shape[1]))
+                yPrimeForMaskSaveCopy = np.reshape(yPrime,(im.shape[0],im.shape[1]))
                 #print(np.max(yPrimeForMaskSave))
-                yPrimeForMaskSave = rescale(yPrimeForMaskSave,4,preserve_range=True,order=0)#order was 1
+                yPrimeForMaskSave = rescale(yPrimeForMaskSave,8,preserve_range=True,order=0)#order was 1
                 #print(np.max(yPrimeForMaskSave))
                 #print(np.max(yPrimeForMaskSave))
                 yPrimeForMaskSave *= 255
+                ##yPrimeForMaskSaveCopy = yPrimeForMaskSaveCopy.astype(np.uint8)
+                ##yPrimeForMaskSaveCopy *= 255
                 yPrimeForMaskSave = yPrimeForMaskSave.astype(np.uint8)
+                ##yPrimeForMaskSaveCopy = yPrimeForMaskSaveCopy.astype(np.uint8)
                 #print(os.path.join(newpath,fileNameString+'_mask'))
                 if not os.path.exists(os.path.join(path,'preMasks'+str(k-1))):
                     os.makedirs(os.path.join(path,'preMasks'+str(k-1))) 
@@ -254,6 +270,8 @@ def useClassifier(FILE_PATH,levels,CLASSIFIER_TYPE,trainSample,superPixMethod,br
                 Image.fromarray((totClassified*255).astype(np.uint8)).save(os.path.join(basicPath,fileNameString+'_basic_mask.jpg'))
                 segImage = Image.fromarray((((segmentOutlines*255).astype(np.uint8))))
                 segImage=segImage.convert('RGB')
+                yPrimeForMaskSaveImage = Image.fromarray((((yPrimeForMaskSaveCopy*255).astype(np.uint8))))
+                yPrimeForMaskSaveImage=yPrimeForMaskSaveImage.convert('RGB')
                 print(np.max(im))
                 origImage = Image.fromarray((im*255).astype(np.uint8))
                 
@@ -264,11 +282,17 @@ def useClassifier(FILE_PATH,levels,CLASSIFIER_TYPE,trainSample,superPixMethod,br
                 print(np.array(origImage).shape)
                 blend = Image.blend(segImage,origImage,0.7)
                 blend.save(os.path.join(basicPath,fileNameString+'_segment_mask.jpg'))
+                #print(yPrimeForMaskSaveCopy.shape)
+                print(im.shape)
+                print(segmentOutlines.shape)
+                print(yPrimeForMaskSaveCopy.shape)
+                blend2 = Image.blend((yPrimeForMaskSaveImage),origImage,0.7)
+                blend2.save(os.path.join(basicPath,fileNameString+'_final_mask.jpg'))
                 #Image.fromarray((((segmentOutlines*255).astype(np.uint8)))).save(os.path.join(basicPath,fileNameString+'_segment_mask.jpg'))
                 #yPrime = (yPrime>64).astype(np.int)
                 if maskMissing == False: 
                     maskArray = np.asarray(maskRaw)
-                    maskArray = resize(maskArray,[totalSob.shape[0],totalSob.shape[1]])
+                    maskArray = resize(maskArray,[im.shape[0],im.shape[1]])
                     maskArray *= 255
                     flatMaskArray = maskArray.reshape(maskArray.shape[0]*maskArray.shape[1],1)
                     y = flatMaskArray
