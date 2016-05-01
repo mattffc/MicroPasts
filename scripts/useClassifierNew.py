@@ -32,7 +32,7 @@ with open(fileName, 'r') as file:
 
 
 
-def useClassifier(FILE_PATH,levels,CLASSIFIER_TYPE,trainSample,superPixMethod,brushMasks):
+def useClassifier(FILE_PATH,levels,CLASSIFIER_TYPE,trainSample,superPixMethod,brushMasks,features):
         path = FILE_PATH
         #levels = 5
         #trainingPath = os.path.join(path,)
@@ -195,17 +195,41 @@ def useClassifier(FILE_PATH,levels,CLASSIFIER_TYPE,trainSample,superPixMethod,br
                 imWithSobBlurred0 = np.dstack([im,sobx,soby,sobx_blurred0,soby_blurred0])
                 '''
                 #im = rescale(im,0.25)
-                im = rescale(im,0.125)
-                #im = im*255 # normalising
-                ##imArray = np.asarray(totalSob)
-                print(np.mean(totalSob))
-                print(np.mean(im))
-                #l=lp
-                ##imArray = np.dstack([imArray,im*255])
+                im = rescale(im,0.25)#125)
+                if features=='RGB'or features=='entropy'or features=='dwt':
+                    imArray = im*255 # normalising
+                elif features=='sobel' or features=='combinedEntSob'or features=='combinedDwtSob':
+                    imArray = np.asarray(totalSob)
+                    imArray = np.dstack([imArray,im*255])
                 #new 
-                dwtFeature = dwtSlide(filepath,4)
+                if features =='entropy'or features =='dwt' or features =='combinedDwtSob' or features =='combinedEntSob':
+                    dwtFeature = dwtSlide(filepath,4,features)
+                
+                abc = dwtFeature[:,0].reshape(im.shape[0],im.shape[1])
+                abc = abc/np.max(abc)
+                b = dwtFeature[:,1].reshape(im.shape[0],im.shape[1])
+                b = b/np.max(b)
+                abc2 = dwtFeature[:,2].reshape(im.shape[0],im.shape[1])
+                abc2 = abc2/np.max(abc2)
+                b2 = dwtFeature[:,3].reshape(im.shape[0],im.shape[1])
+                b2 = b2/np.max(b2)
+                abc3 = dwtFeature[:,4].reshape(im.shape[0],im.shape[1])
+                abc3 = abc3/np.max(abc3)
+                #b3 = dwtFeature[:,7].reshape(im.shape[0],im.shape[1])
+                #b3 = b3/np.max(b)
+                abc = np.hstack([abc,b,abc2,b2,abc3])
+                
+                #abc = dwtFeature[:,0].reshape(im.shape[0],im.shape[1])
+                #abc = abc/np.max(abc)
+                #b = dwtFeature[:,1].reshape(im.shape[0],im.shape[1])
+                #b = b/np.max(b)
+                #abc = np.hstack([abc,b])
                 flatIm = im.reshape(im.shape[0]*im.shape[1],-1)
-                flatImArray = np.hstack([flatIm,dwtFeature])
+                #flatIm = np.zeros((flatIm.shape[0],flatIm.shape[1])) #for dwt testing
+                ##flatImArray = np.hstack([flatIm,dwtFeature])
+                flatImArray = imArray.reshape(imArray.shape[0]*imArray.shape[1],imArray.shape[2])
+                if features=='combinedEntSob'or features=='combinedDwtSob' or features=='entropy' or features=='dwt':
+                    flatImArray = np.hstack([flatImArray,dwtFeature])
                 featureMap = flatImArray
                 #print('here b4')
                 a=water_test.watershedFunc2(filepath,superPixMethod)
@@ -264,7 +288,7 @@ def useClassifier(FILE_PATH,levels,CLASSIFIER_TYPE,trainSample,superPixMethod,br
                 basicPath = os.path.join(path,'preMasks'+str(k-1))
                 print(np.max(totMask2))
                 print(np.min(totMask2))
-                
+                #Image.fromarray((abc*255).astype(np.uint8)).save(os.path.join(basicPath,fileNameString+'abc_mask.jpg'))
                 Image.fromarray(np.uint8(cm.afmhot(totMask2)*255)).save(os.path.join(basicPath,fileNameString+'_ratio_mask.jpg'))
                 Image.fromarray(yPrimeForMaskSave).save(os.path.join(newpath,fileNameString+'_mask.jpg'))
                 Image.fromarray((totClassified*255).astype(np.uint8)).save(os.path.join(basicPath,fileNameString+'_basic_mask.jpg'))
@@ -272,6 +296,14 @@ def useClassifier(FILE_PATH,levels,CLASSIFIER_TYPE,trainSample,superPixMethod,br
                 segImage=segImage.convert('RGB')
                 yPrimeForMaskSaveImage = Image.fromarray((((yPrimeForMaskSaveCopy*255).astype(np.uint8))))
                 yPrimeForMaskSaveImage=yPrimeForMaskSaveImage.convert('RGB')
+                
+                yPrimeForMaskSaveImage2 = np.array(yPrimeForMaskSaveImage)
+                yPrimeForMaskSaveImage2[:,:,1:3]=0
+                print np.max(yPrimeForMaskSaveImage2)
+                print np.max(yPrimeForMaskSaveCopy)
+                #l=lp
+                yPrimeForMaskSaveImage2 = Image.fromarray((((yPrimeForMaskSaveImage2).astype(np.uint8))))
+                
                 print(np.max(im))
                 origImage = Image.fromarray((im*255).astype(np.uint8))
                 
@@ -286,7 +318,7 @@ def useClassifier(FILE_PATH,levels,CLASSIFIER_TYPE,trainSample,superPixMethod,br
                 print(im.shape)
                 print(segmentOutlines.shape)
                 print(yPrimeForMaskSaveCopy.shape)
-                blend2 = Image.blend((yPrimeForMaskSaveImage),origImage,0.7)
+                blend2 = Image.blend((yPrimeForMaskSaveImage2),origImage,0.7)
                 blend2.save(os.path.join(basicPath,fileNameString+'_final_mask.jpg'))
                 #Image.fromarray((((segmentOutlines*255).astype(np.uint8)))).save(os.path.join(basicPath,fileNameString+'_segment_mask.jpg'))
                 #yPrime = (yPrime>64).astype(np.int)

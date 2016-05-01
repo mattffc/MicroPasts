@@ -29,6 +29,7 @@ def concatSob(filePath,levels=1):
           #horzSobSub = rescale(horzSob, 0.25)
           #vertSobSub = rescale(vertSob, 0.25)
           if totalSob.shape[0]==0:
+                   print hvSob.shape
                    totalSob = np.zeros([hvSob.shape[0],hvSob.shape[1]])
           totalSob = np.dstack([totalSob,hvSob])
      totalSob = totalSob[...,1:]	

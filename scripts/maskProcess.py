@@ -12,20 +12,22 @@ Parameters:
     Training mask frequency, default 10
     Compare new masks to true, default False
     Type of super pixeling
+    Features: sobel or entropy or combined or just rgb
     
 Output should be average error across produced masks vs test set if it exists.
 Masks should go into a folder and create a separate folder for basic masks.    
 '''
+
 from stackImagesNew import stack
 from createClassifierNew import createClassifier
 from useClassifierNew import useClassifier
 import os
 
 def maskProcess(folderPath,trainSample=10000,sobelLevels=5,classifier='Tree',
-superPixMethod='combined',brushMasks=False):
+superPixMethod='combined',brushMasks=False,features='combinedEntSob',triGrown=True):
     if not os.path.exists(os.path.join(os.path.dirname(folderPath),
     'trainingData_'+str(sobelLevels)+'_'+str(trainSample)+'.npz')):
-        stack(folderPath,trainSample,sobelLevels,brushMasks,superPixMethod)
+        stack(folderPath,trainSample,sobelLevels,brushMasks,superPixMethod,features,triGrown)
         print('Finished preparing training images')
     else:
         print('Training images already prepared')
@@ -36,8 +38,8 @@ superPixMethod='combined',brushMasks=False):
         print('Finished creating the classifier')
     else:
         print('Classifier already created')
-    useClassifier(os.path.dirname(folderPath),sobelLevels,classifier,trainSample,superPixMethod,brushMasks)
+    useClassifier(os.path.dirname(folderPath),sobelLevels,classifier,trainSample,superPixMethod,brushMasks,features)
     
 if __name__ == '__main__':
-    maskProcess(r'C:\Python34\palstaves2\2013T482_Lower_Hardres_Canterbury\Axe4\images',
-    sobelLevels=5,brushMasks=True,superPixMethod='SLIC')
+    maskProcess(r'C:\Python34\bell\images',
+    sobelLevels=3,brushMasks=True,superPixMethod='SLIC',features='combinedDwtSob')

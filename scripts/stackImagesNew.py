@@ -11,7 +11,7 @@ from dwtSliding import dwtSlide
 import matplotlib.pyplot as plt
 import water_test
 
-def stack(folderPath,sampleNumber,sobelLevels,brushMasks,superPixMethod='combined'):
+def stack(folderPath,sampleNumber,sobelLevels,brushMasks,superPixMethod='combined',features='combined',triGrown=True):
     FOLDER_PATH = folderPath
     SAMPLE_NUMBER = sampleNumber
     #trainRatio = int(opts['<trainRatio>'])
@@ -20,7 +20,24 @@ def stack(folderPath,sampleNumber,sobelLevels,brushMasks,superPixMethod='combine
     levels = sobelLevels
     path = FOLDER_PATH
     outputFilename = os.path.join(os.path.dirname(path),'trainingData_'+str(sobelLevels)+'_'+str(sampleNumber)+'.npz')
-    wholeXArray = np.zeros([0,103])#np.zeros([0,levels*3+3])#+3 is for RGB non sobelised 
+    
+    if features=='RGB':
+        wholeXArray = np.zeros([0,3])#([0,8+3])#np.zeros([0,levels*3+3])#+3 is for RGB non sobelised 
+    elif features=='sobel':
+        wholeXArray = np.zeros([0,levels*3+3])    
+    elif features=='entropy':
+        wholeXArray = np.zeros([0,7+3])
+    elif features=='combinedEntSob':
+        wholeXArray = np.zeros([0,levels*3+7+3])
+    elif features =='dwt':
+        l=lp
+        wholeXArray = np.zeros([0,levels*3+7+3])
+    elif features=='combinedDwtSob':
+        l=lp
+        #wholeXArray = np.zeros([0,levels*3+3])
+    else: 
+        print ("Error selecting type of features")
+        l=lp#breakpoint
     wholeyArray = np.zeros([0])
     numberStacked = 0
     numberSuccessStacked = 0
@@ -100,10 +117,14 @@ def stack(folderPath,sampleNumber,sobelLevels,brushMasks,superPixMethod='combine
             imWithSobBlurred0 = np.dstack([im,sobx,soby,sobx_blurred0,soby_blurred0])
             '''
             #im = rescale(im,0.25)
-            im = rescale(im,0.125)
-            #imArray = np.asarray(totalSob)
-            #imArray = np.dstack([imArray,im*255])
-            dwtFeature = dwtSlide(filepath,4)
+            im = rescale(im,0.25)#0.125)
+            if features=='RGB'or features=='entropy'or features=='dwt':
+                imArray = im*255
+            elif features=='sobel' or features=='combinedEntSob'or features=='combinedDwtSob':
+                imArray = np.asarray(totalSob)
+                imArray = np.dstack([imArray,im*255])
+            if features =='entropy'or features =='dwt' or features =='combinedDwtSob' or features =='combinedEntSob':
+                dwtFeature = dwtSlide(filepath,4,features)
             flatIm = im.reshape(im.shape[0]*im.shape[1],-1)
             print(np.max(dwtFeature))
             print(np.max(im))
@@ -188,8 +209,12 @@ def stack(folderPath,sampleNumber,sobelLevels,brushMasks,superPixMethod='combine
             #Image.fromarray((maskArray*255).astype(np.uint8)).save(os.path.join(newpath,fileNameString+'_mask_training.jpg'))
             maskArray = maskArray*255
             flatMaskArray = maskArray.reshape(maskArray.shape[0]*maskArray.shape[1])
-            #flatImArray = imArray.reshape(imArray.shape[0]*imArray.shape[1],imArray.shape[2])
-            flatImArray = np.hstack([flatIm,dwtFeature])
+            flatImArray = imArray.reshape(imArray.shape[0]*imArray.shape[1],imArray.shape[2])
+            #flatIm = np.zeros((flatIm.shape[0],flatIm.shape[1])) # for dwt only testing
+            print flatIm.shape
+            print dwtFeature.shape
+            if features=='combinedEntSob'or features=='combinedDwtSob' or features=='entropy' or features=='dwt':
+                flatImArray = np.hstack([flatImArray,dwtFeature])
             '''
             foreGround = (flatMaskArray>=64)
             backGround = (flatMaskArray<64)

@@ -126,6 +126,7 @@ for filepath in imageNames:
         maskArray *= 255
         print(maskArray.shape)
         flatMaskArray = maskArray.reshape(maskArray.shape[0]*maskArray.shape[1])
+        flatIm = 0 # testing dwt only
         #flatImArray = imArray.reshape(imArray.shape[0]*imArray.shape[1],imArray.shape[2])
         flatImArray = np.hstack(flatIm,dwtFeature)
         '''

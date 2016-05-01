@@ -23,7 +23,7 @@ def watershedFunc2(imagePath,superPixMethod,trainingSeg=False):
     image = np.asarray(Image.open(imagePath))
     
     #image = color.rgb2gray(image) --needed for watershed but not slic
-    image = rescale(image,0.125)
+    image = rescale(image,0.25)#125)
     #plt.imshow(image)
     #plt.show()
     
