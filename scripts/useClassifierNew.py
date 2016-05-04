@@ -32,11 +32,12 @@ with open(fileName, 'r') as file:
 
 
 
-def useClassifier(FILE_PATH,levels,CLASSIFIER_TYPE,trainSample,superPixMethod,brushMasks,features):
+def useClassifier(FILE_PATH,levels,CLASSIFIER_TYPE,trainSample,superPixMethod,brushMasks,features,triGrown):
         path = FILE_PATH
         #levels = 5
         #trainingPath = os.path.join(path,)
-        training = np.load(os.path.join(path,'trainingData_'+str(levels)+'_'+str(trainSample)+'.npz'))
+        training = np.load(os.path.join(path,'trainingData_'+str(levels)+'_'+\
+        'brush'+str(brushMasks)+'_'+str(superPixMethod)+'_'+str(features)+'_'+'grown'+str(triGrown)+'.npz'))
         shuffled = training['shuffled']
         trainRatio = training['R']
         #trainingImages = training['header'](images)
@@ -65,20 +66,23 @@ def useClassifier(FILE_PATH,levels,CLASSIFIER_TYPE,trainSample,superPixMethod,br
             
             #print((loadInfo))
             print((levels,CLASSIFIER_TYPE,trainSample,superPixMethod))
+            #print loadInfo
             if not os.path.exists(newpath):
                 
                 searchingFolders = False
                 os.makedirs(newpath)
                 masksInfo = {'levels':levels,'CLASSIFIER_TYPE':CLASSIFIER_TYPE,
                 'trainSample':trainSample,'superPixMethod':superPixMethod
-                ,'brushMasks':brushMasks}
+                ,'brushMasks':brushMasks,'features':features,'triGrown':triGrown}
                 json.dump( masksInfo, open(os.path.join(newpath,"maskInfo.json"), "w" ) )
-                
+                print('first')
                 json.dump(header,open(os.path.join(newpath,"trainInfo.json"), "w" ))
             elif (loadInfo=={'levels':levels,'CLASSIFIER_TYPE':CLASSIFIER_TYPE,
                 'trainSample':trainSample,'superPixMethod':superPixMethod
-                ,'brushMasks':brushMasks}):
+                ,'brushMasks':brushMasks,'features':features,'triGrown':triGrown}):
                 searchingFolders = False
+                print('here')
+            #l=lp
             '''
             elif (loadInfo!=(levels,CLASSIFIER_TYPE,trainSample,superPixMethod)):
                 #newpath=os.path.join(path,'predictedMasks')+str(k)
@@ -103,7 +107,8 @@ def useClassifier(FILE_PATH,levels,CLASSIFIER_TYPE,trainSample,superPixMethod,br
        
         if CLASSIFIER_TYPE == 'LinearSVC':
             try:
-                pickleFile = open(os.path.join(path,'LinearSVC'+'_'+str(levels)+'_'+str(trainSample)+'.pickle'), 'rb')
+                pickleFile = open(os.path.join(path,'LinearSVC'+'_'+str(levels)+'_'+\
+        'brush'+str(brushMasks)+'_'+str(superPixMethod)+'_'+str(features)+'_'+'grown'+str(triGrown)+'.pickle'), 'rb')
             except IOError:
                 print('Classifier not trained '+'\n'+'##'+'\n'+'##'+'\n'+'##'+'\n'+'##')
                 print('##>>>>>>>>'+'\n'+'##>>>>>>>>'+'\n'+'##>>>>>>>>'+'\n'+'##>>>>>>>>')
@@ -111,7 +116,8 @@ def useClassifier(FILE_PATH,levels,CLASSIFIER_TYPE,trainSample,superPixMethod,br
             
         elif CLASSIFIER_TYPE == 'Tree':
             try:
-                pickleFile = open(os.path.join(path,'Tree'+'_'+str(levels)+'_'+str(trainSample)+'.pickle'), 'rb')
+                pickleFile = open(os.path.join(path,'Tree'+'_'+str(levels)+'_'+\
+        'brush'+str(brushMasks)+'_'+str(superPixMethod)+'_'+str(features)+'_'+'grown'+str(triGrown)+'.pickle'), 'rb')
             except IOError:
                 print('Classifier not trained '+'\n'+'##'+'\n'+'##'+'\n'+'##'+'\n'+'##')
                 print('##>>>>>>>>'+'\n'+'##>>>>>>>>'+'\n'+'##>>>>>>>>'+'\n'+'##>>>>>>>>')
@@ -148,18 +154,33 @@ def useClassifier(FILE_PATH,levels,CLASSIFIER_TYPE,trainSample,superPixMethod,br
             fileNameStringWithExtension = os.path.basename(filepath)
             fileNameString = os.path.splitext(fileNameStringWithExtension)[0]
             maskPath = os.path.join(path, 'masks/'+fileNameString+'_mask')
+            brushMaskPath = os.path.join(path, 'brushMasks/'+fileNameString+'_mask'+'.jpg')
+            trainMaskPath = os.path.join(path, 'trainMasks/'+fileNameString+'_mask'+'.jpg')
+            procTrain = False
             if not os.path.exists(os.path.join(newpath,fileNameString+'_mask.jpg')):
-                print('Image '+str(imageIndex+1)+' out of '+str(shuffled.shape[0]+1))
+                print('Image '+str(imageIndex+1)+' out of '+str(shuffled.shape[0]))
                 sobelise.process_image(filepath,levels)
                 totalSob = testing_sobel.concatSob(filepath,levels)
                 maskMissing = False
                 try:
                     maskRaw = Image.open(maskPath+'.jpg')
                     maskMissing = False
+                    print 'harpy'
+                    if os.path.exists(brushMaskPath) and brushMasks==True:
+                        procTrain = True
+                    if os.path.exists(trainMaskPath) and brushMasks==False:
+                        procTrain = True
+                    imageIndex += 1
                 except IOError:
                     print('Image '+fileNameString+' has no corresponding mask, therefore error cannot be calculated')
-                    if imageIndex % trainRatio == 0:
+                    if os.path.exists(brushMaskPath) and brushMasks==True:#imageIndex % trainRatio == 0:
                         missingTrain +=1
+                        procTrain = True
+                        print('exists 0')
+                    elif os.path.exists(trainMaskPath) and brushMasks==False:#imageIndex % trainRatio == 0:
+                        missingTrain +=1
+                        procTrain = True
+                        print('exists 0')
                     else:
                         missingTest +=1
                     imageIndex += 1
@@ -201,10 +222,11 @@ def useClassifier(FILE_PATH,levels,CLASSIFIER_TYPE,trainSample,superPixMethod,br
                 elif features=='sobel' or features=='combinedEntSob'or features=='combinedDwtSob':
                     imArray = np.asarray(totalSob)
                     imArray = np.dstack([imArray,im*255])
-                #new 
+                elif features =='sobelSansRGB':
+                    imArray = np.asarray(totalSob)
                 if features =='entropy'or features =='dwt' or features =='combinedDwtSob' or features =='combinedEntSob':
                     dwtFeature = dwtSlide(filepath,4,features)
-                
+                '''
                 abc = dwtFeature[:,0].reshape(im.shape[0],im.shape[1])
                 abc = abc/np.max(abc)
                 b = dwtFeature[:,1].reshape(im.shape[0],im.shape[1])
@@ -218,7 +240,7 @@ def useClassifier(FILE_PATH,levels,CLASSIFIER_TYPE,trainSample,superPixMethod,br
                 #b3 = dwtFeature[:,7].reshape(im.shape[0],im.shape[1])
                 #b3 = b3/np.max(b)
                 abc = np.hstack([abc,b,abc2,b2,abc3])
-                
+                '''
                 #abc = dwtFeature[:,0].reshape(im.shape[0],im.shape[1])
                 #abc = abc/np.max(abc)
                 #b = dwtFeature[:,1].reshape(im.shape[0],im.shape[1])
@@ -232,9 +254,12 @@ def useClassifier(FILE_PATH,levels,CLASSIFIER_TYPE,trainSample,superPixMethod,br
                     flatImArray = np.hstack([flatImArray,dwtFeature])
                 featureMap = flatImArray
                 #print('here b4')
+               
                 a=water_test.watershedFunc2(filepath,superPixMethod)
                 #print('between')
                 b,totClassified,totMask2,segmentOutlines,totMask=water_test.superPix(im,a,featureMap,classifier,100)
+                if superPixMethod == 'None':
+                    b=totClassified
                 #print('here after')
                 print(np.unique((segmentOutlines*255).astype(np.uint8)))
                 
@@ -330,25 +355,36 @@ def useClassifier(FILE_PATH,levels,CLASSIFIER_TYPE,trainSample,superPixMethod,br
                     y = flatMaskArray
                     
                     y = (y>64).astype(np.int)
-                    absError = (np.absolute(y-yPrime)).sum()
+                    absError = np.float((np.absolute(y-yPrime)).sum())/(y.shape[0]*y.shape[1])
                     print('Error from image '+fileNameString+ ' is '+str(absError))
                 
-                    if imageIndex % trainRatio == 0:
+                    if procTrain==True:#os.path.exists(brushMaskPath):
                         #print('Training Image')
+                        print('exists 1')
                         totTrainingError = totTrainingError+absError
                     else:
                         totTestingError = totTestingError+absError
                     #totalError = totalError+absError
             else:
-                print('Image '+str(imageIndex+1)+' out of '+str(shuffled.shape[0]+1)+' already processed')
-                
+                print('Image '+str(imageIndex+1)+' out of '+str(shuffled.shape[0])+' already processed')
+                numberPredicted+=1
                 try:
                     maskRaw = Image.open(maskPath+'.jpg')
                     maskMissing = False
+                    imageIndex += 1
+                    if os.path.exists(brushMaskPath) and brushMasks==True:
+                        procTrain = True
+                    if os.path.exists(trainMaskPath) and brushMasks==False:
+                        procTrain = True
                 except IOError:
                     print('Image '+fileNameString+' has no corresponding mask, therefore error cannot be calculated')
-                    if imageIndex % trainRatio == 0:
+                    if os.path.exists(brushMaskPath) and brushMasks==True:
+                        procTrain = True
+                    if os.path.exists(trainMaskPath) and brushMasks==False:
+                        procTrain = True
+                    if procTrain==True:#os.path.exists(brushMaskPath):#imageIndex % trainRatio == 0:
                         missingTrain +=1
+                        print('exists 2')
                     else:
                         missingTest +=1
                     imageIndex += 1
@@ -371,13 +407,16 @@ def useClassifier(FILE_PATH,levels,CLASSIFIER_TYPE,trainSample,superPixMethod,br
                     #print(y.shape)
                     #print(flatYPrime.shape)
                     y = (y>64).astype(np.int)
-                    absError = (np.absolute(y-flatYPrime)).sum()
+                    absError = np.float((np.absolute(y-flatYPrime)).sum())/(y.shape[0]*y.shape[1])
                     print('Error from image '+fileNameString+ ' is '+str(absError))
                 
-                    if imageIndex % trainRatio == 0:
-                        #print('Training Image')
+                    if procTrain==True:#os.path.exists(brushMaskPath):
+                        print('Training Image')
+                        
                         totTrainingError = totTrainingError+absError
+                        
                     else:
+                        
                         totTestingError = totTestingError+absError
                     #totalError = totalError+absError
                  
@@ -391,11 +430,19 @@ def useClassifier(FILE_PATH,levels,CLASSIFIER_TYPE,trainSample,superPixMethod,br
             averageErrorTest = totalError/(numberPredicted-realTrainSetSize)
             print('Average error for testing set of '+str(imageSetSize-shuffled.shape[0]/trainRatio)+' images is '+ str(averageErrorTest))
         '''
-        print('Number Predicted = ' + str(numberPredicted) +' out of '+str(shuffled.shape[0]))
-        averageErrorTraining = totTrainingError/(len(header)-missingTrain)
-        print('Average error for training set (predicted only) of '+str(int((shuffled.shape[0]/trainRatio+1)-missingTrain))+' images is '+ str(averageErrorTraining))
-        averageErrorTest = totTestingError/(shuffled.shape[0]-len(header)-missingTest)
-        print('Average error for testing set (predicted only) of '+str((shuffled.shape[0]-len(header)-missingTest))+' images is '+ str(averageErrorTest))
+        if len(header)-missingTrain>0:
+            print('Number Predicted = ' + str(numberPredicted) +' out of '+str(shuffled.shape[0]))
+            averageErrorTraining = totTrainingError/(len(header)-missingTrain)
+            print'tot training error'
+            print totTrainingError
+            print('Average error for training set (predicted only) of '+str(int((shuffled.shape[0]/trainRatio+1)-missingTrain))+' images is '+ str(averageErrorTraining))
+            averageErrorTest = totTestingError/(shuffled.shape[0]-len(header)-missingTest)
+            print('Average error for testing set (predicted only) of '+str((shuffled.shape[0]-len(header)-missingTest))+' images is '+ str(averageErrorTest))
+            performance = {'size':(shuffled.shape[0]-len(header)-missingTest),'error':str(averageErrorTest)}
+            json.dump( performance, open(os.path.join(path,"performance_"+str(levels)+'_'+\
+            'brush'+str(brushMasks)+'_'+str(superPixMethod)+'_'+str(features)+'_'+'grown'+str(triGrown)+".json"), "w" ) )
+        else:
+            print('Could not calculate error as there were no true masks')
 if __name__ == '__main__':
     useClassifier()
 

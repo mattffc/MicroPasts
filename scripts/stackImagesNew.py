@@ -11,7 +11,7 @@ from dwtSliding import dwtSlide
 import matplotlib.pyplot as plt
 import water_test
 
-def stack(folderPath,sampleNumber,sobelLevels,brushMasks,superPixMethod='combined',features='combined',triGrown=True):
+def stack(folderPath,sampleNumber,sobelLevels,brushMasks,superPixMethod='combined',features='combined',triGrown=True,sobelType='combined'):
     FOLDER_PATH = folderPath
     SAMPLE_NUMBER = sampleNumber
     #trainRatio = int(opts['<trainRatio>'])
@@ -19,7 +19,8 @@ def stack(folderPath,sampleNumber,sobelLevels,brushMasks,superPixMethod='combine
     #path = './palstaves2/2013T482_Lower_Hardres_Canterbury/Axe1/'
     levels = sobelLevels
     path = FOLDER_PATH
-    outputFilename = os.path.join(os.path.dirname(path),'trainingData_'+str(sobelLevels)+'_'+str(sampleNumber)+'.npz')
+    outputFilename = os.path.join(os.path.dirname(path),'trainingData_'+str(sobelLevels)+'_'+\
+    'brush'+str(brushMasks)+'_'+str(superPixMethod)+'_'+str(features)+'_'+'grown'+str(triGrown)+'.npz')
     
     if features=='RGB':
         wholeXArray = np.zeros([0,3])#([0,8+3])#np.zeros([0,levels*3+3])#+3 is for RGB non sobelised 
@@ -30,11 +31,13 @@ def stack(folderPath,sampleNumber,sobelLevels,brushMasks,superPixMethod='combine
     elif features=='combinedEntSob':
         wholeXArray = np.zeros([0,levels*3+7+3])
     elif features =='dwt':
-        l=lp
-        wholeXArray = np.zeros([0,levels*3+7+3])
+        wholeXArray = np.zeros([0,8+3])
+        #wholeXArray = np.zeros([0,8+3])
     elif features=='combinedDwtSob':
-        l=lp
+        wholeXArray = np.zeros([0,levels*3+8+3])
         #wholeXArray = np.zeros([0,levels*3+3])
+    elif features =='sobelSansRGB':
+        wholeXArray = np.zeros([0,levels*3])
     else: 
         print ("Error selecting type of features")
         l=lp#breakpoint
@@ -88,8 +91,8 @@ def stack(folderPath,sampleNumber,sobelLevels,brushMasks,superPixMethod='combine
                 numberSuccessStacked -= 1
                 continue
             
-            alreadyDone = sobelise.process_image(filepath,levels)
-            totalSob = testing_sobel.concatSob(filepath,levels)
+            alreadyDone = sobelise.process_image(filepath,levels,sobelType)
+            totalSob = testing_sobel.concatSob(filepath,levels,sobelType)
             im = Image.open(filepath)
             im = np.asarray(im)
             #im = ndimage.gaussian_filter(im, 3)
@@ -123,12 +126,14 @@ def stack(folderPath,sampleNumber,sobelLevels,brushMasks,superPixMethod='combine
             elif features=='sobel' or features=='combinedEntSob'or features=='combinedDwtSob':
                 imArray = np.asarray(totalSob)
                 imArray = np.dstack([imArray,im*255])
+            elif features =='sobelSansRGB':
+                imArray = np.asarray(totalSob)
             if features =='entropy'or features =='dwt' or features =='combinedDwtSob' or features =='combinedEntSob':
                 dwtFeature = dwtSlide(filepath,4,features)
             flatIm = im.reshape(im.shape[0]*im.shape[1],-1)
-            print(np.max(dwtFeature))
+            #print(np.max(dwtFeature))
             print(np.max(im))
-            print(np.mean(dwtFeature))
+            #print(np.mean(dwtFeature))
             print(np.mean(im))
             #l=lp
             #l=lp
@@ -138,19 +143,19 @@ def stack(folderPath,sampleNumber,sobelLevels,brushMasks,superPixMethod='combine
             ## mod the maskArray here
             
             
-            
-            ###maskArray = resize(maskArray,[totalSob.shape[0],totalSob.shape[1]])
-            maskArray = resize(maskArray,[im.shape[0],im.shape[1]])
-            ##maskArray *= 255
-            
-            a=water_test.watershedFunc2(filepath,superPixMethod,trainingSeg=True)
-            #print('between')
-            featureMap=maskArray
-            classifier = 1
-            b,totClassified,totMask2,segmentOutlines,totMask=water_test.superPix(im,a,featureMap,classifier,100,alreadyClassified=True,thresh=0.2)
-            #print(b.shape)
-           
-            maskArray=totMask.reshape([(totClassified.shape[0]),(totClassified.shape[1])])
+            if triGrown == True:
+                ###maskArray = resize(maskArray,[totalSob.shape[0],totalSob.shape[1]])
+                maskArray = resize(maskArray,[im.shape[0],im.shape[1]])
+                ##maskArray *= 255
+                a=water_test.watershedFunc2(filepath,superPixMethod,trainingSeg=True)
+                #print('between')
+                featureMap=maskArray
+                classifier = 1
+                b,totClassified,totMask2,segmentOutlines,totMask=water_test.superPix(im,a,featureMap,classifier,100,alreadyClassified=True,thresh=0.2)
+                #print(b.shape)
+                maskArray=totMask.reshape([(totClassified.shape[0]),(totClassified.shape[1])])
+            else:
+                maskArray = resize(maskArray,[im.shape[0],im.shape[1]])
             ###maskArray = ((maskArray+featureMap)/2)
             #plt.imshow(b, interpolation='nearest')
             #plt.show()
@@ -212,7 +217,7 @@ def stack(folderPath,sampleNumber,sobelLevels,brushMasks,superPixMethod='combine
             flatImArray = imArray.reshape(imArray.shape[0]*imArray.shape[1],imArray.shape[2])
             #flatIm = np.zeros((flatIm.shape[0],flatIm.shape[1])) # for dwt only testing
             print flatIm.shape
-            print dwtFeature.shape
+            #print dwtFeature.shape
             if features=='combinedEntSob'or features=='combinedDwtSob' or features=='entropy' or features=='dwt':
                 flatImArray = np.hstack([flatImArray,dwtFeature])
             '''

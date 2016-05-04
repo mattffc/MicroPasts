@@ -80,6 +80,8 @@ def watershedFunc2(imagePath,superPixMethod,trainingSeg=False):
             #plt.imshow(labels, interpolation='nearest',cmap="prism")
             #plt.imshow(image, interpolation='nearest', alpha=.8)
             #plt.show()
+        elif superPixMethod =='None':
+            labels = slic(image,max_iter=5,compactness=10,enforce_connectivity=True,min_size_factor=0.01,n_segments=slicSegments)
         else:
             assert(1==2)
     elif trainingSeg == True:

@@ -13,6 +13,7 @@ Parameters:
     Compare new masks to true, default False
     Type of super pixeling
     Features: sobel or entropy or combined or just rgb
+    Use superpixel voting
     
 Output should be average error across produced masks vs test set if it exists.
 Masks should go into a folder and create a separate folder for basic masks.    
@@ -24,22 +25,30 @@ from useClassifierNew import useClassifier
 import os
 
 def maskProcess(folderPath,trainSample=10000,sobelLevels=5,classifier='Tree',
-superPixMethod='combined',brushMasks=False,features='combinedEntSob',triGrown=True):
+superPixMethod='combined',brushMasks=False,features='combinedEntSob',triGrown=True,sobelType='combined'):
+    if superPixMethod=='None' and triGrown==True:
+        print('Can not have superPixMethod set to None and triGrown set to True')
+        l=lp#conflict of parameters
     if not os.path.exists(os.path.join(os.path.dirname(folderPath),
-    'trainingData_'+str(sobelLevels)+'_'+str(trainSample)+'.npz')):
-        stack(folderPath,trainSample,sobelLevels,brushMasks,superPixMethod,features,triGrown)
+    'trainingData_'+str(sobelLevels)+'_'+'brush'+str(brushMasks)+\
+    '_'+str(superPixMethod)+'_'+str(features)+'_'+'grown'+str(triGrown)\
+    +'.npz')):
+        stack(folderPath,trainSample,sobelLevels,brushMasks,superPixMethod,features,triGrown,sobelType)
         print('Finished preparing training images')
     else:
         print('Training images already prepared')
     if not os.path.exists(os.path.join(os.path.dirname(folderPath),
-    classifier+'_'+str(sobelLevels)+'_'+str(trainSample)+'.pickle')):
+    classifier+'_'+str(sobelLevels)+'_'+\
+    'brush'+str(brushMasks)+'_'+str(superPixMethod)+'_'+str(features)+'_'+'grown'+str(triGrown)+'.pickle')):
         createClassifier(os.path.join(os.path.dirname(folderPath),
-        'trainingData_'+str(sobelLevels)+'_'+str(trainSample)+'.npz'),classifier,sobelLevels,trainSample)
+        'trainingData_'+str(sobelLevels)+'_'+'brush'+str(brushMasks)+\
+        '_'+str(superPixMethod)+'_'+str(features)+'_'+'grown'+str(triGrown)\
+        +'.npz'),classifier,sobelLevels,trainSample,features,brushMasks,superPixMethod,triGrown)
         print('Finished creating the classifier')
     else:
         print('Classifier already created')
-    useClassifier(os.path.dirname(folderPath),sobelLevels,classifier,trainSample,superPixMethod,brushMasks,features)
+    useClassifier(os.path.dirname(folderPath),sobelLevels,classifier,trainSample,superPixMethod,brushMasks,features,triGrown)
     
 if __name__ == '__main__':
     maskProcess(r'C:\Python34\bell\images',
-    sobelLevels=3,brushMasks=True,superPixMethod='SLIC',features='combinedDwtSob')
+    sobelLevels=3,brushMasks=True,superPixMethod='SLIC',features='RGB')
