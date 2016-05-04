@@ -159,8 +159,8 @@ def useClassifier(FILE_PATH,levels,CLASSIFIER_TYPE,trainSample,superPixMethod,br
             procTrain = False
             if not os.path.exists(os.path.join(newpath,fileNameString+'_mask.jpg')):
                 print('Image '+str(imageIndex+1)+' out of '+str(shuffled.shape[0]))
-                sobelise.process_image(filepath,levels)
-                totalSob = testing_sobel.concatSob(filepath,levels)
+                sobelise.process_image(filepath,levels,features)
+                totalSob = testing_sobel.concatSob(filepath,levels,features)
                 maskMissing = False
                 try:
                     maskRaw = Image.open(maskPath+'.jpg')
@@ -219,7 +219,7 @@ def useClassifier(FILE_PATH,levels,CLASSIFIER_TYPE,trainSample,superPixMethod,br
                 im = rescale(im,0.25)#125)
                 if features=='RGB'or features=='entropy'or features=='dwt':
                     imArray = im*255 # normalising
-                elif features=='sobel' or features=='combinedEntSob'or features=='combinedDwtSob':
+                elif features=='sobel' or features=='sobelHandv' or features=='combinedEntSob'or features=='combinedDwtSob':
                     imArray = np.asarray(totalSob)
                     imArray = np.dstack([imArray,im*255])
                 elif features =='sobelSansRGB':

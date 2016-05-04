@@ -38,6 +38,9 @@ def stack(folderPath,sampleNumber,sobelLevels,brushMasks,superPixMethod='combine
         #wholeXArray = np.zeros([0,levels*3+3])
     elif features =='sobelSansRGB':
         wholeXArray = np.zeros([0,levels*3])
+    elif features =='sobelHandv':
+        wholeXArray = np.zeros([0,levels*6+3])
+    
     else: 
         print ("Error selecting type of features")
         l=lp#breakpoint
@@ -91,8 +94,8 @@ def stack(folderPath,sampleNumber,sobelLevels,brushMasks,superPixMethod='combine
                 numberSuccessStacked -= 1
                 continue
             
-            alreadyDone = sobelise.process_image(filepath,levels,sobelType)
-            totalSob = testing_sobel.concatSob(filepath,levels,sobelType)
+            alreadyDone = sobelise.process_image(filepath,levels,features)
+            totalSob = testing_sobel.concatSob(filepath,levels,features)
             im = Image.open(filepath)
             im = np.asarray(im)
             #im = ndimage.gaussian_filter(im, 3)
@@ -123,7 +126,7 @@ def stack(folderPath,sampleNumber,sobelLevels,brushMasks,superPixMethod='combine
             im = rescale(im,0.25)#0.125)
             if features=='RGB'or features=='entropy'or features=='dwt':
                 imArray = im*255
-            elif features=='sobel' or features=='combinedEntSob'or features=='combinedDwtSob':
+            elif features=='sobel' or features=='sobelHandv'or features=='combinedEntSob'or features=='combinedDwtSob':
                 imArray = np.asarray(totalSob)
                 imArray = np.dstack([imArray,im*255])
             elif features =='sobelSansRGB':

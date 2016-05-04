@@ -17,20 +17,25 @@ def downsample(I):
     I = np.atleast_3d(I)
     return rescale(gaussian_filter(I, sigma, multichannel=True), 0.5)
 
-def sobel_rgb(I,sobelType):
+def sobel_rgb(I,features):
     """Like skimage.sobel_{h,v} but works on RGB images. Returns a
     NxMx6 image with channels being hr, hg, hb, vr, vg, vb.
 
     """
     #denoised = gaussian_filter(image, 2)
     I = np.atleast_3d(I)
-    
-    return np.dstack(
-        [sobel(I[..., c]) for c in range(I.shape[-1])]# +
-        #[sobel_v(I[..., c]) for c in range(I.shape[-1])]
-    )
+    if features=='sobelHandv':
+        return np.dstack(
+            [sobel_h(I[..., c]) for c in range(I.shape[-1])]+
+            [sobel_v(I[..., c]) for c in range(I.shape[-1])]
+        )
+    else:
+        return np.dstack(
+            [sobel(I[..., c]) for c in range(I.shape[-1])]# +
+            #[sobel_v(I[..., c]) for c in range(I.shape[-1])]
+        )
 
-def process_image(image_fn, levels=1,sobelType='combined'):
+def process_image(image_fn, levels=1,features='combinedEntSob'):
     
     path = os.path.dirname(os.path.dirname(image_fn))
     #print(path)
@@ -45,7 +50,7 @@ def process_image(image_fn, levels=1,sobelType='combined'):
     elseTest = False
     alreadyDone = True
     for level in range(levels):
-        if sobelType=='handv':
+        if features=='sobelHandv':
             saveLocation1 = os.path.join(path,os.path.splitext((os.path.basename(image_fn)))[0]+'_'+'{}_h.png'.format(level))
             saveLocation2 = os.path.join(path,os.path.splitext((os.path.basename(image_fn)))[0]+'_'+'{}_v.png'.format(level))
             if not os.path.exists(saveLocation1) and not os.path.exists(saveLocation2):
@@ -53,15 +58,16 @@ def process_image(image_fn, levels=1,sobelType='combined'):
                 #print('Saving image layer '+str(counter+1)+' out of '+str(levels))
                 counter = 1+counter
               
-                s = resize(sobel_rgb(im,sobelType), orig_shape)
+                s = resize(sobel_rgb(im,features), orig_shape)
              
                 s = (255 * (0.5 + s)).astype(np.uint8)
                 #print('here')
                 #print((os.path.basename(image_fn)))
                 #print(os.path.splitext((os.path.basename(image_fn)))[0])
                 #print(os.path.join(path,'_'+'{}_hv.png'.format(level)))
-                Image.fromarray(s[..., :3]).save(saveLocation)
-                #Image.fromarray(s[..., 3:]).save(os.path.join(path+'_'+'{}_v.png'.format(level)))
+                #Image.fromarray(s[..., :3]).save(saveLocation)
+                Image.fromarray(s[..., :3]).save(saveLocation1)
+                Image.fromarray(s[..., 3:]).save(saveLocation2)
                 im = downsample(im) 
             else:
                 if elseTest == False:
@@ -74,7 +80,7 @@ def process_image(image_fn, levels=1,sobelType='combined'):
                 #print('Saving image layer '+str(counter+1)+' out of '+str(levels))
                 counter = 1+counter
               
-                s = resize(sobel_rgb(im,sobelType), orig_shape)
+                s = resize(sobel_rgb(im,features), orig_shape)
              
                 s = (255 * (0.5 + s)).astype(np.uint8)
                 #print('here')

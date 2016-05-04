@@ -10,7 +10,7 @@ import glob
 import os
 get_ipython().magic('pylab')
 
-def concatSob(filePath,levels=1,sobelType='combined'):
+def concatSob(filePath,levels=1,features='combinedEntSob'):
      
      #print('Concatinating saved sobel images...')
      filePath = os.path.splitext(filePath)[0]
@@ -21,7 +21,7 @@ def concatSob(filePath,levels=1,sobelType='combined'):
      #print(filePath)
      totalSob = np.zeros([0,15])
      #print(filePath)
-     if sobelType == 'combined':
+     if not features == 'sobelHandv':
          for i in range(levels):
               #print('Concatinating level '+str(i))
               #horzSob = np.asarray(Image.open(os.path.join(filePath+'_'+str(i)+'_h.png')))
@@ -35,7 +35,7 @@ def concatSob(filePath,levels=1,sobelType='combined'):
               totalSob = np.dstack([totalSob,hvSob])
          totalSob = totalSob[...,1:]	
          #print('Finished concatinating')
-     elif sobelType == 'handv':
+     elif features == 'sobelHandv':
         for i in range(levels):
               #print('Concatinating level '+str(i))
               horzSob = np.asarray(Image.open(os.path.join(filePath+'_'+str(i)+'_h.png')))
