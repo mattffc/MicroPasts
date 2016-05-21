@@ -41,9 +41,9 @@ def watershedFunc2(imagePath,superPixMethod,trainingSeg=False):
     denoised -= 0.0000001 # as 1.0 max on denoised was giving errors in the markers
     print(np.max(denoised))
     print(np.min(denoised))
-    slicSegments = 300
+    slicSegments = 200
     if trainingSeg == False:
-        markers = rank.gradient(denoised, disk(6)) < 5 # disk was 2 before, thresh was 10
+        markers = rank.gradient(denoised, disk(3)) < 8 # disk was 2 before, thresh was 10
         
         markers = ndi.label(markers)[0]
         #print(np.max(markers))
@@ -75,6 +75,7 @@ def watershedFunc2(imagePath,superPixMethod,trainingSeg=False):
             #labels = 100000*watershed(gradient, markers)
             print('test before errorBBB')
             labels = slic(image,max_iter=5,compactness=10,enforce_connectivity=True,min_size_factor=0.01,n_segments=slicSegments)#segements 200 was causing crash,compact was 10
+            
             print('after error')
             #plt.imshow(markers, interpolation='nearest')
             #plt.imshow(labels, interpolation='nearest',cmap="prism")
@@ -82,10 +83,12 @@ def watershedFunc2(imagePath,superPixMethod,trainingSeg=False):
             #plt.show()
         elif superPixMethod =='None':
             labels = slic(image,max_iter=5,compactness=10,enforce_connectivity=True,min_size_factor=0.01,n_segments=slicSegments)
+        elif superPixMethod == 'quickShift':
+            labels = quickshift(image, kernel_size=3, max_dist=6, ratio=0.5)
         else:
             assert(1==2)
     elif trainingSeg == True:
-        markers = rank.gradient(denoised, disk(6)) < 5#was 12 disk # disk was 2 before, thresh was 10
+        markers = rank.gradient(denoised, disk(3)) < 8#was 12 disk # disk was 2 before, thresh was 10
         
         markers = ndi.label(markers)[0]
         #print(np.max(markers))
@@ -120,6 +123,8 @@ def watershedFunc2(imagePath,superPixMethod,trainingSeg=False):
             #plt.imshow(labels, interpolation='nearest',cmap="prism")
             #plt.imshow(image, interpolation='nearest', alpha=.8)
             #plt.show()
+        elif superPixMethod == 'quickShift':
+            labels = quickshift(image, kernel_size=3, max_dist=6, ratio=0.5)
         else:
             assert(1==2)
     #print(labels.shape)

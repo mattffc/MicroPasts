@@ -67,18 +67,21 @@ def stack(folderPath,sampleNumber,sobelLevels,brushMasks,superPixMethod='combine
     imageNameHolder = []
     counter = 0
     for filepath in imageNames:
+        #print('in')
+        
         if counter % 1 == 0:
             if numberSuccessStacked >= trainSetSize or numberStacked == imageSetSize: 
-                break
+                #used to be break
+                a=1
             numberStacked += 1
             numberSuccessStacked += 1
             
-            
+            #print('blah')
             
             fileNameStringWithExtension = os.path.basename(filepath)
             fileNameString = os.path.splitext(fileNameStringWithExtension)[0]
             if brushMasks == False:
-                maskPath = os.path.join(os.path.dirname(folderPath), 'masks/'+fileNameString+'_mask')##normally 'masks/'
+                maskPath = os.path.join(os.path.dirname(folderPath), 'trainMasks/'+fileNameString+'_mask')##normally 'masks/'
             else:
                 maskPath = os.path.join(os.path.dirname(folderPath), 'brushMasks/'+fileNameString+'_mask')##normally 'masks/'
             
@@ -87,7 +90,9 @@ def stack(folderPath,sampleNumber,sobelLevels,brushMasks,superPixMethod='combine
             #all levels concatenated together
             #print(maskPath)
             try:
+                
                 maskRaw = Image.open(maskPath+'.jpg').convert(mode='L')#convert is new
+                
                 imageNameHolder.append(fileNameString)
             except IOError:
                 print('Image '+fileNameString+' has no corresponding mask, it has been skipped')
@@ -169,7 +174,7 @@ def stack(folderPath,sampleNumber,sobelLevels,brushMasks,superPixMethod='combine
             if not os.path.exists(newpath):
                 
                     os.makedirs(newpath)
-            greyRegion=(maskArray == 0.2).astype(int) 
+            greyRegion=((maskArray > 0.1) & (maskArray < 0.9)).astype(int) #(a > 1) & (a < 5)
             print(np.max(greyRegion))
             maskImage = Image.fromarray((((maskArray*255).astype(np.uint8))))
             maskImage = maskImage.convert('RGB')
@@ -250,6 +255,7 @@ def stack(folderPath,sampleNumber,sobelLevels,brushMasks,superPixMethod='combine
             wholeXArray = np.concatenate((wholeXArray,X),axis=0)
             wholeyArray = np.concatenate((wholeyArray,y),axis=0)
             header = {'images':imageNameHolder}
+            print('here')
             np.savez_compressed(outputFilename,X=wholeXArray,y=wholeyArray,S=int(SAMPLE_NUMBER),R=trainRatio,shuffled=imageNames,header=header)
             #print('Stacked image '+fileNameString+ '; number '+str(numberSuccessStacked)+' out of '+str(trainSetSize))
         counter += 1

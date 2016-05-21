@@ -16,7 +16,7 @@ from skimage.transform import rescale, resize
 from skimage.segmentation import slic
 
 start = time.time()
-image = np.asarray(Image.open('C:\Python34\\2013T805_Woolaston_Gloucestershire\SetA\images\IMG_3661.JPG'))
+image = np.asarray(Image.open(r'C:\Python34\stonecrossTest2\images\IMG_8502.JPG'))
 #image = np.asarray(Image.open(imagePath))
 
 #image = color.rgb2gray(image)
@@ -47,8 +47,8 @@ print(np.max((rank.gradient(denoisedB, disk(2)))))
 
 
 # local gradient (disk(2) is used to keep edges thin)
-denoised = color.rgb2gray(denoised)
-markers = (rank.gradient(denoised, disk(2)) < 18) # disk 4 works well with thresh 8 and guass 2
+denoised = color.rgb2gray(denoised) # denisoed disk 2
+markers = (rank.gradient(denoised, disk(3))<8)#disk(3))<10)#disk(2)) < 18) # disk 4 works well with thresh 8 and guass 2 # try disk 5 <10
 markers = ndi.label(markers)[0]
 #markers = markers*np.random.rand(markers.shape[0],markers.shape[1])
 print('npmax markers')
@@ -61,14 +61,14 @@ gradient = rank.gradient(denoised, disk(2))
 # process the watershed
 labels = 2*watershed(gradient, markers)+1
 
-labels += 2*slic(image,max_iter=3,compactness=10,enforce_connectivity=True,min_size_factor=0.01,n_segments=200)
+##labels += 2*slic(image,max_iter=3,compactness=10,enforce_connectivity=True,min_size_factor=0.01,n_segments=200)
 print(np.sum(labels))
-
+'''
 for i in range(np.max(labels)+1):
     indicies = np.where(labels==i)
     #print((np.random.rand()))
     labels[indicies] *= np.random.rand()
-
+'''
 print(np.max(labels))
 print(np.min(labels))
 print(np.sum(labels))
