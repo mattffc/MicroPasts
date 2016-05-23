@@ -73,53 +73,53 @@ No more than 100 words.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Introduction}
 
-This project was motivated by an organisation called MicroPasts\cite{micropasts}. MicroPasts is the result of a collaboration between the British Museum and the UCL Institute of Archaeology with the aim of creating an online database of 3D models of archaeological artefacts. The 3D models will serve as a record of the artefacts should any of them degrade or get lost and may also be used to 3D print replicas which could be used as educational tools. An example of a 3D model made by MicroPasts is shown in figure X \cite{jugModel}.
+This project was motivated by an organisation called MicroPasts\cite{micropasts}. MicroPasts is the result of a collaboration between the British Museum and the UCL Institute of Archaeology with the aim of creating an online database of 3D models of archaeological artefacts. The 3D models will serve as a record of the artefacts should any of them degrade or get lost and may also be used to 3D print replicas which could be used as educational tools. An example of a 3D model made by MicroPasts is shown in Figure 1 \cite{jugModel}.
 
 \begin{figure}[H]
-  \caption{A picture of a gull.}
+  \caption{A wooden tankard reconstructed in 3D.}
   \centering
     \includegraphics[width=0.75\textwidth]{jug}
 \end{figure}
 
 %\subsection{Reconstruction Pipeline}
- MicroPasts has an existing pipeline in place which functions as follows. An object to be modelled is selected and photographed on a turntable from many viewpoints. The images are then put onto the MicroPasts website and volunteers use a photo editing program to draw around the object in the images, as shown in FIGURE X.This figure shows an object in the process of being masked. A blue outline has been drawn around half of the object. Each vertex of the outline has to be selected by hand.
+ MicroPasts has an existing pipeline in place which functions as follows. An object to be modelled is selected and photographed on a turntable from many viewpoints. The images are then put onto the MicroPasts website and volunteers use a photo editing program to draw around the object in the images. Figure 2 shows an object in the process of being outlined. A blue outline has been drawn around half of the object. Each vertex of the outline has to be selected by hand.
 \begin{figure}[H]
-  \caption{A picture of a gull.}
+  \caption{A bell being outlined by hand.}
   \centering
     \includegraphics[width=0.75\textwidth]{interface}
 \end{figure} 
-  This process creates a mask for each image in the set. These images and their corresponding masks are then loaded into a 3D reconstruction program called Photoscan\cite{photoscan} which produces a 3D model of the object. This model is then uploaded to the website and can be viewed and downloaded by the public. 
+  This process creates an outline or \emph{mask} for each image in the set. These images and their corresponding masks are then loaded into a 3D reconstruction program called Photoscan\cite{photoscan} which produces a 3D model of the object. The model is then uploaded to the website and can be viewed and downloaded by the public. 
 
-Currently the main bottleneck in the process is the hand drawing of the masks as there are only a limited number of volunteers and the process is quite time consuming. Our project has focused on this part of the pipeline. We hoped to largely automate the process of masking requiring only one in ten of the masks to be drawn by a human. This would represent an order of magnitude decrease in the amount of human input required while still providing sufficient training examples. 
+Currently the main bottleneck in the process is drawing the masks as there are only a limited number of volunteers and the process is quite time consuming. Our project has focused on this part of the pipeline. We hoped to largely automate the process of masking requiring only one in ten of the masks to be drawn by a human. This would represent an order of magnitude decrease in the amount of human input required while still providing sufficient training examples. 
 %The automated masks needed to be similar enough to the hand %drawn masks so that they could be used to produce a high %quality 3D reconstruction. 
 
 %\subsection{Photoscan}
 Photoscan works by using multi-view 3D reconstruction techniques \cite{Hartley2004}. Central to the task is the locating of feature correspondences. These are visual cues on the object which can be matched from multiple different views. The reason masking is essential for a high quality reconstruction is that the program needs to know which features belong to the object and which to ignore. This allows it to only include the object of interest in the model.
 
-The focus of this project is not on the 3D reconstruction procedure but on the production of the masks which it requires. Performance will be judged against the hand labelled masks. However in chapter X we will demonstrate that the automatically generated masks are capable of producing high quality 3D models.
+The focus of this project is not on the 3D reconstruction procedure but on the production of the masks which it requires. Performance will be judged against the hand labelled masks. However in Section 4 we will demonstrate that the automatically generated masks are capable of producing high quality 3D models.
 
-The description of the results will be detailed with the help of three example images from the British Museums' collection, FIGUREs X.The objects chosen were the following: a stone cross FIGURE X a gold bracelet FIGURE X, and a bell FIGURE X. These images are quite representative of the whole collection and will allow us to highlight certain aspects of the algorithm design. 
+The description of the results will be detailed with the help of three example images from the British Museums' collection. The objects chosen were the following: a stone cross (Figure 3) a gold bracelet (Figure 4), and a bell (Figure 5). These images are quite representative of the whole collection and will allow us to highlight certain aspects of the algorithm design. 
 \begin{figure}[H]
 \centering
 \begin{subfigure}{.33\textwidth}
   \centering
   \includegraphics[width=.95\linewidth]{IMG_8504}
-  \caption{A subfigure}
+  %\caption{A subfigure}
   \label{fig:sub1}
 \end{subfigure}%
 \begin{subfigure}{.33\textwidth}
   \centering
   \includegraphics[width=.95\linewidth]{IMG_8512}
-  \caption{A subfigure}
+  %\caption{A subfigure}
   \label{fig:sub2}
 \end{subfigure}
 \begin{subfigure}{.33\textwidth}
   \centering
   \includegraphics[width=.95\linewidth]{IMG_8518}
-  \caption{A subfigure}
+  %\caption{A subfigure}
   \label{fig:sub2}
 \end{subfigure}
-\caption{A figure with two subfigures}
+\caption{Example images of the cross}
 \label{fig:test}
 \end{figure}
 
@@ -128,22 +128,22 @@ The description of the results will be detailed with the help of three example i
 \begin{subfigure}{.33\textwidth}
   \centering
   \includegraphics[width=.95\linewidth]{IMG_3661_orig}
-  \caption{A subfigure}
+  %\caption{A subfigure}
   \label{fig:sub1}
 \end{subfigure}%
 \begin{subfigure}{.33\textwidth}
   \centering
   \includegraphics[width=.95\linewidth]{IMG_3672}
-  \caption{A subfigure}
+  %\caption{A subfigure}
   \label{fig:sub2}
 \end{subfigure}
 \begin{subfigure}{.33\textwidth}
   \centering
   \includegraphics[width=.95\linewidth]{IMG_3679}
-  \caption{A subfigure}
+  %\caption{A subfigure}
   \label{fig:sub2}
 \end{subfigure}
-\caption{A figure with two subfigures}
+\caption{Example images of the bracelet}
 \label{fig:test}
 \end{figure}
 
@@ -152,155 +152,155 @@ The description of the results will be detailed with the help of three example i
 \begin{subfigure}{.33\textwidth}
   \centering
   \includegraphics[width=.95\linewidth]{IMG_7366}
-  \caption{A subfigure}
+  %\caption{A subfigure}
   \label{fig:sub1}
 \end{subfigure}%
 \begin{subfigure}{.33\textwidth}
   \centering
   \includegraphics[width=.95\linewidth]{IMG_7375}
-  \caption{A subfigure}
+  %\caption{A subfigure}
   \label{fig:sub2}
 \end{subfigure}
 \begin{subfigure}{.33\textwidth}
   \centering
   \includegraphics[width=.95\linewidth]{IMG_7381}
-  \caption{A subfigure}
+  %\caption{A subfigure}
   \label{fig:sub2}
 \end{subfigure}
-\caption{A figure with two subfigures}
+\caption{Example images of the bell}
 \label{fig:test}
 \end{figure}
-The purpose of this project was to investigate effective methods for the automation of image masking. Masking, also called binary image segmentation, is the process of labelling every pixel within an image as one of two classes, foreground or background. If a pixel is labelled as foreground it corresponds to the object of interest and if labelled background it corresponds to the environment. This is demonstrated in FIGURE X with white denoting foreground and black denoting background. 
+Masking, also known as binary image segmentation, is the process of labelling every pixel within an image as one of two classes, foreground or background. If a pixel is labelled as foreground it corresponds to the object of interest and if labelled background it corresponds to the environment. This is demonstrated in Figure 6 with white denoting foreground and black denoting background. 
 \begin{figure}[H]
 \centering
 \begin{subfigure}{.5\textwidth}
   \centering
   \includegraphics[width=.95\linewidth]{IMG_8501}
-  \caption{Original image}
+  \caption{Original image of cross}
   \label{fig:sub1}
 \end{subfigure}%
 \begin{subfigure}{.5\textwidth}
   \centering
   \includegraphics[width=.95\linewidth]{IMG_8501_mask}
-  \caption{Hand labelled mask}
+  \caption{Hand labelled mask of cross}
   \label{fig:sub2}
 \end{subfigure}
-\caption{An image of the Stone Cross alongside its hand labelled mask}
+\caption{An image of the cross alongside its hand labelled mask}
 \label{fig:test}
 \end{figure}
-The project deals with a specific type of image which is of an object on a turntable against a plain background. The objects are museum artefacts which are in the process of being reconstructed into 3D. Photoscan requires that the images of the object each have a mask which tells the program what is foreground and what is background. Typically Photoscan will need a minimum of 20 images of the object from many different viewing angles in order to produce a reconstruction. If the masks are not provided the resulting reconstruction is generally very poor\cite{photoscanManual}. 
+The images that we will be dealing with are of an object on a turntable against a relatively plain background. The objects are museum artefacts which are in the process of being reconstructed into 3D. Typically Photoscan will need a minimum of 20 images of the object from many different viewing angles in order to produce a reconstruction. If the masks are not provided the resulting reconstruction is generally very poor\cite{photoscanManual}. 
 
-The aim of the project is to produce masks which can be used to create high quality 3D reconstructions but with less human input than the current method. It's worth noting that the masks don't need to be completely accurate in order to produce good reconstructions.
+The aim of the project is to produce masks which can be used to create high quality 3D reconstructions but with less human input than the current method. It's worth noting that the automated masks don't need to exactly match the hand labelled masks in order to produce good reconstructions.
 
-Binary image segmentation or masking is a specific case of the more general field of multi-class image segmentation\cite{pal1993review}. Multi-class segmentation labels pixels in the image as belonging to one of a set of classes. This field has been well studied over the last 50 years\cite{wang2008image}, but challenges remain. 
+Masking is a specific case of the more general field of multi-class image segmentation\cite{pal1993review}. Multi-class segmentation labels pixels in the image as belonging to one of a set of classes. This field has been well studied over the last 50 years\cite{wang2008image}, but challenges remain. 
 
-One particular difficulty is that measurement of the success of an algorithm can be quite subjective. As an example one algorithm might label a person's hair as distinct from their face while another may label both as the same region. It's not immediately obvious which of these labellings is correct. In the case of our application the true labels are rather more clear because the object is well defined and distinct from the environment. A common approach is to have a hand drawn ground truth version which can be compared to the algorithm's output. Frequently used metrics for performance in image processing include: percentage of mislaballed pixels, the Mean Squared Error (MSE) and the Peak Signal to Noise Ratio (PSNR)\cite{ponomarenko2009metrics}. We will be using percentage of mislaballed pixels as our metric throughout this report.  
+One particular difficulty is that measurement of the success of an algorithm can be quite subjective. As an example one algorithm might label a person's hair as distinct from their face while another may label both as the same region. It's not immediately obvious which of these labellings is correct. In the case of our application the true labels are rather more clear because the object is well defined and distinct from the environment. A common approach is to have a hand drawn version as a ground truth which can be compared to the algorithm's output. Frequently used metrics for performance in image processing include: percentage of mislaballed pixels, the Mean Squared Error (MSE) and the Peak Signal to Noise Ratio (PSNR)\cite{ponomarenko2009metrics}. We will be using the percentage of mislaballed pixels as our metric throughout this report.  
 
 Humans are very good at image segmentation and still outperform even state of the art algorithms by quite a margin\cite{guraripull}. Much of what enables us to perform better than even the most powerful algorithms can be explained by our \emph{understanding} of the scene in which the objects exist. For example if we see that a car is occluded by a tree we perceive that the two halves of the car are not disjoint but most likely part of the same object. We have an understanding of the world in which the image was taken and can use it to accurately segment objects even in difficult conditions. Given that most algorithms have no prior knowledge at all and those that do have it to a very limited extent it is easy to see why their performance can't match that of humans.
 
 Even though current algorithms don't perform as well as humans the potential for time saving is huge and the field has produced many algorithms which are widely used. 
 
-Some techniques are very simple and rely only on a histogram of the intensities of the pixels and then perform a thresholding on that, such as Otsu's method\cite{otsu1975threshold} which produces a binary segmentation. 
+Some techniques are very simple and rely only on a histogram of the intensities of the pixels. They then perform a thresholding on the histogram, such as Otsu's method\cite{otsu1975threshold} which produces a binary segmentation. 
 
-Others use information about not only the pixel intensities but also their locations to break up the image into local regions. Each region containing pixels which are sufficiently similar to one another. These spatial methods employ differing techniques.  Prominent examples include Quickshift\cite{vedaldi2008quick}, Watershed\cite{vincent1991watersheds} and SLIC (Simple Linear Iterative Clustering) \cite{achanta2012slic}.
+Other methods use information about not only the pixel intensities but also their locations to break up the image into local regions. Each region contains pixels which are sufficiently similar to one another. These spatial methods employ differing techniques.  Prominent examples include Quickshift\cite{vedaldi2008quick}, Watershed\cite{vincent1991watersheds} and SLIC (Simple Linear Iterative Clustering) \cite{achanta2012slic}.
 
- Both these spatial methods and the histogram methods assume no prior knowledge of the image to be segmented. They have the advantage that they can be used on any natural image for which no prior knowledge is available and perform reasonably well and as such have high generality. However when prior knowledge of the subject matter is available there are other methods which can perform much better. 
+ Both the spatial and histogram methods assume no prior knowledge of the image to be segmented. They have the advantage that they can be used on any natural image for which no prior knowledge is available with reasonable performance. This gives them good generality. However when prior knowledge of the subject matter is available there are other methods which can perform much better. 
  
  Such methods often combine multi-class segmentation with object classification so that each segment can be labelled with the object class it belongs to rather than an arbitrary identifier. 
  
- A recent example is the Deep Neural Network MRSA\cite{he2015deep} which won the MS COCO Detection Challenge 2015\cite{mscoco}, which is a segmentation and object classification challenge. In this case the prior knowledge comes in the form of additional example images of the object in various environments. The algorithm is presented with these examples along with their segmentations before it performs the segmentation of the unseen image. The example images are known as the \emph{training set} and the unseen images are the \emph{testing set}. The training set allows the algorithm to incorporate prior knowledge of the objects which can aid in the segmentation of the testing set.
+ A recent example is the Deep Neural Network MRSA\cite{he2015deep} which won the MS COCO Detection Challenge 2015\cite{mscoco}. MS COCO stands for Microsoft Common Objects in Context. It's a segmentation and object classification challenge. MRSA gains prior knowledge from having additional example images of the object in various environments. The algorithm is presented with these examples along with their segmentations before it performs on the unseen images. The example images are known as the \emph{training set} and the unseen images are the \emph{testing set}. The training set allows the algorithm to incorporate prior knowledge of the objects which can aid in the segmentation of the testing set.
 
-Our particular application is unusual because the prior knowledge which is available to the algorithm includes not only the object of interest but also examples of the background; the images of the object are all taken in the same environment and there is only minor variation throughout the set. If we use some of the images from the set as training we can use them as prior knowledge of not just the object but the environment as well. Using this extra information should allow the algorithm to perform better than general techniques or even techniques that have a prior knowledge of the object but not the background. 
+Our particular application is unusual because the prior knowledge which is available to the algorithm includes not only the object of interest but also examples of the background; the images of the object are all taken in the same environment and there is only minor variation throughout the set. If we use some of the images from the set as training we can extract prior knowledge of not just the object but the environment as well. Using this extra information should allow the algorithm to perform better than general techniques or even techniques that have a prior knowledge of the object but not the background. 
 
-To extract the prior knowledge from the training images we approached the project from a machine learning standpoint, specifically using Supervised Learning. Supervised Learning refers to inferring a function from data with a known label. These data are training examples. This is in contrast to Unsupervised Learning which attempts to extract structure from data where the label is not provided. 
+To extract the prior knowledge from the training images we approached the project from a machine learning standpoint, specifically using \emph{Supervised Learning}. Supervised Learning is when a function is inferred from data given its labels. These data are the training examples. This is in contrast to \emph{Unsupervised Learning} which attempts to extract structure from data where the labels are not given. 
 
-The machine learning approach can be described as follows. Firstly we have to have some description of the items we are interested in, in this case pixels. Secondly we have to decide on a hypothesis class which defines the type of rules we will use for deciding how to label an item and thirdly we have to tailor these rules to the data set based on training data. 
+The machine learning approach can be described as follows. Firstly we have to have some description of the items we are interested in, in this case pixels. Secondly we have to decide on a \emph{hypothesis class} which defines the type of rules used to label the data. Thirdly we have to tailor these rules to the data set based on training data. 
 
-The main content of the report is based on the changes and improvements made to a baseline classification algorithm. We discuss the reasons these changes were implemented and the results on segmentation performance. The primary areas of investigation are the type of classifier used, which defines both the hypothesis class and the method for tailoring that hypothesis, the description of each pixel (also called a feature vector) and additional techniques which augment the classifier. 
+The main content of the report is based on the changes and improvements made to a baseline classification algorithm. We discuss the reasons these changes were implemented and the results on segmentation performance. The primary areas of investigation are: the type of classifier used, which defines both the hypothesis class and the method for tailoring that hypothesis, the description of each pixel (also called a feature vector) and additional techniques which augment the classifier. 
 
 \section{Methodology and development}
 
- In this section we will discuss the procedure for automatically producing masks . We start with a basic algorithm as a benchmark for performance and then iterate on it. The basic algorithm uses pixel intensities (RGB values) as its feature vector and a linear SVM as its classifier. The changes made as the algorithm was iterated included investigating different classifiers, feature descriptors and also some additional techniques which helped improve performance. 
+ In this section we will discuss the procedure for automatically producing masks . We start with a baseline algorithm as a benchmark for performance and then iterate on it. The basic algorithm uses pixel intensities (RGB values) as its feature vector and a linear support vector machine (SVM) as its classifier. We will discuss this baseline algorithm in \emph{Section 2.2.1}.
  
- Throughout this section we will use the three image sets shown in Section X FIGURE X as visual examples and to quantify performance.  Each of the image sets shows the object rotated on a turntable over 20 images. There are ground truths given for the cross and the bracelet in the form of hand drawn masks. Using the ground truth masks we can calculate the error of our automated masks. The bell doesn't have any ground truths available therefore performance is only visually assessed. 
+ Throughout this section we will use the three image sets shown in \emph{Section 1} (Figures 3-5) as visual examples and to quantify performance.  Each of the image sets contains 20 pictures of the object rotated on a turntable. There are ground truths for the cross and the bracelet in the form of hand drawn masks. Using the ground truth masks we can calculate the error of our automated masks. The bell doesn't have any ground truths available therefore performance is only visually assessed. 
 
-As well as being a representative example, the objects we chose are quite effective at illustrating how each change to the algorithm effected its performance. The objects are visually quite dissimilar with the cross and the bell having lots of texture to the bracelet with its shiny surface and problematic shadow. 
+As well as being a representative example, the objects we chose are quite effective at illustrating how each change to the algorithm effected performance. The objects are visually quite dissimilar with the cross and the bell having lots of texture to the bracelet with its shiny surface and problematic shadow. 
 
-The bracelet is made of reflective material which causes it to produce highlights which can saturate the pixels. This removes all texture from the patch of pixels causing them to look a lot like the cloth background FIGURE X. Additionally the reflective property causes the pixel intensities and the texture to vary quite a lot between different viewpoints.
+The bracelet is made of reflective material which causes it to produce highlights which can saturate the pixels. This removes all texture from the patch of pixels causing them to look a lot like the cloth background (Figure 7). Additionally the reflective property causes the pixel intensities and the texture to vary quite a lot between different viewpoints.
 \begin{figure}[H]
-  \caption{A picture of a gull.}
+  \caption{The bracelet has some saturated highlights.}
   \centering
     \includegraphics[width=0.75\textwidth]{highlight}
 \end{figure}
-The reason why shadows can be difficult for most image segmentation techniques to deal with is because the segmentation relies on edges in the image being prominent in order for a segment boundary to be placed there. If an image has a smooth transition from an object to a shadow, as is often the case, many segmentation algorithms struggle because there is no clear edge. This is a well studied problem in image segmentation\cite{ecins2014shadow}. One way of reducing this problem is to factor in the texture of the region where there is a shadow as it is likely to be dissimilar to that of the object, we will discuss this approach further in chapter X. 
+Shadows can be difficult for segmentation techniques to deal with. This is because most techniques rely on prominent edges for placing segment boundaries. Often shadows have a very soft edge and a segment from the object can 'leak' into the shadow. This is a well studied problem in image segmentation\cite{ecins2014shadow}. One way of reducing this problem is to factor in the texture of the region where there is a shadow. It is likely to be dissimilar from that of the object. We will discuss this approach further in Section \emph{2.2}. 
 
-It is worth noting that the format of capturing the images was not chosen by us but was part of the pipeline that was already established. Ideally the objects would be photographed against a green screen but fitting into the existing pipeline with a large archive of existing photos meant this was not possible. 
+It is worth noting that the format of capturing the images was not chosen by us but was part of the pipeline that was already established. Ideally the objects would be photographed against a green screen. However fitting into the existing pipeline with a large archive of existing photos meant this was not possible. 
 The environment in which the image sets are taken is often quite plain with only the turntable and generally a white cloth background. There is normally only one lighting source which can cause there to be some notable shadows from certain viewing angles. The object is rotated on the turntable by about 20 degrees between each image being taken until a full rotation of the object is captured. 
 
-Sometimes the images have a foreign object enter the frame such as a hand. If this only occurs in the testing set it can be difficult for the classifier to deal with. However if the image set can be examined before training images are chosen it would be sensible to include training images which include these foreign objects. Also the training images should ideally be views which are as representative of the whole object as possible.
+Sometimes the images have a foreign object enter the frame such as a hand. If this only occurs in the testing set it can be difficult for the classifier to deal with. If the image set can be examined beforehand it would be sensible to chose images containing the foreign object as training. Also the training images should ideally be views which are as representative of the whole object as possible.
 
 Our masking algorithm will be presented in stages with each stage representing a modification. Generally a modification was made to the algorithm to solve a case where it was under performing. Each modification will be discussed in turn along with the problem which it addresses. We will present the change in performance both as the percentage of incorrectly labelled pixels and with a visualisation of the mask produced. In the case of the bell only the visualisations are given because there are no ground truth masks from which to calculate the accuracy of pixel labelling.
 
-The visualisations are important not only to gain understanding but because they are a better indicator of how well the algorithm has performed than the pixel metric. This is because the metric simply counts the number of incorrectly labelled pixels and averages it across the image set without accounting for which areas were labelled incorrectly or whether the errors were consistent. 
+The visualisations are important not only to gain understanding but because they are a better indicator of how well the algorithm has performed than the error metric. This is because the metric simply averages the number of errors across the image set without accounting for which areas were labelled incorrectly or whether the errors were consistent. 
 
-Appreciation for which pixels were labelled incorrectly is important because some wrong labels effect the 3D reconstruction process more than others. For example if parts of the background which adjoin to the object such as a shadow are frequently labelled as foreground then they may be included in the 3D reconstruction which is undesirable. On the other hand if areas of the foreground are sometimes mislabelled as background it doesn't affect 3D reconstruction so much as long as these parts of the object have been correctly labelled in a least some of the images. This is due to the way the 3D reconstruction program searches for correspondences in the image and it has a large amount of redundancy built in from the multiple views.
+Appreciation for which pixels were labelled incorrectly is important because some wrong labels effect the 3D reconstruction process more than others. For example if parts of the background which adjoin to the object such as a shadow are frequently labelled as foreground then they may be included in the 3D reconstruction. On the other hand if areas of the foreground are sometimes mislabelled as background it doesn't affect 3D reconstruction as much. Provided that these parts of the object have been correctly labelled in a least some of the images. This is due to the way the 3D reconstruction program searches for correspondences in the image. It has a large amount of redundancy built in from the multiple views.
 
 \subsection{Classifiers}
-What type of classifier is used specifies the methods for both selecting the hypothesis class and also fitting it to the data. For example the linear SVM classifier has a linear decision boundary as its hypothesis class and it is fit to the data using the support vector method.
+The type of classifier specifies the methods for both selecting the hypothesis class and also fitting it to the data. For example the linear SVM classifier has a linear decision boundary as its hypothesis class and it is fit to the data using the support vector method.
 
-Classifiers require a description of the input to be able to decide which class it belongs to. The description of the item is key to the process as even the most sophisticated classifier won't correctly classify an item with a poor description. The item description is often referred to as a feature vector, a vector where each entry refers to a trait of the item. In our case we are interested in classifying individual pixels as belonging to the foreground or the background. A description of a pixel could be its intensity values for each colour channel: Red , Blue and Green (RGB). This would form a 3 dimensional feature vector. The job of the classifier is to take this feature vector and output which class it thinks it belongs to. Once trained the classifier essentially defines a rule or a set of rules which delineate the classes.
+Classifiers require a description of the input to be able to decide which class it belongs to. The description of the item is key to the process. Even the most sophisticated classifier won't correctly classify items which are poorly described. The item description is often referred to as a feature vector; a vector where each entry refers to a trait of the item. In our case we are interested in classifying individual pixels. The classes are foreground and background. A description of a pixel could be its intensity values for each colour channel: Red , Blue and Green (RGB). The purpose of the classifier is to take this feature vector and output an estimate of its class. Once trained the classifier essentially defines a rule or a set of rules which delineate the inputs into classes.
 
- As an example we might create a simple classifier which has a rule that any pixel with a red value above 100 (out of 255) should be classified as background and everything else as foreground. This would be what is known as a hand crafted classifier. A hand crafted classifier has the exact hypothesis defined by an engineer, whereas a classifier produced with machine learning fits its hypothesis to the data with optimisation techniques. The engineer proposes a hypothesis class, for example a classification rule based on thresholding the value of the red channel. Then by optimisation the best possible level for this threshold is learnt for the training examples. The assumption is that these training examples will be representative of future examples which the classifier has not yet seen. When the classifier is tested on these unseen samples it uses the hypothesis learnt from the training set to estimate the class of the new example. Therefore the quality of the training examples is very important, they need to be representative of the future samples for the classifier to have good performance.
+ As an example we might create a simple classifier which has a rule that any pixel with a red value above 100 (out of 255) should be classified as background and everything else as foreground. This would be what is known as a hand crafted classifier. A hand crafted classifier has the exact hypothesis defined by an engineer. A classifier produced with machine learning fits its hypothesis to the data with optimisation techniques. The engineer proposes a hypothesis class, for example a classification rule based on thresholding the value of the red channel. Then by optimisation the best possible level for this threshold is learnt for the training examples. The assumption is that these training examples will be representative of future examples which the classifier has not yet seen. When the classifier is tested on these unseen samples it uses the hypothesis learnt from the training set to estimate the class of the new example. Therefore the quality of the training examples is very important. They need to be representative of the future samples for the classifier to have good performance.
  
  There are many and varied classifiers each with different hypothesis classes and methods for hypothesis fitting . We investigated using two of the most robust and commonly used; linear SVMs and Decision Trees. 
  
 \subsubsection{Support Vector Machines}
-A linear SVM defines its hypothesis by placing a plane in the input feature space (this is the space that is spanned by the feature vectors) so that it classifies as many training examples correctly as possible. It also positions the plane so that the distance between itself and the closest training examples (called support vectors) is maximised. It is therefore known as a maximum margin classifier. The parameters of the plane along with the cost function form a fitness landscape over which we optimise. The cost function in the case of support vector machines is defined by the width of the margin between the decision plane and the support vectors. We can also include a condition which softens the constraint that all training examples must be on the correct side of the plane and instead adds a penalty to the fitness score. This is necessary in applications where identical feature vectors may map to different classes. 
+A linear SVM defines its hypothesis by placing a plane in the input feature space. This is the space that is spanned by the feature vectors\cite{suykens1999least}. The plane is positioned so that it correctly classifies all training examples. Additionally the distance between the plane and the closest training examples (called support vectors) is maximised. It is therefore known as a maximum margin classifier. The parameters of the plane along with the cost function form a fitness landscape to optimise over. The cost function for support vector machines is defined by the width of the margin between the decision plane and the support vectors. We can also include a condition which softens the constraint that all training examples must be on the correct side of the plane and instead adds a penalty to the fitness score. This is necessary for data which are not linearly separable. 
 
-We applied a linear SVM to our application using pixel RGB values as the feature vector. The classifier was trained on a random subset of the pixels from the foreground and background of each of the training images. After training it was tested on the remaining images, with every pixel being considered in turn. We expected the classifier to struggle because the pixel data is not linearly separable in most cases.  However this simple setup would serve as a useful benchmark from which to iterate on. The results are as follows: the average error on the cross set was 9.50\%, and that for the bracelet was 9.66\%. Here is a figure(X) which shows the result of the classification on a test image. 
+We applied a linear SVM to our application using pixel RGB values as the feature vector. The classifier was trained on a subset of the pixels from the foreground and background of each of the training images. After training it was tested on the remaining images, with every pixel being considered in turn. We expected the classifier to struggle because the pixel data is not linearly separable in our image sets.  However this simple setup would serve as a useful benchmark from which to iterate on. The results are as follows: the average error on the cross was 9.50\%, and that for the bracelet was 9.66\%. Figure 8 shows the result of the classification on the cross. Notice that the linear classifier has been unable to cope with the dark regions of the cross. Instead the lighter region was prioritised as it makes up more of the image area.
 \begin{figure}[H]
 \centering
 \begin{subfigure}{.5\textwidth}
   \centering
   \includegraphics[width=.95\linewidth]{IMG_8504}
-  \caption{A subfigure}
+  \caption{Original image}
   \label{fig:sub1}
 \end{subfigure}%
 \begin{subfigure}{.5\textwidth}
   \centering
   \includegraphics[width=.95\linewidth]{IMG_8504_basic_mask_svm_}
-  \caption{A subfigure}
+  \caption{Automated mask}
   \label{fig:sub2}
 \end{subfigure}
-\caption{A figure with two subfigures}
+\caption{Performance of SVM with RGB classification on the cross}
 \label{fig:test}
 \end{figure}
 
-It can be seen that the performance was reasonable with the majority of the object being labelled as foreground and vice versa for the background. However there was certainly room for improvement. A more complex hypothesis which allows for a non linear decision boundary would likely do better. Alternatively we could have carried out transformations on the data, utilising the kernel trick\cite{scholkopft1999fisher} to 'untangle' it and make it linearly separable, before passing it to the SVM. We decided instead to use a widely used and very successful approach known as Decision Trees.
+There is certainly room for improvement. A more complex hypothesis which allows for a non linear decision boundary would likely do better. Alternatively we could have carried out transformations on the data before passing it to the SVM. Many transformations can utilise the kernel trick\cite{scholkopft1999fisher} to efficiently 'untangle' the data and make it linearly separable. We decided instead to use another widely used and very successful approach known as Decision Trees.
 \subsubsection{Decision Trees}
 
-Decision trees have as their hypothesis class a set of simple decision rules, linear in this case, which together define complex decision regions in the feature space.  When combined the linear decision boundaries can define any arbitrary function and therefore they will definitely have the capacity to model our data. 
+Decision trees have as their hypothesis class a set of simple decision rules, linear in this case, which together define complex decision regions in the feature space\cite{quinlan1986induction}.  When enough linear decision boundaries are combined they can define any arbitrary function and therefore they will definitely have the capacity to model our data. 
 
-A problem which can affect any classifier with high modelling capacity is the possibility of it becoming over trained. Overtraining is when a classifier gets very good at correctly classifying the samples in a training set but its rules are so specific to the training set that it performs much worse when it is used to classify unseen examples. One way that decision trees can get around this problem is by using a technique called random forests. Random forests works by combing together many separate decision trees which are each trained on some random subset of the training data. When it comes to testing all of the decision trees in the forest classify the sample according to their decision boundaries and then the final result is decided by a majority vote. This method proves to be an effective way to prevent over fitting of the training data. It makes the classifier more generalisable, rules are less specific to particular instances of training data. Random Forests have been found to be very effective and robust in most scenarios\cite{breiman2001random}. 
+A problem which can affect any classifier with high modelling capacity is the possibility of it becoming over trained. Overtraining is when a classifier gets very good at correctly classifying the samples in a training set but its rules become too specific. It then performs much worse when it is used to classify unseen examples. One way that Decision Trees can get around this problem is by using a technique called Random Forests\cite{breiman2001random}. Random Forests works by combing together many separate Decision Trees which are each trained on some random subset of the training data. When it comes to testing, all of the Decision Trees in the forest classify the sample according to their decision boundaries. The final result is decided by a majority vote. This method proves to be an effective way to prevent over fitting of the training data. It makes the classifier more generalisable, rules are less specific to particular instances of training data. 
 
-A benefit of Decision Trees is that they work very well 'out of the box' and also they can provide a useful diagnostic called the Gini Importance\cite{menze2009comparison} which gives a metric of how important each feature is in the feature vector for deciding on how to classify an instance. For these reasons we used Decision Trees with Random Forests as our second hypothesis type and stuck with it through the rest of the project.
+A benefit of Decision Trees is that they work very well 'out of the box' and also they can provide a useful diagnostic called the \emph{Gini Importance}\cite{menze2009comparison}. The Gini Importance is a metric given for each feature. It corresponds to how much the feature was utilised by Decision Trees when tailoring its hypothesis. Given these benefits and its general robustness we used Decision Trees with Random Forests as our second hypothesis type. We use Decision Trees as the default classifier throughout the rest of the report.
 
- Decision Trees' performance was tested on the image set using RGB values as the feature vector. The results are as follows: the average error for the cross was 4.33\% and for the bracelet 4.36\%.This is a XXX percentage reduction over SVM. Here is a figure X representing the improvement in performance. This result is a marked improvement in performance both numerically and by eye. The improvement comes as the classifier is able to model the non linear distribution of the data. The pixel intensity distributions are often non linear because there may be different clusters of colour within the object, such as the bell which has some silver detail in the centre whereas the rest is rusty brown FIGURE X These separate clusters often can't be separated with a single linear decision boundary.
+ Decision Trees' performance was tested on the image set using RGB values as the feature vector. The results are as follows: the average error for the cross was 4.33\% and for the bracelet 4.36\%. This represents more than a halving in error over the SVM. Figure 9 shows the improvement in performance. The improvement comes as the classifier is able to model the non linear distribution of the data. The pixel intensity distributions are often non linear because there may be different clusters of colour within the object. Figure 10 shows classification of the bell which has some silver detail in the centre whereas the rest is rusty brown. The SVM prioritises the larger cluster whereas the Decision Trees are able to model both clusters quite well.
 \begin{figure}[H]
 \centering
 \begin{subfigure}{.5\textwidth}
   \centering
   \includegraphics[width=.95\linewidth]{IMG_8504_basic_mask_svm_}
-  \caption{A subfigure}
+  \caption{SVM mask}
   \label{fig:sub1}
 \end{subfigure}%
 \begin{subfigure}{.5\textwidth}
   \centering
   \includegraphics[width=.95\linewidth]{IMG_8504_basic_mask_tree_}
-  \caption{A subfigure}
+  \caption{Decision Trees mask}
   \label{fig:sub2}
 \end{subfigure}
-\caption{A figure with two subfigures}
+\caption{SVM and Decision Trees classification on the cross}
 \label{fig:test}
 \end{figure}
 \begin{figure}[H]
@@ -308,34 +308,34 @@ A benefit of Decision Trees is that they work very well 'out of the box' and als
 \begin{subfigure}{.33\textwidth}
   \centering
   \includegraphics[width=.95\linewidth]{IMG_7366}
-  \caption{A subfigure}
+  \caption{Original image}
   \label{fig:sub1}
 \end{subfigure}%
 \begin{subfigure}{.33\textwidth}
   \centering
-  \includegraphics[width=.95\linewidth]{IMG_7366_basic_mask}
-  \caption{A subfigure}
+  \includegraphics[width=.95\linewidth]{IMG_7366_basic_mask__2_}
+  \caption{SVM mask}
   \label{fig:sub2}
 \end{subfigure}
 \begin{subfigure}{.33\textwidth}
-  \centering
-  \includegraphics[width=.95\linewidth]{IMG_7366_basic_mask__2_}
-  \caption{A subfigure}
+  \centering 
+  \includegraphics[width=.95\linewidth]{IMG_7366_basic_mask}
+  \caption{Decision Trees mask}
   \label{fig:sub2}
 \end{subfigure}
-\caption{A figure with two subfigures}
+\caption{SVM and Decision Trees classification on the bell}
 \label{fig:test}
 \end{figure}
 
 
 \subsection{Feature vectors}
-The information that the classifier receives about a sample is known as the sample's feature vector.  Choosing an effective feature vector is crucial to the success of the classifier and this has been a major focus of the project. If we simply used the greyscale value of a pixel as its feature vector it would be very difficult or impossible to correctly classify all of the pixels. There may be some pixels of the object and of the background which share the same grayscale value. In this case they would be impossible to separate, the information contained in the feature vector is not sufficient to discriminate between them. In the previous section we considered taking the RGB values of a pixel as its description. This gives the classifier all of the information available about this one pixel. However it gives the classifier no information about the context of that pixel. If we can somehow capture information about the pixels surrounding our target pixel it will likely allow our classifier to do a better job. This technique is broadly known as texture extraction. We will take some measurement of the pixels around our target pixel and add it on to the feature vector along with the RGB values.
+Choosing an effective feature vector is crucial to the success of the classifier and this has been a major focus of the project. If we simply used the greyscale value of a pixel as its feature vector it would be very difficult or impossible to correctly classify all of the pixels. There may be some pixels of the object which share the same grayscale value as the background. In this case they would be impossible to separate. The information contained in the feature vector is not sufficient to discriminate between them. In the previous section we considered taking the RGB values of a pixel as its description. This gives the classifier all of the information available about this one pixel. However it gives the classifier no information about the context of that pixel. If we can somehow capture information about the pixels surrounding our target pixel performance will likely improve. This technique is broadly known as texture extraction. We will take some measurement of the pixels around our target pixel and add it on to the feature vector containing the RGB values.
 
 \subsubsection{Sobel Image}
 
- The first technique that we considered for extracting this texture information was by using a Sobel filter\cite{chaple2014design}. The Sobel filter has the following kernel KERNEL. The filter essentially works like an edge detector when it is convolved with the image. It picks out rapid changes in the pixel values and can operate individually on each colour channel. The resulting Sobel image gives high activation to patches in the image with high frequency, such as edges or highly textured patches.
+ The first technique that we considered for extracting this texture information was by using a Sobel filter\cite{chaple2014design}. The Sobel filter is an edge operator. When convolved with the image it computes an estimation of the image gradients. It picks out rapid changes in the pixel values and can operate individually on each colour channel. The resulting Sobel image gives high activation to patches in the image with high frequency, such as edges or highly textured patches.
  
- The filter is directional, it can be passed horizontally to extract horizontal edges and vertically to extract vertical edges. The two resulting filtered images may be combined into one, shown in Figure X vs X. This shows the difference between the two approaches;  for the combined Sobel the object is clearly outlined on both edge orientations verses the separate vertical and horizontal images where the edges are picked out based on orientation. 
+ The filter is directional, it can be passed horizontally or vertically to extract the respective edges. The two resulting filtered images may be combined into one. Figure 11 shows the difference between the two approaches. In the combined Sobel(\emph{image b}) the object is clearly outlined on both edge orientations. The individual Sobels(\emph{images c,d}) pick out the oriented edges. 
 
 
 \begin{figure}[H]
@@ -343,99 +343,105 @@ The information that the classifier receives about a sample is known as the samp
 \begin{subfigure}{.45\textwidth}
   \centering
   \includegraphics[width=.95\linewidth]{IMG_7365}
-  \caption{A subfigure}
+  \caption{Original image}
   \label{fig:sub1}
 \end{subfigure}%
 \begin{subfigure}{.45\textwidth}
   \centering
   \includegraphics[width=.95\linewidth]{IMG_7365_3_hv}
-  \caption{A subfigure}
+  \caption{Combined Sobel filtered image}
   \label{fig:sub2}
 \end{subfigure}
 \begin{subfigure}{.45\textwidth}
   \centering
   \includegraphics[width=.95\linewidth]{IMG_7365_3_h}
-  \caption{A subfigure}
+  \caption{Horizontal Sobel filtered image}
   \label{fig:sub2}
 \end{subfigure}
 \begin{subfigure}{.45\textwidth}
   \centering
   \includegraphics[width=.95\linewidth]{IMG_7365_3_v}
-  \caption{A subfigure}
+  \caption{Vertical Sobel filtered image}
   \label{fig:sub2}
 \end{subfigure}
-\caption{A figure with two subfigures}
+\caption{A comparison of Sobel filters on the bell}
 \label{fig:test}
 \end{figure}
 
 
-We investigated the effect on performance of using each case as the feature vector. In both cases the Sobel information was provided along with the RGB values. The results for the individual filters were average errors of 3.08\% for the cross and 2.26\% for the bracelet. Figure X?. The errors for the combined filter were 3.04\% for the cross and 1.50\% for the bracelet. We expected the combination of both orientations to work slightly better than the individuals because the nature of our application is objects being rotated on a turntable and therefore orientation should not be taken into account when deciding how to classify pixels. Considering the bracelet if we just used a horizontal orientation as our only training image when the turntable rotates it by 90 degrees to the vertical position the edges will not be recognised as belonging to the bracelet. Figure X and X show this. As expected the results show that the combination approach works better, except in the case of the cross as it is relatively invariant to rotation. The change in the metric of X can be explained by the random nature of the classifier. This implementation of Random Forests typically accounts for variations of around 0.05%.
+We investigated the effect on performance of using combined versus individual Sobels. In both cases the Sobel information was provided along with the RGB values. Results for the individual filters were average errors of 3.08\% for the cross and 2.26\% for the bracelet. The errors for the combined filter were 3.04\% for the cross and 1.50\% for the bracelet. 
+
+We expected the combination of both orientations to work slightly better than the individuals. As objects are rotated on a turntable in our application, orientation should not be taken into account when deciding how to classify pixels. 
+
+Consider the scenario of classifying the bracelet given only a single training image. If the bracelet is laid horizontally in the training image then the classifier will be presented with lots of examples of horizontal edges. As the bracelet is rotated through 90 degrees the dominant edges will become vertical. If the individual Sobel filters are used the classifier will have learnt to pick out horizontal edges and will perform worse on the vertical bracelet. The combined filter however will not register any difference between these orientations and should perform better. The results show that this is indeed the case, see Figure 12. The combined Sobel filter will be used as the default throughout the rest of this report.
+
+ The error metric for the bracelet is also lower when using the combined filter. However the cross shows little change in performance. This is due to it being relatively rotation invariant. The change in error is within the typical variation between trials of 0.05\%. This variation is accounted for by the stochastic nature of Random Forests.
 \begin{figure}[H]
 \centering
 \begin{subfigure}{.45\textwidth}
   \centering
   \includegraphics[width=.95\linewidth]{IMG_3661_crop}
-  \caption{A subfigure}
+  \caption{Training image}
   \label{fig:sub2}
 \end{subfigure}
 \begin{subfigure}{.45\textwidth}
   \centering
   \includegraphics[width=.95\linewidth]{IMG_3680_crop}
-  \caption{A subfigure}
+  \caption{Test image}
   \label{fig:sub2}
 \end{subfigure}
 \begin{subfigure}{.45\textwidth}
   \centering
   \includegraphics[width=.95\linewidth]{IMG_3680_mask_hv_crop}
-  \caption{A subfigure}
+  \caption{Combined filter mask}
   \label{fig:sub1}
 \end{subfigure}%
 \begin{subfigure}{.45\textwidth}
   \centering
   \includegraphics[width=.95\linewidth]{IMG_3680_mask_handvsep_crop}
-  \caption{A subfigure}
+  \caption{Individual filters mask}
   \label{fig:sub2}
 \end{subfigure}
 
-\caption{A figure with two subfigures}
+\caption{The performance on the bracelet of individual Sobel filters verses the combined filter}
 \label{fig:test}
 \end{figure}
 
-Passing a Sobel filter over an image will only extract texture at a certain scale. We can extract textures at different scales by 'sobelising' the image at different resolutions to create a 'Sobel pyramid'. The Sobel pyramid is somewhat similar to that used for locating features for SIFT\cite{lowe1999object}. We start with the original image and operate on it with a Sobel operator of parameters X. We then perform a Gaussian blur on the image with a kernel with sigma X. This is followed by down-sampling of the image by interpolation which saves on computational time. This is possible because the blurring decreases the information in the image so we only need half the number of pixels to represent it, by Nyquist's theorem.
+Passing a Sobel filter over an image will only extract texture at a certain scale. We can extract textures at different scales by filtering the image at different resolutions to create a Sobel \emph{pyramid}. The Sobel pyramid is somewhat similar to that used for locating features in SIFT\cite{lowe1999object}. We start with the original image and operate on it with a Sobel filter. We then perform a Gaussian blur on the image. This is followed by a down-sampling by interpolation. The process then repeats creating a pyramid of Sobel images at different resolutions. Down sampling saves on computational time and doesn't result in any lost information. This is possible because the magnitude of the blurring decreases the information in the image by half. Therefore, by Nyquist's theorem, we only need half the number of pixels to represent it.
 
- Having Sobel filters performed on different resolutions of the image but using the same size Sobel operator is efficient and extracts texture at a range of length scales. For example in FIGURE X we can see the first level of the pyramid picks out fine texture. FIGURE X is level 5 of the pyramid and picks out much more coarse texture as the resolution is much lower. All of these layers are concatenated together and used as the feature vector, alongside RGB values for the target pixel. This technique of creating a pyramid of different resolutions is used later on in section X for the entropy and discrete wavelet transform texture extractors.
+ Figure 13 shows 3 levels of the Sobel pyramid for the bracelet. The first level of the pyramid(b) picks out fine texture. Levels 3 and 5(\emph{images c,d}) pick out progressively more coarse texture as the resolution gets lower. All of these layers are concatenated together and used as the feature vector, alongside RGB values. This technique of creating a pyramid of different resolutions is used again in \emph{Sections 2.2.2} and \emph{2.2.3} for the entropy and discrete wavelet transform texture extractors respectively.
  \begin{figure}[H]
 \centering
 \begin{subfigure}{.45\textwidth}
   \centering
   \includegraphics[width=.95\linewidth]{IMG_3662_crop}
-  \caption{A subfigure}
+  \caption{Original image}
   \label{fig:sub1}
 \end{subfigure}%
 \begin{subfigure}{.45\textwidth}
   \centering
   \includegraphics[width=.95\linewidth]{IMG_3662_0_hv_crop}
-  \caption{A subfigure}
+  \caption{Level 1}
   \label{fig:sub2}
 \end{subfigure}
 \begin{subfigure}{.45\textwidth}
   \centering
   \includegraphics[width=.95\linewidth]{IMG_3662_1_hv_crop}
-  \caption{A subfigure}
+  \caption{Level 3}
   \label{fig:sub2}
 \end{subfigure}
 \begin{subfigure}{.45\textwidth}
   \centering
   \includegraphics[width=.95\linewidth]{IMG_3662_2_hv_crop}
-  \caption{A subfigure}
+  \caption{Level 5}
   \label{fig:sub2}
 \end{subfigure}
-\caption{A figure with two subfigures}
+\caption{The result of performing Sobel filtering on different resolutions of the bracelet image}
 \label{fig:test}
 \end{figure}
 
-The results of the classification using Sobel pyramids of various levels as feature vectors are shown in table X. FIGURES X. Note the error values quoted above for Sobel are using the 5 level pyramid.
-\begin{table}
+The results of the classification using Sobel pyramids of various sizes are shown in Table 1. The 5 layer pyramid performs the best overall. Note that all the error values quoted for Sobel prior to now  used the 5 layer pyramid. This will also be used as the default form of Sobel through the rest of the report.
+\begin{table}[H]
 \begin{center}
     \begin{tabular}{ | l | l | l | p{5cm} |}
     \hline
@@ -448,274 +454,279 @@ The results of the classification using Sobel pyramids of various levels as feat
     \hline
     
     \end{tabular}
-    \caption{The caption of the table}\label{table:somename}
+    \caption{Percentage of mislabelled pixels for Sobel pyramids of differing sizes}\label{table:somename}
 \end{center}
 \end{table}
-In each case the classifier used was Decision Trees. We have also considered the performance of a classifier which uses a feature vector only consisting of the Sobel pyramid and not using the RGB values of the target pixel. This results in an error of 6.39\% for the cross and 2.52\% for the bracelet. The resulting classification is shown in figure X. Performance without the RGB values is worse as would be expected. The classifier particularly struggles in the dark region of the bell where there isn't much texture information but the actual pixel values are very discriminative.
+We also considered the performance of using only the Sobel pyramid and not the RGB values. This results in an error of 6.39\% for the cross and 2.52\% for the bracelet. Performance without the RGB values is worse as was expected. Figure 14 shows the classification on the bell. The classifier particularly struggles in the dark region of the bell(\emph{image a.i}) where there isn't much texture information. The actual pixel values are very discriminative in this region so the classifier with access to this information performs much better.
 \begin{figure}[H]
 \centering
 \begin{subfigure}{.5\textwidth}
   \centering
   \includegraphics[width=.75\linewidth]{IMG_7381_edit}
-  \caption{A subfigure}
+  \caption{Original image}
   \label{fig:sub2}
 \end{subfigure}
 \begin{subfigure}{.5\textwidth}
   \centering
   \includegraphics[width=.75\linewidth]{IMG_7381_mask_sobelRGB_edit}
-  \caption{A subfigure}
+  \caption{Sobel and RGB}
   \label{fig:sub1}
 \end{subfigure}%
 \begin{subfigure}{.5\textwidth}
   \centering
   \includegraphics[width=.75\linewidth]{IMG_7381_masksobelNoRGB_edit}
-  \caption{A subfigure}
+  \caption{Sobel without RGB}
   \label{fig:sub2}
 \end{subfigure}
 
-\caption{A figure with two subfigures}
+\caption{The classification performance on the bell for Sobel with and without RGB values}
 \label{fig:test}
 \end{figure}
 
-From the Gini Importance graph for Sobel with RGB it can be seen that across the whole Sobel pyramid the most important layers were X and X. Of these layers the colours that were most important were X and the RGB value that was most important was X. Here is a picture of the most important sobels FIGURE X, for bracelet eg.
-
- 
-
-
-
 \subsubsection{Entropy}
-The Sobel pyramid performs effectively and adds useful information for the classifier to use as is shown by the increase in performance. However there are other ways of extracting texture information which we will now consider.
+The Sobel pyramid is effective in adding useful information for the classifier to use shown by the increase in performance. However there are other ways of extracting texture information.
  
-The first method we will discuss is to capture the entropy of the region surrounding the target pixel. The entropy can be calculated for the neighbourhood of values around the target pixel as a representation of its disorder\cite{jernigan1984entropy}. Higher values correspond to higher amounts of texture. 
+One method is to calculate the entropy of the region surrounding the target pixel. Entropy can be used as a measure of the disorder of a neighbourhood of pixels\cite{jernigan1984entropy}. Higher values correspond to rapidly changing pixel intensities which is due to higher amounts of texture. 
 
-We considered a 5x5?? neighbourhood around the target pixel and used a grayscale version of the image to calculate the entropy. The image is then blurred and down-sampled as it was for the Sobel filter to produce a texture scale pyramid. The pyramid is concatenated with the RGB value to create the feature vector. In this case we only investigated the 5 layer pyramid as this gave the best performance for the Sobel filter. 
+We considered a 5 by 5 neighbourhood around the target pixel and used a grayscale version of the image to calculate the entropy. The image is then recursively blurred and down-sampled ,as it was for the Sobel filter, to produce a scale pyramid. The pyramid is concatenated with the RGB values to create the feature vector. In this case we only investigated the 5 layer pyramid as this gave the best performance for the Sobel filter. 
 
-This approach gave an average error of 3.52\% for the cross and 1.70\% for the bracelet. These values are similar to those obtained using the 5 layer sobel pyramid?. Here is a figure X which shows the performance alongside sobel. It can be seen that sobel performs better in some parts of the image than entropy does SEE FIG. The converse is true for other parts of the image FIG. 
+This approach gave an average error of 3.52\% for the cross and 1.70\% for the bracelet. These values are slightly worse than those obtained using the 5 layer Sobel pyramid. Figure 15 shows the performance alongside Sobel. The top images (\emph{images a,b}) show the mask in red overlaid on the original image. It can be seen that entropy actually performs better in some parts of the image than Sobel (\emph{images a,b .i}). The converse is true for other parts of the image(\emph{image a,b .ii}). 
 \begin{figure}[H]
 \centering
 
 \begin{subfigure}{.45\textwidth}
   \centering
   \includegraphics[width=.95\linewidth]{IMG_3662_final_mask_sobel_crop2}
-  \caption{A subfigure}
+  \caption{Sobel mask overlaid on original}
   \label{fig:sub1}
 \end{subfigure}%
 \begin{subfigure}{.45\textwidth}
   \centering
   \includegraphics[width=.95\linewidth]{IMG_3662_final_mask_entropy_crop2}
-  \caption{A subfigure}
+  \caption{Entropy mask overlaid on original}
   \label{fig:sub2}
 \end{subfigure}
 \begin{subfigure}{.45\textwidth}
   \centering
   \includegraphics[width=.95\linewidth]{IMG_3662_basic_mask_sobel_crop2}
-  \caption{A subfigure}
+  \caption{Sobel mask}
   \label{fig:sub2}
 \end{subfigure}
 \begin{subfigure}{.45\textwidth}
   \centering
   \includegraphics[width=.95\linewidth]{IMG_3662_mask_entropy_crop2}
-  \caption{A subfigure}
+  \caption{Entropy mask}
   \label{fig:sub2}
 \end{subfigure}
 
 
-\caption{A figure with two subfigures}
+\caption{A comparison of Sobel and entropy for classification on the bracelet}
 \label{fig:test}
 \end{figure}
-We decided to combine entropy and sobel values into a single feature vector to give the classifier more information to work with. This gave an average error of 1.71\% for the cross and 0.87\% for the bracelet. Visually the results are similar to those using just entropy but the edges are slightly cleaner and even the islet hole(i) has been picked out, FIGURE X. The extra information has helped discriminate between the pixels. This gives the best results of any of the feature vectors we tested.
+As each feature performed the best in different places we decided to combine the two into a single feature vector. This gave an average error of 1.71\% for the cross and 0.87\% for the bracelet. This represented a big improvement in performance, nearly half the error, of either feature alone. Evidently the information contained in the features is not entirely mutual. Visually the results are similar to those using just entropy but the edges are slightly cleaner and even the islet hole(\emph{image .i}) has been picked out (Figure 16). This feature vector gave the best results of all that we tested.
 
 \begin{figure}[H]
-  \caption{A picture of dwt no sobel.}
+  
   \centering
     \includegraphics[width=0.75\textwidth]{IMG_3662_mask_entsob_crop}
+    \caption{The mask produced by using the combination of Sobel and entropy}
 \end{figure}
-The Gini Importance graph for the combination of entropy , sobel and RGB shows that X was the most important component FIGURE X.
+The Gini Importance graph for the combination of Sobel, entropy and RGB is shown in Figure 17. Pixel intensities(RGB values), are important with the blue channel dominating. Sobel makes a notable contribution but only levels 2,3 and 5. Entropy only has a small importance score but it's clear from the classification that it adds useful information.
 
 \begin{figure}[H]
-  \caption{A picture of dwt no sobel.}
+  \caption{A graph of Gini Importance for RGB, Sobel and entropy on the bracelet}
   \centering
     \includegraphics[width=1\textwidth]{giniEnt}
+
 \end{figure}
 
 \subsubsection{Discrete Wavelet Transform}
 
-A further technique we investigated for extracting texture information was to take the discrete wavelet transform (DWT)\cite{shensa1992discrete} from a neighbourhood around the target pixel,  6x6??. The DWT produces another 6x6 image representing horizontal, vertical and diagonal frequency information and base pixel values down sampled by half in 3x3 squares. 
+Another technique we investigated for extracting texture information from a neighbourhood around the target pixel was to take the discrete wavelet transform (DWT)\cite{shensa1992discrete}.  The DWT operates on a 6 by 6 patch of pixels. It produces another 6 by 6 image split into 3 by 3 squares. The squares represent horizontal, vertical and diagonal frequency information as well as base pixel values down-sampled. 
 
-Once again we repeated the procedure at different scales to create a texture pyramid of 5 levels. We took the mean values and variance of each of the squares of the DWT for each level of the pyramid. These were concatenated with the RGB values to create the feature vector. 
+Once again we repeated the procedure at different resolutions to create a texture pyramid of 5 levels. We took the mean values and the variance of each of the squares. These were concatenated with the RGB values to create the feature vector. 
 
-The classification was performed using this new feature vector. The error for the cross was 3.78\% and error for the bracelet was 2.02\%. Visually the results were very similar to using entropy. Again we combined the DWT feature vector with that obtained from the sobel pyramid. The result was an error of 2.32\% for the cross and 1.13\% for the bracelet. 
-
-
+Classification was performed using this new feature vector. The error for the cross was 3.78\% and error for the bracelet was 2.02\%. Visually the results were very similar to using entropy. We then combined the DWT feature with Sobel. The result was an error of 2.32\% for the cross and 1.13\% for the bracelet. 
 
 \subsection{Super pixelling}
-A small number of individual pixels within an object may be dissimilar from the vast majority of the pixels which make up that object. During training the classifier will have very little exposure to these abnormal pixels because they make up such a small percentage of the object. Therefore the model learned by the classifier won't take these pixels into account. 
+A small number of individual pixels within an object may be dissimilar from the vast majority of their neighbours. During training the classifier will have very little exposure to these abnormal pixels because they make up such a small percentage of the object. Therefore the model learned by the classifier won't take these pixels into account. 
 
-As our algorithm classifies one pixel at a time, these abnormal pixels are likely to be misclassified even if all of their neighbours are classified correctly. This results in noisy speckles of incorrectly labelled pixels across the image. The problem applies both to the object and the background. See figure XXX where there is significant noise around the cross, particularly at the edges of the object. 
+When it comes to testing, these abnormal pixels are likely to be misclassified even if all of their neighbours are classified correctly. This results in noisy speckles of incorrectly labelled pixels across the image, see Figure 18(\emph{image .i}). There is significant noise within the cross, particularly at the edges. The problem also applies to the background.
 \begin{figure}[H]
-  \caption{A picture of dwt with sobel.}
+  
   \centering
     \includegraphics[width=0.5\textwidth]{IMG_8518_basic_mask_edit}
+    \caption{Classification on the cross using Sobel and entropy}
 \end{figure}
-The edge regions are particularly prone to the problem of underrepresentation during training. Edge regions may look quite different to the interior of the object due to being partially out of focus in some cases, see FIGURE X DO STONECROSS. Also the Sobel images have higher activation at the edges than in the centre FIGURE X, ALSO STONECROSS. These factors combine to make the feature vector for pixels near the edge of the object look quite different to the feature vector for a pixel in the centre of the object.
+The edge regions are particularly prone to this problem of underrepresentation during training. Edge regions may look quite different to the interior of the object. In the case of the cross it is due to the edges being partially out of focus. Figure 19(\emph{image a.i}) shows how the far edge of the cross has little texture as it is out of focus. This is in contrast to the near face (\emph{image a.ii}). Also the Sobel images have higher activation at the edges by definition, Figure 19(\emph{image b.i}). These factors combine to make the feature vector of a pixel near the edge look quite different to one at the centre.
 \begin{figure}[H]
 \centering
 \begin{subfigure}{.45\textwidth}
   \centering
   \includegraphics[width=.95\linewidth]{IMG_8518_edit}
-  \caption{A subfigure}
+  \caption{Original image with focus contrast}
   \label{fig:sub2}
 \end{subfigure}
 \begin{subfigure}{.45\textwidth}
   \centering
   \includegraphics[width=.95\linewidth]{IMG_8518_2_hv}
-  \caption{A subfigure}
+  \caption{Sobel filtered image}
   \label{fig:sub1}
 \end{subfigure}%
 
-\caption{A figure with two subfigures}
+\caption{An illustration of focus and Sobel on the cross}
 \label{fig:test}
 \end{figure}
- The edge region makes up a smaller proportion of the area of the object than the centre and therefore it contributes fewer training pixels. This causes the classifier to bias its hypothesis in favour of the centre region. The result is that the problem of handling atypical pixels, as discussed above, is accentuated in the edge region. 
+ The edge region makes up a smaller proportion of the area of the object than the centre and therefore it contributes fewer training pixels. This causes the classifier to bias its hypothesis in favour of the centre region. The result is that the problem of handling abnormal pixels, as discussed above, is accentuated in the edge region. 
  
-We decided to investigate a consensus based approach to combat this problem of isolated atypical pixels. We enforced a constraint that if a pixel's neighbours voted as a majority to belong to a particular class, that pixel should also be labelled as that class. The justification is that a pixel is similar to its neighbours and therefore it should share the same class as them. 
+We decided to investigate a neighbourhood consensus based approach to combat this problem. We enforced a constraint that if a pixel's neighbours voted as a majority to belong to a particular class, that pixel must also be labelled as that class. The justification is that a pixel is similar to its neighbours and therefore it should share the same class as them. 
 
-This approach relies on having a method to calculate a pixel's neighbours effectively. If neighbours can be found the task would effectively change to classification of neighbourhoods of the image rather than individual pixels. This would much reduce the misclassification of the atypical pixels.
+This approach relies on having a method to calculate a pixel's neighbours accurately. If neighbours can be found the task would effectively change to classification of neighbourhoods rather than individual pixels. This should reduce the misclassification of abnormal pixels.
 
 Super pixel segmentation is the name given to the process of dividing up an image into neighbourhoods, called super pixels. They are regions of the image which have relatively uniform colour and texture. Super-pixels generally over-segment an image, meaning that they break up the image into more segments than there are objects. The benefit of this is that most of the structure in the image is conserved\cite{RenMalik03}.  
 
-Super-pixels are localised, all of the pixel members are adjacent to other members. Super-pixels are also bounded by edges in the image if the strength of the edge is above a threshold. Therefore two pixels which are separated by a strong edge cannot be part of the same super pixel. This prevents super pixels from spanning between objects. The process of creating super pixels is easiest for images where there are clear and distinct edges between the objects. It is much more difficult where the edges are soft, which is often the case with shadows. 
+Super-pixels are localised, all of the pixel members are adjacent to other members. Edges in the image act as boundaries for the super-pixels if the strength of the edge is above a threshold. Therefore two pixels which are separated by a strong edge cannot be part of the same super pixel. This prevents super pixels from spanning between objects. The process of creating super pixels is easiest for images where there are clear and distinct edges between the objects. It is much more difficult where the edges are soft, which is often the case with shadows. 
 
-Once super pixels have been formed and classification of the individual pixels has completed we need to decide on a voting system which dictates the label for each super pixel. We could simply have that the majority vote of the constituent pixels is chosen. However it is again worth noting that patches of background mislabelled as foreground are more problematic for 3D reconstruction than foreground labelled as background. So long as most of the object is correctly labelled in most of the images the reconstruction will work well. However if there are a few images where background is mislabelled as foreground they can introduce errors to the 3D reconstruction. Therefore it is better to be conservative when assigning super pixels as foreground. This can be achieved by setting a threshold for proportion of foreground votes before a super pixel can itself be labelled as foreground.
+Voting takes place once super-pixels have been formed and classification of the individual pixels has completed. The voting will dictate the label for each super pixel. We could simply chose the label of the majority vote of constituent pixels. However we are more concerned about mislabelling background than foreground due to the reconstruction process. Therefore it is better to be conservative when assigning super-pixels as foreground. This can be achieved by setting a higher threshold for foreground membership. A super-pixel will only be labelled as foreground if it exceeds the threshold number of constituent foreground pixels.
 
-The value at which to threshold the pixel voting has a large effect on the performance of the algorithm. Here are two figures showing X and X the heatmaps of pixel voting. The colour of the pixels is proportional to the percentage of pixels voting for foreground. The threshold value is shown in the top left?- in each case the value was X and X, it can be seen that a small difference of threshold affects the result a lot. 
+The value at which to threshold the pixel voting has a large impact on the performance of the algorithm. We found that 75\% generally gave robust performance across all of the image sets we considered. However often a different value was more optimal for a specific image. Potentially this threshold value could be tuned to the image set. A tuned threshold may look at the number of equivocal super pixels and place the threshold to maximally separate them. Perhaps in a similar way to Otsu's method. However due to time constraints this approach has not been investigated here. 
 
-We found that X generally gave robust performance across all of the image sets we considered, even if a different value was more optimal for a specific image. Potentially this threshold value could be tuned to the image set. A tuned threshold may look at the number of equivocal super pixels and place the threshold to maximally separate them, perhaps in a similar way to Otsu's method. However due to time constraints this approach has not been investigated. 
-
-There are many popular techniques for forming the super-pixels themselves of which we will consider three: Watershed, SLIC and Quickshift. A comparison of the error scores is shown in table X.
+There are many popular techniques for forming the super-pixels themselves of which we will consider three: Watershed, SLIC and Quickshift. A comparison of the error scores is shown in Table 2.
 
 
 
 \subsubsection{Watershed}
-Watershed algorithm works conceptually by supposing that the image gradient is a height map as if it was a geographical landscape. The algorithm gets its name from the catchment area of rainfall called a watershed. 
+Conceptually, Watershed segmentation works by supposing that the image gradient is a height map as if it was a geographical landscape. The algorithm gets its name from the catchment area for rainfall known as a watershed. 
 
-The aim of the algorithm is to find basins in the height map and plant a seed in each basin. From these seeds we imagine water pooling and rising. As the water level rises in the basins it eventually spills over and meets water from another basin. When it does the meeting of these two bodies of water defines a super pixel boundary. The seeds are generally placed in regions of the image where spatial frequency is low.
+The aim of the algorithm is to find basins in the height map and plant a seed in each basin. From these seeds we imagine water pooling and rising. As the water level rises in the basins it eventually spills over and meets water from other basins. When it does the meeting of these bodies of water defines a super pixel boundary. The seeds are placed in regions of the image where spatial frequency is low as this corresponds to deep basins.
  
-When watershed is undertaken on the cross it produces the result shown in FIGURE X. White outlines represent the boundaries between the super pixels.
+When watershed is undertaken on the cross it produces the result shown in Figure 20. The first image (\emph{image a}) shows the super-pixel boundaries with white outlines. The second image (\emph{image b}) shows the classification in red before voting has taken place, overlaid on the original image. The third image (\emph{image c}) shows a \emph{heat-map} of the voting. The super-pixels are coloured white if they contain only foreground pixels. Lower proportions correspond to yellow,red and finally black for no foreground pixels. The last image (\emph{image d}) shows the final mask after pixel voting has been thresholded. The threshold colour is shown as a circle in the bottom right of \emph{image c.ii}.
 
-We used the Watershed algorithm with the threshold set at 50?percent as the super pixel method. Our core classifier was Decision Trees with RGB, Sobel and Entropy pyramids. The resulting errors are 0.83\% for the cross and 0.73\% for the bracelet. The figure X shows that the mask is generally cleaner and there is less noise than before. However there is some erosion of the object at the top edge. The heat map in FIGURE B which shows the proportion of foreground voting pixels within a superpixel as a colour. White is entirely foreground through yellow and red to black which is entirely background. The top edge of the cross has been quite poorly classified in the per pixel mask becuase of the edge effects we discussed in SECTION X. This has caused the superpixels to be rejected as the thresholding is quite conservative.
+We tested the Watershed algorithm with the core classifier as Decision Trees with RGB, Sobel and entropy pyramids. The resulting errors were 0.83\% for the cross and 0.73\% for the bracelet. This is a large improvement, especially for the cross. Figure 20 (\emph{image d}) shows that the mask is generally cleaner and there is less noise than before. However there is some erosion of the object at the top edge, \emph{image d.i}. This is due to some of the edge being misclassified before voting shown in \emph{image b.i}. The super-pixels then don't contain the required proportion of foreground and are rejected, as shown in \emph{image c.i}. These super-pixels would have been correctly classified if the threshold was slightly lower. However as discussed in \emph{Section 2.3} a conservative threshold was chosen which performed robustly across all of the image sets.
 \begin{figure}[H]
 \centering
 \begin{subfigure}{.45\textwidth}
   \centering
   \includegraphics[width=.95\linewidth]{IMG_8518_segment_mask}
-  \caption{A subfigure}
+  \caption{Super-pixel outlines}
   \label{fig:sub1}
 \end{subfigure}%
 \begin{subfigure}{.45\textwidth}
   \centering
   \includegraphics[width=.95\linewidth]{IMG_8518_final_mask}
-  \caption{A subfigure}
+  \caption{Mask before voting}
   \label{fig:sub2}
 \end{subfigure}
 \begin{subfigure}{.45\textwidth}
   \centering
   \includegraphics[width=.95\linewidth]{IMG_8518_ratio_mask}
-  \caption{A subfigure}
+  \caption{Heat-map, \emph{ii} is threshold colour}
   \label{fig:sub2}
 \end{subfigure}
 \begin{subfigure}{.45\textwidth}
   \centering
   \includegraphics[width=.95\linewidth]{IMG_8518_mask}
-  \caption{A subfigure}
+  \caption{Mask after voting}
   \label{fig:sub2}
 \end{subfigure}
-\caption{A figure with two subfigures}
+\caption{A demonstration of Watershed segmentation with voting on the cross}
 \label{fig:test}
 \end{figure}
 
 
-A problem with the watershed algorithm is that it has many parameters which need to be tuned to a particular image set for good performance. As we cannot realistically tune the parameters manually for each image set we have chose a set of parameters which performs reasonably for most objects. However we were not able to find a parameter setting which such gave robust performance. For example see how FIGURE X performs much worse than FIGURE X.
+A problem with the watershed algorithm is that it has many parameters which need to be tuned to a particular image set for good performance. We cannot realistically tune the parameters manually for each image set. Therefore we have to chose a robust set of parameters which performs reasonably for most objects. However we were not able to find a parameter setting which gave such performance. Figure 21 shows the Watershed segmentation of the bracelet using the same parameters as the cross in Figure 20. A large amount of the shadow(\emph{image .i}) has been included as part of the bracelet.
 
 \begin{figure}[H]
-  \caption{A picture of a gull.}
+  
   \centering
     \includegraphics[width=0.5\textwidth]{IMG_3661_segment_mask_}
+\caption{Watershed segmentation of the bracelet}
 \end{figure}
 \subsubsection{SLIC}
-SLIC works by conducting k-means clustering on the pixel RGB values and their Cartesian coordinates. K-means clustering attempts to group similar samples into the same cluster, or in this case, super-pixel. It also transforms the RGB colour space into the LAB colour space prior to clustering. The LAB colour space is closer to how humans perceive colour\cite{mcguire1992reporting}.
+SLIC works by conducting k-means clustering on the pixel intensities and their Cartesian coordinates. K-means clustering attempts to group similar samples into the same cluster, or in this case, super-pixel. SLIC also transforms the RGB colour space into the \emph{LAB} colour space prior to clustering. The LAB colour space is closer to how humans perceive colour\cite{mcguire1992reporting}.
 
- Its most important parameter is the number of segments, the higher this is the smaller the super-pixels and the longer the processing time. SLIC performed well on most of image sets with little tuning required, unlike watershed. 
+ Its most important parameter is the number of segments. The higher this is the smaller the super-pixels and the longer the processing time. SLIC performed reasonably well on most of the image sets with little tuning required, unlike Watershed. 
  
-SLIC gives a more regular segmentation than watershed and there is less variability between image sets. The result of using the core classifier with watershed super pixels was 0.96\% for the cross and 0.42\% for the bracelet. FIGURE is X. This figure X shows the heat map where colours similar to white have a high proportion of pixels voting for foreground and black through red is low proportion, or high proportion of background votes. Figure X shows the images thresholded at X%.
+SLIC gives a more regular segmentation than Watershed and there is less variability between image sets. The result of using the core classifier with SLIC super pixels was 0.96\% for the cross and 0.42\% for the bracelet. Performance on the cross has decreased but it has increased substantially for the bracelet.
+
+Figure 22 shows why the performance on the cross was worse than when using Watershed. \emph{Image .i} shows a super-pixel missing from the cross. More importantly \emph{image .ii} shows that a super-pixel has leaked from the cross into the shadow. As discussed in \emph{Section 2} this can have a large impact on 3D reconstruction performance.
 \begin{figure}[H]
-  \caption{A picture of a gull.}
+  
   \centering
     \includegraphics[width=0.5\textwidth]{IMG_8518_final_mask_slic}
+    \caption{SLIC segmentation mask overlaid on original}
 \end{figure}
-We found that when either watershed or SLIC failed to detect an object boundary  often the other method correctly identified the boundary. This is because they work in quite different ways. Therefore we implemented a combination of the two under the assumption that this would miss less boundaries than either by themselves. This combination gives the following segmentation of the cross FIGURE X. It can be seen that regions that were missing from both have been included here. The error was 0.77\% for the cross and 0.47\% for the bracelet. Performance is good for both objects. 
+We noticed that when either Watershed or SLIC failed to detect an object boundary  often the other method correctly identified it. This may happen because they work in quite different ways. To capitalise on this fact, we implemented a combination of the two algorithms. We hoped that the combination would miss fewer boundaries than either by themselves. 
+
+Figure 23 shows a comparison of the three methods on the cross. \emph{Image a} shows the Watershed segmentation. \emph{Image a.i} highlights a missed boundary between the cross and the background. \emph{Image b} is the SLIC segmentation. SLIC doesn't miss the boundary that Watershed does but it misses a different one shown in \emph{image b.ii}. The combination is shown in \emph{image c}. Notice that both missed boundaries have been picked up here.
+
+Implementing this approach for classification gave an error of 0.77\% for the cross and 0.47\% for the bracelet. This represents a small average improvement over both of the constituent algorithms.
 
  \begin{figure}[H]
 \centering
 \begin{subfigure}{.5\textwidth}
   \centering
-  \includegraphics[width=.75\linewidth]{IMG_8508_segment_mask_watershed}
-  \caption{A subfigure heatmap}
+  \includegraphics[width=.95\linewidth]{IMG_8508_segment_mask_watershed}
+  \caption{Watershed segmentation}
   \label{fig:sub2}
 \end{subfigure}
 \begin{subfigure}{.5\textwidth}
   \centering
-  \includegraphics[width=.75\linewidth]{IMG_8508_segment_mask_slic}
-  \caption{A subfigure slic}
+  \includegraphics[width=.95\linewidth]{IMG_8508_segment_mask_slic}
+  \caption{SLIC segmentation}
   \label{fig:sub1}
 \end{subfigure}%
 \begin{subfigure}{.5\textwidth}
   \centering
-  \includegraphics[width=.75\linewidth]{IMG_8508_segment_mask_comb}
-  \caption{A subfigure slic}
+  \includegraphics[width=.95\linewidth]{IMG_8508_segment_mask_comb}
+  \caption{Combined segmentation}
   \label{fig:sub1}
 \end{subfigure}%
 
 
-\caption{A figure with two subfigures}
+\caption{A comparison of super-pixel segmentation on the stone cross}
 \label{fig:test}
 \end{figure}
 
 \subsubsection{QuickShift}
-Quickshift works by doing graph cuts on the image XXX. It produces a highly over-segmented version of the image. The benefit of this over-segmentation is that it captures all of the detailed edges of an object as it has a lower threshold for what it considers to be an edge. It is therefore less easily deceived by soft edges such as shadows than methods which aim to minimise over-segmentation. The potential downside is that if the super-pixels are too small it reduces the effectiveness of consensus voting. Quickshift performed on the bell is displayed alongside the watershed, slic and combination methods in FIGURE X.
+Quickshift is another clustering algorithm similar to SLIC. It produces a highly over-segmented version of the image. The benefit of this over-segmentation is that it generally captures most of the softer edges of an object. This is because it has a lower threshold for what it considers to be an edge. It is therefore less easily deceived by soft edges such as shadows. The potential downside is that if the super-pixels are too small it reduces the effectiveness of consensus voting. Quickshift was performed on the bell and the results are displayed alongside the Watershed, SLIC and combination methods in Figure 24.
 \begin{figure}[H]
 \centering
 \begin{subfigure}{.45\textwidth}
   \centering
   \includegraphics[width=.95\linewidth]{IMG_7366_segment_mask_watershed}
-  \caption{A subfigure}
+  \caption{A Watershed}
   \label{fig:sub1}
 \end{subfigure}%
 \begin{subfigure}{.45\textwidth}
   \centering
   \includegraphics[width=.95\linewidth]{IMG_7366_segment_mask_slic}
-  \caption{A subfigure}
+  \caption{A SLIC}
   \label{fig:sub2}
 \end{subfigure}
 \begin{subfigure}{.45\textwidth}
   \centering
   \includegraphics[width=.95\linewidth]{IMG_7366_segment_mask_comb}
-  \caption{A subfigure}
+  \caption{Watershed and SLIC}
   \label{fig:sub2}
 \end{subfigure}
 \begin{subfigure}{.45\textwidth}
   \centering
   \includegraphics[width=.95\linewidth]{IMG_7366_segment_mask_quick}
-  \caption{A subfigure}
+  \caption{Quickshift }
   \label{fig:sub2}
 \end{subfigure}
-\caption{A figure with two subfigures}
+\caption{A comparison of Watershed, SLIC, their combination and Quickshift segmentations on the bell}
 \label{fig:test}
 \end{figure}
 
 
 
-The performance of Quickshift seemed to be the best of all of the super pixel algorithms including the combination of watershed and SLIC. Using the same core classifier as before the results are XXX for the cross and XX for the bracelet. Figure X. The capacity for detecting soft edges can be seen in FIGURE X bracelet. There is however an issue with these smaller super-pixels will be discussed in chapter X on trimap growing.
+The performance of Quickshift seemed to be the best of all of the super pixel algorithms. Using the same core classifier as before results in an error of 0.72\% for the cross and 0.44\% for the bracelet. This is a very slight improvement over the combination of Watershed and SLIC. 
+
+However, visually Quickshift resulted in a more significant improvement in performance because it very rarely crossed from foreground to background. An example of its capacity for detecting soft edges can be seen on the bracelet in Figure 25. \emph{Image a} shows the segmentation with the Watershed and SLIC combination. The shadow which was included with the bracelet in \emph{image a.i} has been correctly segmented by Quickshift \emph{image b}. 
+
+There is however an issue with these smaller super-pixels which will be discussed in \emph{Section 2.5.2} on trimap growing.
 
 \begin{figure}[H]
 \centering
@@ -744,34 +755,34 @@ The performance of Quickshift seemed to be the best of all of the super pixel al
 
 
 
-\begin{table}
+\begin{table}[H]
 \begin{center}
     \begin{tabular}{ | l | l | l | p{5cm} |}
     \hline
     Segmentation Method & Cross Error(\%) & Bracelet Error(\%) \\ \hline
-    None & 1.71\% & 0.87\% \\ \hline
-    Watershed & 0.83\% & 0.73\% \\ \hline
-    SLIC & 0.96\% & 0.42\% \\ \hline
-    SLIC and Watershed & 0.77\% & 0.47\% \\ \hline
-    Quickshift & ??\% & 0.48\% \\
+    None & 1.71 & 0.87 \\ \hline
+    Watershed & 0.83 & 0.73 \\ \hline
+    SLIC & 0.96 & 0.42 \\ \hline
+    SLIC and Watershed & 0.77 & 0.47 \\ \hline
+    Quickshift & 0.72 & 0.44 \\
     \hline
      
     \end{tabular}
-    \caption{The caption of the table}\label{table:somename}
+    \caption{Percentage of mislabelled pixels for super-pixel techniques}\label{table:somename}
 \end{center}
 \end{table}
 \subsection{Augmenting Techniques}
-The core components of a classification algorithm are the type of classifier and the form of the feature vector of the items to be classified. There are, however, additional techniques which can bolster performance. We will now move on to talk about these additional techniques which can be used to augment the core process and improve performance.
+The core components of a classification algorithm are the type of classifier and the form of the feature vector. There are, however, additional techniques which can bolster performance. We will now move on to talk about these additional techniques which can be used to augment the core process.
 
 \subsubsection{Sampling of pixels}
 In order to train the classifier we need to have example pixels. These are obtained from a subset of the images which have been hand labelled with ground truth masks. For example if we have a set of 20 images we will use two of those images as training and the remaining 18 for testing. When it comes to producing the error score we only consider the performance on the test set. 
 
-We found that if we take every single pixel from the training images, along with their corresponding label obtained from the mask, it would cause the process to take a very long time or crash. This is because the images are very large, generally 18mega pixels each. Therefore we decided to instead sample a random set of pixels from the image, 10,000 rather than all 18 million. This number of pixels should give a good idea of the distribution of pixel values across the image whilst being quick to process. 
+We found that if we took every single pixel from the training images, along with their corresponding label, it would cause the process to take a very long time or crash. This is because the images are very large, generally 18mega pixels each. Therefore we decided to instead sample a random subset of pixels from the image; 10,000 rather than all 18 million. This number of pixels should give a good idea of the distribution of pixel values across the image whilst being quick to process. 
 
-On some images, particularly where the object occupied only a small amount of the image, the performance would be quite poor with much of the object being labelled as background. The most likely reason for this was that ,as the object was small, it only made up a small percentage of the randomly sampled training pixels. Therefore the classifier would be heavily biased in favour of correctly classifying the background examples rather than the underrepresented foreground.
+On some images, particularly where the object occupied only a small amount of the image, the performance would be quite poor. Much of the object was being labelled as background. The most likely reason for this was that ,as the object was small, it only made up a small percentage of the randomly sampled training pixels. Therefore the classifier would be heavily biased in favour of correctly classifying the background examples rather than the underrepresented foreground.
 
- To resolve this issue we chose to sample an equal number of pixels from the foreground and the background, 5000 from each which would help remove the bias. The results are shown in table X for a Decision Tree classifier using RGB and a 5 layer Sobel pyramid with no super pixels. Note equal sampling  was implemented early on and all other results throughout the report used this technique.
- \begin{table}
+ To resolve this issue we chose to sample an equal number of pixels from the foreground and the background. 5000 from each was chosen. We hoped this equal sampling would remove the bias. The results are shown in Table 3 using RGB and Sobel with no super pixels. The results are significantly improved especially for the smaller bracelet. Note; equal sampling  was implemented early on and all other results throughout the report, including prior to this section, used this technique.
+ \begin{table}[H]
  \begin{center}
     \begin{tabular}{ | l | l | l | p{5cm} |}
     \hline
@@ -781,36 +792,38 @@ On some images, particularly where the object occupied only a small amount of th
     \hline
     
     \end{tabular}
-    \caption{The caption of the table}\label{table:somename}
+    \caption{Percentage of mislabelled pixels for equal and random sampling}\label{table:somename}
 \end{center}
 \end{table}
  
-Another issue with sampling we encountered was which images to use for training. To begin with we simply selected the training images from the start of the image set. The problem with this approach is that the images are neighbouring and due to the format of the data neighbouring images are very similar. Images are stored in the order that they were taken and they are taken each time the turntable is slightly rotated. Having similar training images is not as helpful for the classifier as having diverse ones because they aren't as representative of the object from different viewpoints. 
+Another issue we encountered with sampling was which images to use for training. To begin with we simply selected the training images from the start of the image set. The problem with this approach is that the images are neighbouring and ,due to the format of the data, neighbouring images are very similar. Images are stored in the order that they were taken and they are taken each time the turntable is slightly rotated. Having similar training images is not as helpful for the classifier as having diverse ones. Diverse images better represent all of the viewpoints that the classifier will be tested on. 
 
-One approach is to sample the training images randomly from the set. However if we sample randomly from the small image sets we are dealing with we may get two very similar views by chance. The classifier would information on the other views of the object. 
+One approach is to sample the training images randomly from the set. However if we sample randomly from the small image sets we are dealing with we may get two very similar views by chance. The classifier would then have little information on the other views of the object. 
 
-Another approach allows us to use the ordered nature of the images to our advantage. We can sample at equal intervals to best capture the variation in views. So of 20 images we would take images 1 and 11 and use them as training images.This approach helped make performance more consistent on objects which had clear orientation such as the bracelet. Improvement shown on FIGURE X.
+A better approach would make use of the ordered nature of the images. We can sample at equal intervals to best capture the variation in views. So of 20 images we would take images 1 and 11 and use them as training images.
+
+This approach helped make performance more consistent on objects which had clear orientation such as the bracelet. An example is shown in Figure 26. \emph{Image a} shows the classification of the bracelet with equally spaced training images. \emph{Image b} shows the classification for training images selected from the start of the set. 
 \begin{figure}[H]
 \centering
 \begin{subfigure}{.45\textwidth}
   \centering
   \includegraphics[width=.95\linewidth]{IMG_3669_basic_mask_eq}
-  \caption{A subfigure heatmap}
+  \caption{Equally spaced sampling}
   \label{fig:sub2}
 \end{subfigure}
 \begin{subfigure}{.45\textwidth}
   \centering
   \includegraphics[width=.95\linewidth]{IMG_3669_basic_mask_uneq}
-  \caption{A subfigure slic}
+  \caption{Sampling from the start}
   \label{fig:sub1}
 \end{subfigure}%
 
 
-\caption{A figure with two subfigures}
+\caption{A comparison of how sampling training images impacts classification of the bracelet}
 \label{fig:test}
 \end{figure}
 
-The results of implementing these sampling techniques are displayed in table X. The classifier was Decision Trees using RGB and a 5 layer Sobel pyramid with no super pixels. Note that the technique of equally spaced samples has been used for all other results in this report.
+The results of implementing these sampling techniques are displayed in Table 4. Equally spaced samples gives a small improvement on the bracelet as there is significant variability in the image set. There is a slight decrease in the cross performance. The cross image set shows little variability and this change can be attributed to the stochasticity of Random Forests. Note; the technique of equally spaced samples has been used for all other results in this report.
 \begin{table}
 \begin{center}
     \begin{tabular}{ | l | l | l | p{5cm} |}
@@ -822,150 +835,152 @@ The results of implementing these sampling techniques are displayed in table X. 
     Equally Spaced & 3.04 & 1.57 \\
     \hline
     \end{tabular}
-    \caption{The caption of the table}\label{table:somename}
+    \caption{Percentage of mislabelled pixels for image sampling techniques}\label{table:somename}
 \end{center}
 \end{table}
- Of course the assumption is that the images are always going to be in order and this puts a constraint on the nature of the data.
+ Of course the assumption is that the images are always going to be in order. This puts a constraint on the nature of the data.
 
 \subsubsection{Largest connected region}
-Another problem that we encountered which was not solved by super pixels was when significantly sized regions of the background were misclassified as foreground. The super pixel voting was designed to remove misclassified individual pixels, not whole regions. A particular problem was when new objects were introduced to the scene that were not seen in training. Such as the hand and table edge seen in FIGURE X. As these objects were not present in training the classifier didn't have specific rules to reject them as background. Although many of the misclassified pixels were handled by super pixel voting, sizeable misclassified super pixels remained.
+Another problem that we encountered which was not solved by super pixels was when significantly sized regions of the background were misclassified as foreground. The super pixel voting was designed to remove misclassified individual pixels, not whole regions. 
+
+A particular problem was when new objects were introduced to the scene that were not seen in training. Such as the hand and table edge seen in Figure 27 \emph{image a.i}. As these objects were not present in training the classifier didn't have specific rules to reject them as background. Although many of the misclassified pixels were handled by super-pixel voting, sizeable misclassified super-pixels remained.
 \begin{figure}[H]
 \centering
 \begin{subfigure}{.33\textwidth}
   \centering
-  \includegraphics[width=.75\linewidth]{IMG_7370}
-  \caption{A subfigure quick red}
+  \includegraphics[width=.95\linewidth]{IMG_7370}
+  \caption{Original image}
   \label{fig:sub2}
 \end{subfigure}
 \begin{subfigure}{.33\textwidth}
   \centering
-  \includegraphics[width=.75\linewidth]{IMG_7370_final_mask}
-  \caption{A subfigure quick white}
+  \includegraphics[width=.95\linewidth]{IMG_7370_final_mask}
+  \caption{Mask before voting}
   \label{fig:sub1}
 \end{subfigure}%
 \begin{subfigure}{.33\textwidth}
   \centering
-  \includegraphics[width=.75\linewidth]{IMG_7370_ratio_mask}
-  \caption{A subfigure combo red}
+  \includegraphics[width=.95\linewidth]{IMG_7370_ratio_mask}
+  \caption{Heat-map, \emph{ii} is threshold colour}
   \label{fig:sub2}
 \end{subfigure}
 
-\caption{A figure with two subfigures}
+\caption{A hand is introduced to the bell image set}
 \label{fig:test}
 \end{figure}
-In order to mitigate this issue we decided to implement a system that would process the mask after super-pixel voting and extract the largest connected region of foreground. This region would then remain as foreground and all other pixels would become background. Therefore so long as the object was the largest connected region all other misclassified regions would be rejected. This method obviously assumes that we are dealing with a single object of interest and not multiple. If a new set of images were introduced with multiple objects this largest connected component could be extended to included the largest X components. 
+In order to mitigate this issue we decided to implement a system that would process the mask after super-pixel voting and extract the largest connected region of foreground. This region would then remain as foreground and all other pixels would become background. Therefore so long as the object was the largest connected region all other misclassified regions would be rejected. This method obviously assumes that we are dealing with a single object of interest and not multiple. If a new set of images were introduced with multiple objects this largest connected component could be extended to included the largest \emph{X} components. 
 
-This method effectively rejects misclassified regions such as the hand shown here FIGURE X. So long as they don't connect with the object as is the case with shadows. The result of using this constraint with our classifier being Decision Trees using RGB, Sobel and Entropy pyramids with SLIC super pixels is shown in table X. Note that all of the super pixel results in section X were given using the largest connected region constraint.
-\begin{table}
+This method effectively rejects misclassified regions such as the hand, so long as they don't connect with the object as is the case with shadows. The result of using this constraint with RGB, Sobel and entropy with SLIC super pixels is shown in Table 5. There is a noticeable improvement in performance. Note; all of the super-pixel results in \emph{Section 2.3} were given using the largest connected region constraint.
+\begin{table}[H]
 \begin{center}
     \begin{tabular}{ | l | l | l | p{5cm} |}
     \hline
     Using Largest Region & Cross Error(\%) & Bracelet Error(\%) \\ \hline
     No & 1.14 & 0.74 \\ \hline
-    Yes & 0.96\% & 0.42\% \\
+    Yes & 0.96 & 0.42 \\
     \hline
     
     \end{tabular}
-    \caption{The caption of the table}\label{table:somename}
+    \caption{Percentage of mislabelled pixels for largest region extraction}\label{table:somename}
 \end{center}
 \end{table}
-This process can occasionally cause problems if the quality of the classification has been very poor as in FIGURE X. Here the two regions of the bracelet have been disconnected from one another and therefore much of the correctly labelled pixels are rejected. However this problem is quite rare and only happens when the classification is particularly poor. 
+This process can occasionally cause problems if the quality of the classification has been very poor as in Figure 28. Here the two regions of the bracelet have been disconnected from one another. This has caused many of the correctly labelled pixels to be rejected. However this problem is quite rare and only happens when the classification is particularly poor. 
 
 \begin{figure}[H]
 \centering
 \begin{subfigure}{.5\textwidth}
   \centering
   \includegraphics[width=.75\linewidth]{IMG_3670_final_mask}
-  \caption{A subfigure quick red}
+  \caption{Final mask overlaid on original}
   \label{fig:sub2}
 \end{subfigure}
 \begin{subfigure}{.5\textwidth}
   \centering
   \includegraphics[width=.75\linewidth]{IMG_3670_ratio_mask}
-  \caption{A subfigure quick white}
+  \caption{Heat-map}
   \label{fig:sub1}
 \end{subfigure}%
 \begin{subfigure}{.5\textwidth}
   \centering
   \includegraphics[width=.75\linewidth]{IMG_3670_basic_mask}
-  \caption{A subfigure combo red}
+  \caption{Mask before voting}
   \label{fig:sub2}
 \end{subfigure}
 
-\caption{A figure with two subfigures}
+\caption{A problem with extracting the largest connected region}
 \label{fig:test}
 \end{figure}
 
 \subsection{Reducing Human Input}
-The aim of this algorithm is to reduce the amount of human input required to mask images. Up until now all of the images used for training have been carefully draw around by a human to define the boundary of the object. We realised that there could be a further reduction in the time taken to produce these masks if they could be produced in a more rough manner. 
+Our aim is to reduce the amount of human input required to mask images. Up until now all of the images used for training have been carefully draw around by a human. We realised that there could be a further time saving if these masks could be produced in a more rough manner. 
 \subsubsection{Trimaps}
-These rough maps were made up of three colours, white grey and black and are therefore called Trimaps. Black represents definite background, white; definite foreground and grey is used for ambiguous regions. Grey regions aren't really unknown by the human but they allow the object to be digitally painted over much faster than having to be specific about where the edges of the object are. The examples are show in FIGUREs X. 
+The masks would contain three colours: white, grey and black. We therefore adopted the term \emph{Trimap}. Black represents definite background, white; definite foreground and grey is used for ambiguous regions. Grey regions aren't really unknown by the human but they allow the object to be digitally painted over much faster. An example of a trimap for the bell is shown in Figure 29. 
 
 \begin{figure}[H]
 \centering
 \begin{subfigure}{.45\textwidth}
   \centering
-  \includegraphics[width=.75\linewidth]{IMG_7365}
-  \caption{A subfigure quick red}
+  \includegraphics[width=.95\linewidth]{IMG_7365}
+  \caption{Original}
   \label{fig:sub2}
 \end{subfigure}
 \begin{subfigure}{.45\textwidth}
   \centering
-  \includegraphics[width=.75\linewidth]{IMG_7365_mask}
-  \caption{A subfigure quick white}
+  \includegraphics[width=.95\linewidth]{IMG_7365_mask}
+  \caption{Trimap}
   \label{fig:sub1}
 \end{subfigure}%
 
 
-\caption{A figure with two subfigures}
+\caption{An example of a trimap}
 \label{fig:test}
 \end{figure}
 The purpose of doing this is purely to speed up the process for humans and is not intended to improve performance. In fact the performance is likely to degrade to some extent because the classifier loses the information about the grey regions. 
-A problem with this technique is that it accentuates further the effect we discussed in chaper X about pixels from edge regions being underrepresented. Now edge regions are discarded altogether. This results in the degradation of the performance of the classifier around edge regions. 
+A problem with this technique is that it accentuates further the effect we discussed in \emph{Section 2.3} about pixels from edge regions being underrepresented. Now edge regions are discarded altogether. This results in degradation of the performance of the classifier around edge regions. 
 
-Particularly in the bell image the classification results in a 'halo' around the object where the background has been mislabelled as foreground. This happens because if we look at the sobel image FIGURE X there is high activation of the sobel within the bell and very little outside the edges of the bell. As the classifier is only able to use the black areas of definitive background it finds that background will always have a very low sobel activation. Then when a test image is presented the regions just of the outside of the bell where the sobel activation is high are mislabelled as foreground. This is understandable given the nature of the training data available to the classifier.
+Particularly in the bell image the classification results in a \emph{halo} around the object where the background has been mislabelled as foreground, see Figure 30 \emph{image d.i}. This classification is performed without super-pixels. For ease of visualisation the trimap colours are modified for overlaying on the original image. Green has replaced the grey region and red has replaced the white region. If we look at the Sobel of the training image with the trimap overlaid(\emph{image b}) there is high activation within the red region and very little in the black region. As the classifier is only able to use the black areas as definitive background it finds that background will always have a very low Sobel activation. Then when a test image is presented \emph{(image c)} the regions just outside of the bell where the Sobel activation is high are mislabelled as foreground. This classification is understandable given the training data available to the classifier.
 
 \begin{figure}[H]
 \centering
 \begin{subfigure}{.45\textwidth}
   \centering
   \includegraphics[width=.75\linewidth]{IMG_7365_mask_training_brush}
-  \caption{A subfigure}
+  \caption{Trimap on training image}
   \label{fig:sub1}
 \end{subfigure}%
 \begin{subfigure}{.45\textwidth}
   \centering
   \includegraphics[width=.75\linewidth]{IMG_7365_3_hv_brush}
-  \caption{A subfigure}
+  \caption{Trimap on Sobel}
   \label{fig:sub2}
 \end{subfigure}
 \begin{subfigure}{.45\textwidth}
   \centering
   \includegraphics[width=.75\linewidth]{IMG_7368_crop}
-  \caption{A subfigure}
+  \caption{Test image}
   \label{fig:sub2}
 \end{subfigure}
 \begin{subfigure}{.45\textwidth}
   \centering
   \includegraphics[width=.75\linewidth]{IMG_7368_basic_mask_edit}
-  \caption{A subfigure}
+  \caption{Mask with halo}
   \label{fig:sub2}
 \end{subfigure}
-\caption{A figure with two subfigures}
+\caption{A problem with excluding the edge regions of the bell}
 \label{fig:test}
 \end{figure}
-The change in performance of the classifier after moving to trimaps from ground truths is displayed in table X. The classifier was Decision Trees with RGB, sobel and Entropy pyramids using SLIC super pixels. It is a significant decrease but the reduction in time taken to generate the masks may be worth it.
+The change in performance of the classifier after moving to trimaps from ground truths is displayed in Table 6. The classification was with RGB, Sobel and entropy using SLIC super-pixels. It is a significant decrease in performance but the time saving may outweigh it.
 \begin{table}
 \begin{center}
     \begin{tabular}{ | l | l | l | p{5cm} |}
     \hline
     Using Trimaps & Cross Error(\%) & Bracelet Error(\%) \\ \hline
     No & 1.14 & 0.74 \\ \hline
-    Yes & ??\% & ??\% \\
+    Yes & 1.76 & 1.23 \\
     \hline
     
     \end{tabular}
-    \caption{The caption of the table}\label{table:somename}
+    \caption{Percentage of mislabelled pixels for trimaps vs. ground truths}\label{table:somename}
 \end{center}
 \end{table}
 
@@ -973,85 +988,87 @@ The change in performance of the classifier after moving to trimaps from ground 
 
 
 \subsubsection{Expanding Trimaps}
-The issue of edge regions being underrepresented can be mitigated by using the following technique. Just as we used super-pixels to aid in the classification process we can use them to help expand the unambiguous regions of the trimaps. If a super pixel contains above a threshold of definite background or foreground and the remaining pixels are grey then the whole super pixel will be labelled with the definite class. If the super pixels are large enough this should convert a large amount of the grey region to black and white. If this is successful the classifier should have access to edge regions of the object for training. This should help eliminate the halo issues discussed in section X. Once again we relied on the assumption that a super-pixel always belongs to a single object.  
+The issue of edge regions being excluded can be mitigated by using the following technique. Just as we used super-pixels to aid in the classification process we can use them to help expand the unambiguous regions of the trimaps. If a super pixel contains above a threshold of definite background or foreground and the remaining pixels are grey then the whole super-pixel will be labelled with the definite class. If the super-pixels are big enough this should convert a large amount of the grey region to black and white. If this is successful the classifier should have access to edge regions of the object for training. This would help eliminate the halo issues discussed in \emph{Section 2.5.1}. Once again we relied on the assumption that a super-pixel always belongs to a single object.  
 
-Choosing the threshold value above which a super pixel will be labelled as a definite class is quite different from the threshold for classification discussed in section X. Firstly it is subject to the constraint that a super pixel will only be converted to a definitive class if only one of foreground or background is present along with the unknown region. Secondly the threshold will be much lower. Typically values chosen were X. This is to allow super-pixels to grow up to the edge of the image even if only a small corner of the super pixel is definitive.
+The threshold for labelling a super-pixel as a definite class during training is quite different from the threshold for classification discussed in \emph{Section 2.3}. Firstly it is subject to the constraint that a super-pixel must only contain one definite label. That is a super-pixel will only be converted to a definite class if only one of foreground or background is present. Secondly the threshold will be much lower. Typically values chosen were 25\%. This is to allow super-pixels to grow up to the edge of the object even if only a corner of the super-pixel is definite.
 
-Region growing with SLIC on the X produces the results shown in FIGURE X. The same classifier as before was used. When the training trimaps are grown like this the performance is imrpoved significantly especially effective for eliminating halos, numerically X. However quickshift has less of an improvement result X, due to FIGURE X poor region growing.
+Expanding trimaps with SLIC on the cross produces the result shown in Figure 31 \emph{image b}. This is grown from the original brush mask shown in \emph{image a}. When the training trimaps are grown like this the performance is improved significantly, see Table 7. The method is especially effective for eliminating halos. However Quickshift has less of an improvement. \emph{Image c} shows that the Quickshift segments were too small to grow up to the edges of the cross. Therefore the edges are still ignored by the classifier during training.
 \begin{figure}[H]
 \centering
 \begin{subfigure}{.45\textwidth}
   \centering
-  \includegraphics[width=.75\linewidth]{IMG_8501_mask_training}
-  \caption{A subfigure}
+  \includegraphics[width=.95\linewidth]{IMG_8501_mask_training}
+  \caption{Original trimap}
   \label{fig:sub1}
 \end{subfigure}%
 \begin{subfigure}{.45\textwidth}
   \centering
-  \includegraphics[width=.75\linewidth]{IMG_8501_mask_training_slic}
-  \caption{A subfigure}
+  \includegraphics[width=.95\linewidth]{IMG_8501_mask_training_slic}
+  \caption{SLIC}
   \label{fig:sub2}
 \end{subfigure}
 \begin{subfigure}{.45\textwidth}
   \centering
-  \includegraphics[width=.75\linewidth]{IMG_8501_mask_training_quick}
-  \caption{A subfigure}
+  \includegraphics[width=.95\linewidth]{IMG_8501_mask_training_quick}
+  \caption{Quickshift}
   \label{fig:sub2}
 \end{subfigure}
 
-\caption{A figure with two subfigures}
+\caption{Trimap expansion on the cross}
 \label{fig:test}
 \end{figure}
 
- The issue here is that the super pixels that quickshift produces are too small to bridge the whole grey region and reach the edge of the object. Therefore the edges are still ignored by the classifier during training. 
+  
 \begin{table}
 \begin{center}
     \begin{tabular}{ | l | l | l | p{5cm} |}
     \hline
-    Training Images & Cross Error(\%) & Bracelet Error(\%) \\ \hline
+    Training masks & Cross Error(\%) & Bracelet Error(\%) \\ \hline
     Ground truths & 1.14 & 0.74 \\ \hline
-    Basic Trimaps & ??\% & ??\% \\
+    Basic trimaps & 1.76 & 1.23 \\
     \hline
-    Grown Trimaps & ??\% & ??\% \\
+    SLIC grown trimaps & 1.21 & 0.85 \\
+    \hline
+    Quickshift grown trimaps & 1.78 & 0.82 \\
     \hline
     \end{tabular}
-    \caption{The caption of the table}\label{table:somename}
+    \caption{Percentage of mislabelled pixels for different types of training mask}\label{table:somename}
 \end{center}
 \end{table}
-Super pixels need to be large enough that they can bridge the grey region from both the inside and the outside of the object. A method is required for making segments which are sufficiently large. We could use SLIC but there is the drawback that in some cases the super pixels are overly generous and bridge between the object and the background. This generally is very harmful for performance because it means some of the background will have been used as foreground training examples. An example of a case where this occurs is the shadow on the bracelet in FIGURE X which we have looked at before. Reference Section X FIGURE X.
+The super-pixels need to be large enough that they can bridge the grey region from both the inside and the outside of the object. Therefore a method is needed to produce a coarse segmentation. We could use SLIC but there is the drawback that in some cases the super pixels are overly generous and bridge between the object and the background. This particularly harmful for performance in this case because it means some of the background will be used as foreground training examples. An example of a case where this occurs is the shadow on the bracelet in Figure 32 \emph{image a.i}. \emph{Image d} shows that the SLIC segmentation has included the shadow as foreground for training.
 
-Quickshift on the other hand has no such problem with the shadow FIGURE X and therefore a segmentation based on this would do better in this case. However as we've discussed its super pixels are too small to usefully expand the trimap. It is very difficult to achieve both large segments whilst preserving soft edges. 
+Quickshift on the other hand has no such problem with the shadow \emph{image c}. A segmentation based on this would do better in this case. However as we've discussed its super-pixels are often too small to usefully expand the trimap. It is very difficult to achieve both large segments whilst preserving soft edges. 
 
 \begin{figure}[H]
 \centering
 \begin{subfigure}{.45\textwidth}
   \centering
-  \includegraphics[width=.75\linewidth]{IMG_3661}
-  \caption{A subfigure quick red}
+  \includegraphics[width=.95\linewidth]{IMG_3661}
+  \caption{Original image}
   \label{fig:sub2}
 \end{subfigure}
 \begin{subfigure}{.45\textwidth}
   \centering
-  \includegraphics[width=.75\linewidth]{IMG_3661_mask_training}
-  \caption{A subfigure quick red}
+  \includegraphics[width=.95\linewidth]{IMG_3661_mask_training}
+  \caption{Original trimap}
   \label{fig:sub2}
 \end{subfigure}
 \begin{subfigure}{.45\textwidth}
   \centering
-  \includegraphics[width=.75\linewidth]{IMG_3661_mask_training_grown}
-  \caption{A subfigure quick red}
+  \includegraphics[width=.95\linewidth]{IMG_3661_mask_training_grown}
+  \caption{Quickshift expansion}
   \label{fig:sub2}
 \end{subfigure}
 \begin{subfigure}{.45\textwidth}
   \centering
-  \includegraphics[width=.75\linewidth]{IMG_3661_mask_training_slic}
-  \caption{A subfigure quick red}
+  \includegraphics[width=.95\linewidth]{IMG_3661_mask_training_slic}
+  \caption{SLIC expansion}
   \label{fig:sub2}
 \end{subfigure}
 
 
 
-\caption{A figure with two subfigures}
+\caption{A problem with large super-pixels for trimap expansion}
 \label{fig:test}
 \end{figure}
 
@@ -1064,118 +1081,123 @@ Quickshift on the other hand has no such problem with the shadow FIGURE X and th
 
 
 \section{Summary of Results}
-A summary table of the main results is displayed in table X. All the different classifiers used along with their errors(percentage of mislabelled pixels) are displayed with comments on their performance. In all cases the training images were equally spaced and the training pixels were selected equally across the object and the background. The largest connected segment constraint was enforced. RGB is included in the feature vector unless stated otherwise. All Sobel, Entropy and DWT feature vectors are pyramids of 5 layers. The sobel images are combined rather than individual.
+A summary table of the main results is displayed in Table 8. The most notable stages of the algorithm with their errors(percentage of mislabelled pixels) are displayed with comments on their performance. Ground truth masks were used as training. In all cases the following selections were made: the training images were equally spaced ,training pixels were selected equally across the object and the background, the largest connected segment constraint was enforced, RGB is included in the feature vector unless stated otherwise, all Sobel, entropy and DWT feature vectors are pyramids of 5 layers, the Sobel directions are combined rather than individual.
 
-The numeric performance scores can be somewhat misleading because they don't take account of what pixels were labelled incorrectly. Also the metrics will score poorly if one of the images in the set is classified badly but the rest are very good. Therefore visual appraisal is more appropriate.
+The numeric performance scores can be somewhat misleading because they don't take account of which pixels were labelled incorrectly. Also the metrics will score poorly if one of the images in the set is classified badly but the rest are very good. Therefore visual appraisal is more appropriate.
 
-The best version of the algorithm as evaluated visually across the test sets was the following: a Decision Trees classifier using the RGB, Sobel and Entropy pyramids as feature vector with Quickshift super-pixel voting. It also had the best error averaged across the test sets of 0.58%
-\begin{table}
+The best version of the algorithm as evaluated visually across the test sets was the following: a Decision Trees classifier using the RGB, Sobel and entropy pyramids as feature vector with Quickshift super-pixel voting. It also had the best error averaged across the test sets of 0.58%
+\begin{table}[H]
 \begin{center}
     \begin{tabular}{ | p{3cm} | l | l | p{5cm} |}
     \hline
     Method & Cross Error(\%) & Bracelet Error(\%) & Comments \\ \hline
-    Linear SVM & 9.50\% & 9.66\% & Baseline performance, struggles when the object is more than one colour.\\ \hline
+    Linear SVM & 9.50 & 9.66 & Baseline performance, struggles when the object is more than one colour.\\ \hline
     Trees & 4.33\% & 4.36\% & Can handle multi-coloured objects but struggles if any background colour matches the object.\\ \hline
-    Trees, Sobel, no RGB & 6.39\% & 2.52\% & Struggles with regions that have little texture \\ \hline
-    Trees, Sobel & 3.04\% & 1.50\% & Big improvement over RGB, fuzzy classification at edges \\ \hline
-    Trees, Entropy & 3.52\% & 1.70\% & Similar performance to Sobel but makes errors in slightly different places.\\ \hline
-    Trees, Sobel, Entropy & 1.71\% & 0.87\% & Combination of features performs better than either individually, information is not entirely mutual\\
+    Trees, Sobel, no RGB & 6.39 & 2.52 & Struggles with regions that have little texture \\ \hline
+    Trees, Sobel & 3.04 & 1.50 & Big improvement over RGB, fuzzy classification at edges \\ \hline
+    Trees, Entropy & 3.52 & 1.70 & Similar performance to Sobel but makes errors in slightly different places.\\ \hline
+    Trees, Sobel, Entropy & 1.71 & 0.87 & Combination of features performs better than either individually, information is not entirely mutual\\
     \hline
-    Trees, DWT  & 3.78\% & 2.02\% & Slightly worse than Entropy and similar visual results \\
+    Trees, DWT  & 3.78 & 2.02 & Slightly worse than Entropy and similar visual results \\
     \hline
-    Trees, Sobel, DWT & 2.32\% & 1.13\% & Slightly worse than Entropy and Sobel with similar visual results\\
+    Trees, Sobel, DWT & 2.32 & 1.13 & Slightly worse than Entropy and Sobel with similar visual results\\
     \hline
-    Trees , Sobel, Entropy, Watershed & 0.83\% & 0.73\% & Isolated mislabelled pixels mostly eliminated, formation of super-pixels isn't robust. \\
+    Trees , Sobel, Entropy, Watershed & 0.83 & 0.73 & Isolated mislabelled pixels mostly eliminated, formation of super-pixels isn't robust. \\
     \hline
-    Trees with Sobel, Entropy, SLIC & 0.96\% & 0.42\% & More robust formation of super-pixels across image sets \\
+    Trees with Sobel, Entropy, SLIC & 0.96 & 0.42 & More robust formation of super-pixels across image sets \\
     \hline
-    Trees with Sobel, Entropy, SLIC+Watershed & 0.77\% & 0.47\% & Combination of super-pixel methods increased robustness \\
+    Trees with Sobel, Entropy, SLIC+Watershed & 0.77 & 0.47 & Combination of super-pixel methods increased robustness \\
     \hline
-     Trees with Sobel, Entropy, Quickshift & 0.72\% & 0.44\% & Best over segmentation with edges rarely missed, can cause issues for Trimap growing\\
+     Trees with Sobel, Entropy, Quickshift & 0.72 & 0.44 & Best over segmentation with edges rarely missed, can cause issues for Trimap growing\\
     \hline
      
     \end{tabular}
-    \caption{The caption of the table}\label{table:somename}
+    \caption{Percentage of mislabelled pixels for notable algorithms}\label{table:somename}
 \end{center}
 \end{table}
  
 \section{Performance of best algorithm}
-In this section we discuss the performance of the best performing algorithm as detailed in Section X. 
+In this section we discuss the performance of the best performing algorithm as detailed in Section 3. 
 
-Here is a figure X of the bell where the holes have been well picked out but also a patch has been incorrectly labelled (inset). This mistake is quite forgivable as this patch does look very similar to the background. It can be seen that this patch was not quite visible in the training image FIGURE X which makes it very difficult for the classifier to correctly label it. 
+Figure 33 shows the performance on the bell where the holes have been well picked out(\emph{ image .ii}) but also a patch has been incorrectly labelled (\emph{image .i}). This mistake is quite forgiveable as this patch does look very similar to the background. The training masks were expanded trimaps using Quickshift.
 \begin{figure}[H]
-  \caption{A picture of stonecross zoomed into texture.}
+  
   \centering
     \includegraphics[width=0.5\textwidth]{IMG_7375_final_mask_ex1}
+    \caption{Classification of the best algorithm on the bell}
 \end{figure}
 %Here is the algorithm performing on the bell where there is shadow at the bottom. Here some of the shadow has been included FIGURE X. The cause of this is the super pixels have grown into the shadow from the bell because the edge is very soft. Even though the pixel-wise classification doesn't include much of the shadow? This is one of the drawbacks of using the super pixel technique. Again it can be seen that this shadow wasn't present in either training image. 
 
-Here we can see the algorithm performing on the stone cross. It can be seen that the edge has been slightly eaten into, this is largely due to the reasons discussed in chapter X. However if we look at using the true masks as training which will stop this problem, this is the result FIGURE X.
+In Figure 34 we can see the algorithm performing on the stone cross. This was using trimaps expanded with SLIC. Performance is very good with only a few small segments of the object mislabelled. 
 \begin{figure}[H]
-  \caption{A picture of stonecross zoomed into texture.}
+  
   \centering
-    \includegraphics[width=0.5\textwidth]{IMG_8515_final_mask_ex2}
+    \includegraphics[width=0.75\textwidth]{IMG_8515_final_mask_ex2}
+    \caption{Classification of the best algorithm on the cross}
 \end{figure}
 
-Even with the masks having large sections of the edge of the cross missing, 3D reconstruction performance was still good, see FIGURE X\cite{crossModel}. Next to ground truths. This shows that having parts of the objected mislabelled in some of the views doesn't have a dramatic effect on the final model.
+3D reconstruction performance from the automated cross masks was very good, see Figure 35\cite{crossModel}. The quality was indistinguishable from the reconstruction using the ground truth masks.
 \begin{figure}[H]
-  \caption{A picture of stonecross zoomed into texture.}
+  
   \centering
-    \includegraphics[width=0.5\textwidth]{stone3D}
+    \includegraphics[width=0.75\textwidth]{stone3D}
+    \caption{A screenshot of the 3D cross model made from automated masks}
 \end{figure}
-The bracelet and the bell produced reasonably good quality point clouds FIGURE X, which is a level below a full reconstruction. However the full reconstruction couldn't be performed for either object because of insufficient feature correspondences given the relatively small number of viewpoints. 
+The bracelet and the bell produced reasonably good quality point clouds (Figure 36), which is a level below a full reconstruction. However the full reconstruction couldn't be performed for either object because of insufficient feature correspondences given the relatively small number of viewpoints. 
 \begin{figure}[H]
 \centering
 \begin{subfigure}{.45\textwidth}
   \centering
   \includegraphics[width=.95\linewidth]{bellCloud}
-  \caption{A subfigure quick red}
+  \caption{Bell}
   \label{fig:sub2}
 \end{subfigure}
 \begin{subfigure}{.45\textwidth}
   \centering
   \includegraphics[width=.95\linewidth]{braceletCloud}
-  \caption{Actually should be grown slic trimap highlighting problem}
+  \caption{Bracelet}
   \label{fig:sub2}
 \end{subfigure}
 
-\caption{A figure with two subfigures}
+\caption{Point clouds made using automated masks}
 \label{fig:test}
 \end{figure}
 
-Importantly the hand labelled masks for the bracelet also were not able to produce a full reconstruction showing that the masking was not the cause of the issue. Even though the 3D reconstructions could not be performed the bracelet and bell were chosen as examples because they demonstrated certain aspects of the project more clearly than the other available objects. 
+Importantly the hand labelled masks for the bracelet also were not able to produce a full reconstruction. This shows that the masking was not the cause of the issue. Even though the 3D reconstructions could not be performed the bracelet and the bell were chosen as examples because they demonstrated certain aspects of the project more clearly than the other available objects. 
 
-For objects where the hand labelled masks were able to produce the full 3D reconstruction our automated masks produced reconstructions of equal quality. Some examples of which are shown here: FIGURE X axehead, FIGURE X shabti. These objects are not discussed in further detail for reasons of space.
+For objects where the hand labelled masks were able to produce the full 3D reconstruction, our automated version matched their quality. Some examples of the automated models are shown here: Figure 37 of an Egyptian sculpture and Figure 38 of an axehead. These objects are not discussed in further detail for reasons of space.
 \begin{figure}[H]
-  \caption{A picture of a gull.}
+  
   \centering
     \includegraphics[width=0.75\textwidth]{shabti3D}
+    \caption{An automated 3D model of an Egyptian sculpture}
 \end{figure}
 \begin{figure}[H]
-  \caption{A picture of a gull.}
+  
   \centering
     \includegraphics[width=0.75\textwidth]{axe3D}
+    \caption{An automated 3D model of an axehead}
 \end{figure}
 
 \section{Conclusions}
-We set out with the question of whether it was possible to produce good enough masks for a 3D reconstruction from one tenth of the images being hand labelled. The answer is yes, as is demonstrated by the 3D models in Section X. These were produced not only using an order of magnitude less hand labelled masks but also the masks were rough trimaps which are quicker to produce.
+We set out with the question of whether it was possible to produce good enough masks for a 3D reconstruction from one tenth of the images being hand labelled. The answer is yes, as is demonstrated by the 3D models in Section 4. These were produced not only using an order of magnitude fewer hand labelled masks but also the masks were rough trimaps which are quicker to produce.
 
-We have investigated the applicability of SVMs and Decision Trees to the application, finding Decision Trees to be the most effective. Also we have looked at which feature vectors perform best and why, particularly with regard to extracting texture. We've found success from using augmenting techniques for our core classifier such as super pixel segmentations , extracting the largest connected region and better methods for sampling training pixels. From our baseline of a SVM with RGB feature vector where error on both image sets was X and X performance was improved considerably to X and X. 
+We have investigated the applicability of SVMs and Decision Trees to the application, finding Decision Trees to be the most effective. Also we have looked at which feature vectors perform best and why, particularly with regard to extracting texture. We've found success from using augmenting techniques for our core classifier such as super pixel segmentations, extracting the largest connected region and better methods for sampling training pixels. From our baseline algorithm where error on the cross was 9.50\% and on the bracelet was 9.66\% performance was improved considerably to 0.72\% and 0.44\% respectively. 
 
-We've found that it is difficult to create a single algorithm that performs well on all of the test cases. For example in section X we saw that the performance of SLIC was better in the case of trimap growing for the bell however Quickshift worked better for the bracelet. 
+We've found that it is difficult to create a single algorithm that performs well on all of the test cases. For example in \emph{Section 2.5.2} we saw that the performance of SLIC was better in the case of expanding trimaps for the cross however Quickshift worked better for the bracelet. 
 
 Shadows have featured much throughout the report and they continue to be an issue. If we were able to modify the image gathering setup we would suggest using multiple lighting sources to prevent shadows from ever forming.
 
 
 \section{Further Work}
 \subsection{Trimaps}
-We still do not have a robust method for expanding the trimaps as discussed in Section X. A method which could perform well would be to combine the super pixels after they have been created based on their similarity\cite{shih2005automatic}. This process could be conducted on quickshift to make the segments large enough to bridge the grey region.
+We still do not have a robust method for expanding the trimaps as discussed in \emph{Section 2.5.2}. A method which could perform well would be to combine the super-pixels after they have been created based on their similarity\cite{shih2005automatic}. This process could be conducted on Quickshift to make the segments large enough to bridge the grey region.
 \subsection{DWT Metric}
-The performance of using the DWT pyramid as feature vector, discussed in Section X, was worse than we hoped. This may have been due to the fact that the way we extracted information from the DWT in the form of the means and the variances was non optimal. Taking the mean and variance is almost a linear operation but the classifier benefits from having non linear operations performed on the data. One such operation could be taking the maximum value of each block of the DWT. 
+The performance of using the DWT pyramid as feature vector, discussed in \emph{Section 2.2.3}, was worse than we hoped. This may have been due to the way we extracted information from the DWT in the form of the means and the variances. Taking the mean and variance is almost a linear operation but the classifier benefits from having non linear operations performed on the data. One such operation could be taking the maximum value of each block of the DWT. 
 \subsection{Neural Networks}
-A very promising area that could be investigated is in using convolutional neural networks which are the state of the art in many machine vision areas\cite{imageNet}. If applied to our case we would provide a convolutional neural network with a whole patch of pixels around our target pixel. The convolutional aspect refers to this window of pixels passing over the whole image. Neural networks are able to look at the raw data, in this case pixel values in a patch, and extract their own feature vectors. 
+A very promising area that could be investigated is in using convolutional neural networks which are the state of the art in many machine vision areas\cite{imageNet}. If applied to our case we would provide the network with a whole patch of pixels around our target pixel. The convolutional aspect refers to this window of pixels passing over the whole image. Neural networks are able to look at the raw data, in this case pixel values in a patch, and extract their own feature vectors. 
 
-The issue with neural networks is that they typically require large amounts of training data in order to perform well. Our application often only has a limited number of training images so it may not be suitable. This problem can be mitigated however by a process called data augmentation. We take the training images that we have and distort them in some way, either by rotation, cropping, affine transformations or adding noise to artificially increase the size of the training set. This process could be used to create a training set that is large enough to fully train a neural network on.
+The issue with neural networks is that they typically require large amounts of training data in order to perform well. Our application often only has a limited number of training images so it may not be suitable. This problem can be mitigated however by a process called data augmentation. We take the training images that we have and distort them in some way. Either by rotation, cropping, affine transformations or adding noise to artificially increase the size of the training set. This process could be used to create a training set that is large enough to fully train a neural network on.
 
  Alternatively we could use a 'pre-trained' neural network and fine tune it on our training examples. Such a network would already be trained on natural images so that it has learnt suitable feature vectors before tuning them to our dataset.
 \subsection{Shape Priors}
